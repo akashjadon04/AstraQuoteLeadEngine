@@ -4,12 +4,19 @@ services:
   lead-engine:
     build: .
     container_name: astraquote_lead_engine
-    restart: always
+    restart: always          # Auto-restart if it crashes or VM reboots
     ports:
       - "8800:8800"
     volumes:
-      - ./data:/app/data
-      - ./exports:/app/exports
+      - astraquote_data:/app/data       # Persistent leads DB — survives restarts
+      - astraquote_exports:/app/exports # Persistent exports
+      - astraquote_logs:/app/logs       # Persistent logs
     environment:
       - DASHBOARD_HOST=0.0.0.0
       - DASHBOARD_PORT=8800
+      - PYTHONUNBUFFERED=1
+
+volumes:
+  astraquote_data:
+  astraquote_exports:
+  astraquote_logs:
