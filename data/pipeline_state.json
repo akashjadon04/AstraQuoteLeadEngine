@@ -5,10 +5,10 @@
   "leads_discovered": 40,
   "leads_filtered": 7,
   "leads_qualified": 0,
-  "leads_researched": 7,
-  "leads_enriched": 7,
-  "last_log": "Only 1/50 final leads so far. Re-crawl iteration 1/20...",
-  "updated_at": "2026-07-29T11:21:59.174236",
+  "leads_researched": 27,
+  "leads_enriched": 27,
+  "last_log": "Only 5/50 final leads so far. Re-crawl iteration 7/20...",
+  "updated_at": "2026-07-29T11:44:02.922404",
   "stop_requested": false,
   "target_lead_count": 50
 }
