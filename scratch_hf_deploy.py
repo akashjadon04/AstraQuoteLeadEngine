@@ -17,7 +17,7 @@ try:
     url = create_repo(
         repo_id=repo_id,
         repo_type="space",
-        space_sdk="gradio",
+        space_sdk="static",
         private=False,
         exist_ok=True
     )
@@ -33,6 +33,6 @@ api.upload_folder(
     ignore_patterns=["venv/*", ".git/*", "__pycache__/*", "*.pyc", "data/*.log"]
 )
 
-print("\nSUCCESS! Gradio Space deployed and building.")
+print("\nSUCCESS! Static Space deployed and unpaused.")
 print(f"Space URL: https://huggingface.co/spaces/{repo_id}")
-print(f"Direct App URL: https://{username}-astraquote-leadengine.hf.space")
+print(f"Direct App URL: https://{username}-astraquote-leadengine.static.hf.space")
