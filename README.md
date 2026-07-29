@@ -1,3 +1,13 @@
+---
+title: AstraQuote Lead Engine
+emoji: 🚰
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+app_port: 8800
+pinned: false
+---
+
 # AstraQuote Lead Engine
 
 **Enterprise-Grade B2B Lead Generation for Swiss Trade Businesses**
