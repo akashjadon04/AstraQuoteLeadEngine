@@ -35,13 +35,16 @@ init_db(config.DB_PATH)
 logger.info("Database initialised.")
 
 # ── 2. Start Flask Dashboard (background thread, always on) ──
+# Render (and most cloud platforms) inject PORT env var — must use it
+PORT = int(os.environ.get("PORT", config.DASHBOARD_PORT))
+
 def run_dashboard():
     """Run Flask dashboard server — never exits."""
     from dashboard.app import app
-    logger.info(f"Dashboard starting on 0.0.0.0:{config.DASHBOARD_PORT}")
+    logger.info(f"Dashboard starting on 0.0.0.0:{PORT}")
     app.run(
         host="0.0.0.0",
-        port=config.DASHBOARD_PORT,
+        port=PORT,
         debug=False,
         use_reloader=False,
         threaded=True,
