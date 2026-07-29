@@ -1,0 +1,14 @@
+{
+  "status": "running",
+  "current_layer": 4,
+  "current_layer_name": "Re-Crawl",
+  "leads_discovered": 40,
+  "leads_filtered": 7,
+  "leads_qualified": 0,
+  "leads_researched": 7,
+  "leads_enriched": 7,
+  "last_log": "Only 1/50 final leads so far. Re-crawl iteration 1/20...",
+  "updated_at": "2026-07-29T11:21:59.174236",
+  "stop_requested": false,
+  "target_lead_count": 50
+}

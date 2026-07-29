@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="flex justify-between items-center mb-4">
+    <h1 class="text-3xl">Lead Database</h1>
+    <a href="{{ url_for('export_panel') }}" class="btn btn-outline">Export Leads</a>
+</div>
+
+<div class="glass-card mb-4">
+    <div class="flex gap-4 items-center">
+        <input type="text" id="searchInput" class="input-control" placeholder="Search by company name..." style="max-width: 300px;">
+        <select id="cantonFilter" class="input-control" style="max-width: 150px;">
+            <option value="">All Cantons</option>
+            <option value="Genève">Genève</option>
+            <option value="Fribourg">Fribourg</option>
+            <option value="Valais">Valais</option>
+            <option value="Vaud">Vaud</option>
+            <option value="Neuchâtel">Neuchâtel</option>
+            <option value="Jura">Jura</option>
+        </select>
+        <select id="statusFilter" class="input-control" style="max-width: 150px;">
+            <option value="">All Statuses</option>
+            <option value="enriched">Enriched</option>
+            <option value="qualified">Qualified</option>
+            <option value="researched">Researched</option>
+            <option value="discovered">Discovered</option>
+            <option value="rejected">Rejected</option>
+        </select>
+        <select id="sortBy" class="input-control" style="max-width: 190px;">
+            <option value="fit">Sort: Best Fit (AstraQuote)</option>
+            <option value="size">Sort: Company Size</option>
+            <option value="urgency">Sort: Urgency</option>
+            <option value="digital">Sort: Digital Maturity</option>
+            <option value="recent">Sort: Most Recent</option>
+        </select>
+        <button class="btn btn-primary" onclick="loadLeads()">Filter</button>
+    </div>
+</div>
+
+<div class="glass-card table-container">
+    <table id="leadsTable">
+        <thead>
+            <tr>
+                <th>Company</th>
+                <th>Canton</th>
+                <th>Niche</th>
+                <th>Phone</th>
+                <th>Fit</th>
+                <th>Size</th>
+                <th>Contact</th>
+                <th>Urgency</th>
+                <th>Digital</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="leadsBody">
+            <tr><td colspan="11" style="text-align: center;">Loading leads...</td></tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function getUrgencyBadge(score) {
+        if (!score) return '-';
+        if (score >= 8) return `<span class="badge badge-danger">🔴 ${score} (Hot)</span>`;
+        if (score >= 5) return `<span class="badge badge-warning">🟡 ${score} (Warm)</span>`;
+        return `<span class="badge badge-success">🟢 ${score} (Cool)</span>`;
+    }
+
+    function getFitBadge(score) {
+        // "Fit" is AstraQuote's ICP-match score (size, legitimacy, niche, contact) —
+        // deliberately separate from Urgency/Digital, which are about pitch angle,
+        // not whether this is actually a good lead to be calling in the first place.
+        if (score === null || score === undefined) return '-';
+        if (score >= 75) return `<span class="badge badge-success" title="Qualified — matches AstraQuote's target customer">${score}</span>`;
+        if (score >= 50) return `<span class="badge badge-warning" title="Good — check the breakdown">${score}</span>`;
+        return `<span class="badge badge-danger" title="Poor fit for AstraQuote">${score}</span>`;
+    }
+
+    function getSizeBadge(lead) {
+        // Estimated company-size band — the "is this big enough to bother" axis.
+        // 'micro'/'sole_trader' are the one/two-person shops the sales team said
+        // aren't worth calling, so they're flagged, not hidden.
+        const band = lead.size_band;
+        if (!band) return '<span title="Not yet sized">-</span>';
+        const map = {
+            established: ['badge-success', '🏢 10+', 'Established (~10+ staff)'],
+            small:       ['badge-success', '👥 4-9', 'Small team (~4-9)'],
+            micro:       ['badge-warning', '⚠️ 2-3', 'Micro (~2-3) — likely too small'],
+            sole_trader: ['badge-danger',  '⚠️ 1',   'Sole trader (~1 person) — too small'],
+            unknown:     ['badge-warning', '❔ ?',    'Size unknown — no staff signal found'],
+        };
+        const [cls, label, title] = map[band] || map.unknown;
+        const hint = lead.team_headcount_hint ? ` (site: ${lead.team_headcount_hint})` : '';
+        return `<span class="badge ${cls}" title="${title}${hint}">${label}</span>`;
+    }
+
+    function getContactBadge(lead) {
+        // A lead is only outreach-ready if we know who to ask for. Manager-tier
+        // contacts (gérant/directeur/responsable) are preferred; anything below
+        // 'manager'/'owner' still shows the name, but "None" means don't cold-call blind.
+        const name = lead.decision_maker_name;
+        if (!name) {
+            return `<span class="badge badge-danger" title="No contact found — verify before calling">⚠️ None</span>`;
+        }
+        const tierLabel = {
+            manager: `⭐ ${name}`,
+            owner: `👤 ${name}`,
+            other: `👤 ${name}`,
+            inferred: `❔ ${name}`,
+        };
+        const title = {
+            manager: 'Manager-tier contact (preferred)',
+            owner: 'Owner/associate-tier contact',
+            other: 'Named contact, role unconfirmed',
+            inferred: 'Guessed from company name only — verify on the call',
+        };
+        const tier = lead.contact_tier || 'other';
+        return `<span title="${title[tier] || ''}">${tierLabel[tier] || name}</span>`;
+    }
+
+    async function loadLeads() {
+        const canton = document.getElementById('cantonFilter').value;
+        const status = document.getElementById('statusFilter').value;
+        const search = document.getElementById('searchInput').value.toLowerCase();
+        const sort = document.getElementById('sortBy').value;
+
+        let url = '/api/leads?';
+        if (canton) url += `canton=${canton}&`;
+        if (status) url += `status=${status}&`;
+        if (sort) url += `sort=${sort}&`;
+
+        try {
+            const response = await fetch(url);
+            const leads = await response.json();
+
+            const tbody = document.getElementById('leadsBody');
+            tbody.innerHTML = '';
+
+            leads.filter(lead => !search || (lead.company_name && lead.company_name.toLowerCase().includes(search)))
+                 .forEach(lead => {
+                const tr = document.createElement('tr');
+                tr.style.cursor = 'pointer';
+
+                tr.innerHTML = `
+                    <td onclick="window.location.href='/leads/${lead.id}'" style="font-weight: 600; color: var(--primary);">${lead.company_name || '-'}</td>
+                    <td onclick="window.location.href='/leads/${lead.id}'">${lead.canton || '-'}</td>
+                    <td onclick="window.location.href='/leads/${lead.id}'">${lead.niche || '-'}</td>
+                    <td>${lead.phone || '-'}</td>
+                    <td>${getFitBadge(lead.fit_score)}</td>
+                    <td>${getSizeBadge(lead)}</td>
+                    <td>${getContactBadge(lead)}</td>
+                    <td>${getUrgencyBadge(lead.urgency_score)}</td>
+                    <td>${lead.digital_score || '-'}/5</td>
+                    <td><span class="badge" style="background: rgba(255,255,255,0.1); border: 1px solid #666;">${lead.status || '-'}</span></td>
+                    <td>
+                        <a href="tel:${lead.phone || ''}" class="btn btn-outline" style="padding: 4px 8px; font-size: 12px; margin-right: 4px;" title="Call">📞</a>
+                        <a href="mailto:${lead.email || ''}" class="btn btn-outline" style="padding: 4px 8px; font-size: 12px; margin-right: 4px;" title="Email">✉️</a>
+                        <a href="${lead.website || '#'}" target="_blank" class="btn btn-outline" style="padding: 4px 8px; font-size: 12px;" title="Website">🔗</a>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            if (leads.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="11" style="text-align: center;">No leads found.</td></tr>';
+            }
+        } catch (error) {
+            console.error('Error loading leads:', error);
+            document.getElementById('leadsBody').innerHTML = '<tr><td colspan="11" style="text-align: center; color: var(--danger);">Error loading leads.</td></tr>';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadLeads);
+    document.getElementById('searchInput').addEventListener('keyup', (e) => {
+        if(e.key === 'Enter') loadLeads();
+    });
+    document.getElementById('sortBy').addEventListener('change', loadLeads);
+</script>
+{% endblock %}

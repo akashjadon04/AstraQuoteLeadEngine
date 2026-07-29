@@ -1,0 +1,398 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="flex justify-between items-center mb-1">
+    <h1 class="text-3xl">Dashboard Overview</h1>
+    <a href="{{ url_for('leads') }}" class="btn btn-primary">View All Leads</a>
+</div>
+<p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;" id="currentBatchInfo">
+    Loading current batch info…
+</p>
+
+<!-- Pipeline Control Center -->
+<div class="glass-card glow-box-purple" id="pipelineControlCard" style="margin-bottom: 2.5rem; padding: 2rem;">
+    <style>
+        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
+        .layer-item {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.35rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            border: 1px solid transparent;
+            transition: all 0.3s;
+        }
+        .layer-active {
+            background: rgba(245, 158, 11, 0.08);
+            border-color: rgba(245, 158, 11, 0.25);
+            color: #fde047;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.1);
+        }
+        .layer-completed {
+            background: rgba(16, 185, 129, 0.08);
+            border-color: rgba(16, 185, 129, 0.25);
+            color: #6ee7b7;
+        }
+        .layer-pending {
+            background: rgba(255, 255, 255, 0.01);
+            border-color: transparent;
+        }
+        .retro-terminal {
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 0.78rem;
+            background: rgba(5, 5, 12, 0.9);
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 0 15px rgba(139, 92, 246, 0.15);
+            color: #38ef7d;
+            text-shadow: 0 0 4px rgba(56, 239, 125, 0.55);
+            padding: 1.25rem;
+            border-radius: 0.75rem;
+            height: 230px;
+            overflow-y: auto;
+            line-height: 1.6;
+        }
+    </style>
+    
+    <div class="grid-charts" style="margin-bottom: 0; gap: 2rem;">
+        <!-- Left Side: Controls & Visual Tree -->
+        <div style="flex: 1.2;">
+            <div class="flex justify-between items-center mb-4">
+                <div>
+                    <h2 class="text-2xl" style="color: #fff; letter-spacing: -0.02em;">Pipeline Control Center</h2>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.15rem;">Status: <span id="pipelineStatusText" style="font-weight: 800; text-transform: uppercase; color: var(--text-muted);">Idle</span></p>
+                </div>
+                <div class="flex gap-2">
+                    <button class="btn btn-primary" id="btnStart" onclick="startPipeline()" style="padding: 0.5rem 1rem; font-size: 0.8rem; background: linear-gradient(135deg, #10b981, #34d399); box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);">▶ START</button>
+                    <button class="btn btn-outline" id="btnContinue" onclick="continuePipeline()" style="padding: 0.5rem 1rem; font-size: 0.8rem; border-color: rgba(6, 182, 212, 0.3); color: var(--accent);">⟲ CONTINUE</button>
+                    <button class="btn btn-outline" id="btnStop" onclick="stopPipeline()" style="padding: 0.5rem 1rem; font-size: 0.8rem; border-color: rgba(239, 68, 68, 0.3); color: var(--danger); display: none;">■ STOP</button>
+                    <button class="btn btn-outline" id="btnReset" onclick="resetPipeline()" style="padding: 0.5rem 1rem; font-size: 0.8rem; border-color: rgba(249, 115, 22, 0.3); color: #f97316;">⟲ RESET</button>
+                </div>
+            </div>
+            
+            <!-- Visual Tree -->
+            <div style="margin-bottom: 1.5rem;">
+                <div class="layer-item layer-pending" id="layer1"><span style="margin-right:10px;">L1</span> Wide Net Discovery <span style="margin-left:auto;" id="lblL1">-</span></div>
+                <div class="layer-item layer-pending" id="layer2"><span style="margin-right:10px;">L2</span> Region & Size Filter <span style="margin-left:auto;" id="lblL2">-</span></div>
+                <div class="layer-item layer-pending" id="layer3"><span style="margin-right:10px;">L3</span> Quota Check Gate <span style="margin-left:auto;" id="lblL3">-</span></div>
+                <div class="layer-item layer-pending" id="layer4"><span style="margin-right:10px;">L4</span> Adaptive Re-Crawl Loop <span style="margin-left:auto;" id="lblL4">-</span></div>
+                <div class="layer-item layer-pending" id="layer5"><span style="margin-right:10px;">L5</span> Deep Research (Public-Info) <span style="margin-left:auto;" id="lblL5">-</span></div>
+                <div class="layer-item layer-pending" id="layer6"><span style="margin-right:10px;">L6</span> Contact Enrichment <span style="margin-left:auto;" id="lblL6">-</span></div>
+                <div class="layer-item layer-pending" id="layer7"><span style="margin-right:10px;">L7</span> Presentation & Export <span style="margin-left:auto;" id="lblL7">-</span></div>
+            </div>
+            
+            <div class="flex justify-between mb-1" style="font-size: 0.8rem; font-weight: 700;">
+                <span>Overall Progress</span>
+                <span id="pipelineProgressPercent">0%</span>
+            </div>
+            <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.04); border-radius: 4px; overflow: hidden;">
+                <div id="pipelineProgressBar" style="height: 100%; width: 0%; background: linear-gradient(90deg, var(--primary), var(--accent)); transition: width 0.5s;"></div>
+            </div>
+        </div>
+        
+        <!-- Right Side: Scrolling Cyberpunk Terminal -->
+        <div style="flex: 1;">
+            <div class="flex justify-between items-center mb-2">
+                <span style="font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--primary); font-weight: 700; letter-spacing: 0.05em;">SYSTEM CONSOLE LOGS</span>
+                <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--text-muted);" id="pulseLed"></span>
+            </div>
+            <div class="retro-terminal" id="terminalConsole">
+                <div>[SYSTEM] Console initiated. Ready for connection.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- KPIs -->
+<div class="grid-kpi" id="kpiContainer">
+    <div class="glass-card">
+        <h3 style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">Total Leads</h3>
+        <div class="text-3xl" id="kpiTotal">-</div>
+    </div>
+    <div class="glass-card">
+        <h3 style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">Qualified Leads</h3>
+        <div class="text-3xl" style="color: var(--success);" id="kpiQualified">-</div>
+    </div>
+    <div class="glass-card">
+        <h3 style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;" title="How well leads match AstraQuote's actual target customer — size, legitimacy, niche, named contact. NOT digital maturity.">Avg Fit Score</h3>
+        <div class="text-3xl" style="color: var(--primary);" id="kpiFit">-</div>
+    </div>
+    <div class="glass-card">
+        <h3 style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;" title="Fit score 75+ AND a named decision-maker found">ICP-Qualified</h3>
+        <div class="text-3xl" style="color: var(--success);" id="kpiIcpQualified">-</div>
+    </div>
+    <div class="glass-card">
+        <h3 style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;" title="Qualified leads with no named contact found yet — don't cold-call these blind">Missing Contact</h3>
+        <div class="text-3xl" style="color: var(--warning);" id="kpiNoContact">-</div>
+    </div>
+    <div class="glass-card">
+        <h3 style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;" title="Otherwise-complete leads set aside purely for being too small (one/two-person structures)">Too Small (set aside)</h3>
+        <div class="text-3xl" style="color: var(--danger);" id="kpiTooSmall">-</div>
+    </div>
+    <div class="glass-card">
+        <h3 style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">Avg Urgency</h3>
+        <div class="text-3xl" style="color: var(--danger);" id="kpiUrgency">-</div>
+    </div>
+    <div class="glass-card">
+        <h3 style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">Avg Digital Maturity</h3>
+        <div class="text-3xl" style="color: var(--accent);" id="kpiDigital">-</div>
+    </div>
+</div>
+
+<!-- Charts -->
+<div class="grid-charts">
+    <div class="glass-card" style="height: 300px;">
+        <h3 class="mb-4">Canton Distribution</h3>
+        <div style="position: relative; height: 220px;">
+            <canvas id="cantonChart"></canvas>
+        </div>
+    </div>
+    
+    <div class="glass-card" style="height: 300px;">
+        <h3 class="mb-4">Niche Distribution</h3>
+        <div style="position: relative; height: 220px;">
+            <canvas id="nicheChart"></canvas>
+        </div>
+    </div>
+    
+    <div class="glass-card" style="height: 300px;">
+        <h3 class="mb-4">Urgency Distribution</h3>
+        <div style="position: relative; height: 220px;">
+            <canvas id="urgencyChart"></canvas>
+        </div>
+    </div>
+
+    <div class="glass-card" style="height: 300px;">
+        <h3 class="mb-4">Fit Score Distribution <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: 400;">(AstraQuote ICP match)</span></h3>
+        <div style="position: relative; height: 220px;">
+            <canvas id="fitChart"></canvas>
+        </div>
+    </div>
+
+    <div class="glass-card" style="height: 300px;">
+        <h3 class="mb-4">Company Size Distribution <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: 400;">(estimated)</span></h3>
+        <div style="position: relative; height: 220px;">
+            <canvas id="sizeChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Placeholder for pipeline funnel or recent activity -->
+    <div class="glass-card" style="height: 300px; overflow-y: auto;">
+        <h3 class="mb-4">Recent Activity</h3>
+        <ul style="list-style: none; padding: 0;">
+            <li style="padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+                <span class="badge badge-success" style="margin-right: 10px;">Enriched</span> Lead #1024 updated
+            </li>
+            <li style="padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+                <span class="badge badge-warning" style="margin-right: 10px;">Researched</span> Lead #1023 scored
+            </li>
+            <li style="padding: 10px 0;">
+                <span class="badge badge-success" style="margin-right: 10px;">Enriched</span> Lead #1022 updated
+            </li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='charts.js') }}"></script>
+<script>
+    function loadStats() {
+        fetch('/api/stats')
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('kpiTotal').innerText = data.total_leads;
+                document.getElementById('kpiQualified').innerText = data.qualified_leads;
+                document.getElementById('kpiFit').innerText = data.avg_fit_score + ' / 100';
+                document.getElementById('kpiIcpQualified').innerText = data.icp_qualified_leads;
+
+                const batchEl = document.getElementById('currentBatchInfo');
+                if (data.current_run_id) {
+                    const when = data.current_run_last_updated ? new Date(data.current_run_last_updated.replace(' ', 'T') + 'Z').toLocaleString() : 'unknown time';
+                    batchEl.innerText = `Current batch: ${data.current_run_count} leads · generated ${when} · every run replaces the previous batch, nothing accumulates.`;
+                } else {
+                    batchEl.innerText = 'No batch generated yet — click START to run the pipeline.';
+                }
+                document.getElementById('kpiNoContact').innerText = data.no_contact_count;
+                document.getElementById('kpiTooSmall').innerText = data.too_small_count;
+                document.getElementById('kpiUrgency').innerText = data.avg_urgency + ' / 10';
+                document.getElementById('kpiDigital').innerText = data.avg_digital_maturity + ' / 5';
+
+                // Refresh charts
+                if (typeof initDashboardCharts === 'function') {
+                    initDashboardCharts();
+                }
+            })
+            .catch(err => console.error('Error loading stats:', err));
+    }
+
+    function startPipeline() {
+        fetch('/api/pipeline/start', { method: 'POST' })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    console.log('Pipeline started');
+                    checkPipelineStatus();
+                } else {
+                    alert(data.message);
+                }
+            });
+    }
+
+    function stopPipeline() {
+        fetch('/api/pipeline/stop', { method: 'POST' })
+            .then(res => res.json())
+            .then(data => {
+                console.log('Stop request sent');
+            });
+    }
+
+    function continuePipeline() {
+        fetch('/api/pipeline/continue', { method: 'POST' })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    console.log('Pipeline continued');
+                    checkPipelineStatus();
+                } else {
+                    alert(data.message);
+                }
+            });
+    }
+
+    function resetPipeline() {
+        if (!confirm("Are you sure you want to delete all scraped leads, logs, and progress, and start from scratch?")) {
+            return;
+        }
+        fetch('/api/pipeline/reset', { method: 'POST' })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    console.log('Database and progress cleared.');
+                    document.getElementById('terminalConsole').innerHTML = "<div>[SYSTEM] Database cleared. Control center reset to idle. Ready.</div>";
+                    loadStats();
+                    checkPipelineStatus();
+                } else {
+                    alert(data.message);
+                }
+            });
+    }
+
+    let lastLogs = [];
+
+    function updateLogs() {
+        fetch('/api/pipeline/logs')
+            .then(res => res.json())
+            .then(logs => {
+                const term = document.getElementById('terminalConsole');
+                if (JSON.stringify(logs) === JSON.stringify(lastLogs)) return;
+                lastLogs = logs;
+                
+                term.innerHTML = logs.map(line => `<div>${line}</div>`).join('');
+                term.scrollTop = term.scrollHeight;
+            });
+    }
+
+    function checkPipelineStatus() {
+        fetch('/api/pipeline-status')
+            .then(res => res.json())
+            .then(data => {
+                const statusText = document.getElementById('pipelineStatusText');
+                const btnStart = document.getElementById('btnStart');
+                const btnContinue = document.getElementById('btnContinue');
+                const btnStop = document.getElementById('btnStop');
+                const led = document.getElementById('pulseLed');
+                
+                // Update overall status & buttons
+                if (data.status === 'running') {
+                    statusText.innerText = 'Running (Layer ' + data.current_layer + ')';
+                    statusText.style.color = 'var(--warning)';
+                    btnStart.style.display = 'none';
+                    btnContinue.style.display = 'none';
+                    btnStop.style.display = 'inline-flex';
+                    led.style.background = '#10b981';
+                    led.style.animation = 'pulse 1s infinite';
+                    updateLogs();
+                } else {
+                    statusText.innerText = data.status;
+                    statusText.style.color = data.status === 'completed' ? 'var(--success)' : 'var(--text-muted)';
+                    btnStart.style.display = 'inline-flex';
+                    btnContinue.style.display = 'inline-flex';
+                    btnStop.style.display = 'none';
+                    led.style.background = 'var(--text-muted)';
+                    led.style.animation = 'none';
+                }
+                
+                // Update progress bar
+                let progressPercent = 0;
+                if (data.status === 'running') {
+                    if (data.current_layer === 1) {
+                        progressPercent = Math.min((data.leads_discovered || 0) / 210, 1) * (100/7);
+                    } else if (data.current_layer === 2) {
+                        progressPercent = (100/7) + Math.min((data.leads_filtered || 0) / (data.leads_discovered || 1), 1) * (100/7);
+                    } else {
+                        // Layers 3-6 are a merged research/enrich/final-gate loop that
+                        // can revisit earlier layer numbers on a re-crawl iteration
+                        // (e.g. drop back to Layer 4 after Layer 6), so a naive
+                        // "layer number" progress bar would visibly go backwards.
+                        // Drive this segment off the one number that only ever goes
+                        // up: how many final leads (phone + name + completed
+                        // research) have been found so far, out of the target.
+                        const target = data.target_lead_count || 50;
+                        const loopProgress = Math.min((data.leads_qualified || 0) / target, 1) * (100/7) * 4;
+                        progressPercent = (100/7) * 2 + loopProgress;
+                    }
+                    progressPercent = Math.min(Math.round(progressPercent), 99);
+                } else if (data.status === 'completed') {
+                    progressPercent = 100;
+                }
+                document.getElementById('pipelineProgressPercent').innerText = progressPercent + '%';
+                document.getElementById('pipelineProgressBar').style.width = progressPercent + '%';
+                
+                // Update layers visual tree
+                const current_layer = Number(data.current_layer);
+                for (let i = 1; i <= 7; i++) {
+                    const el = document.getElementById('layer' + i);
+                    const lbl = document.getElementById('lblL' + i);
+                    
+                    // Reset class list
+                    el.className = 'layer-item';
+                    
+                    if (data.status === 'idle') {
+                        el.classList.add('layer-pending');
+                        lbl.innerText = '-';
+                        lbl.style.color = 'var(--text-muted)';
+                    } else if (i < current_layer) {
+                        el.classList.add('layer-completed');
+                        lbl.innerText = '✓ DONE';
+                        lbl.style.color = '#10b981';
+                    } else if (i === current_layer && data.status === 'running') {
+                        el.classList.add('layer-active');
+                        lbl.innerText = '● ACTIVE';
+                        lbl.style.color = '#f59e0b';
+                    } else {
+                        el.classList.add('layer-pending');
+                        lbl.innerText = '-';
+                        lbl.style.color = 'var(--text-muted)';
+                    }
+                }
+                
+                // If it completed, refresh stats
+                if (data.status === 'completed' && statusText.innerText !== 'completed') {
+                    loadStats();
+                }
+            })
+            .catch(err => console.error('Error fetching pipeline status:', err));
+    }
+
+    // Initial load
+    loadStats();
+    checkPipelineStatus();
+    
+    // Poll status and logs every 1.5 seconds
+    setInterval(checkPipelineStatus, 1500);
+    setInterval(updateLogs, 1500);
+</script>
+{% endblock %}

@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  lead-engine:
+    build: .
+    container_name: astraquote_lead_engine
+    restart: always
+    ports:
+      - "8800:8800"
+    volumes:
+      - ./data:/app/data
+      - ./exports:/app/exports
+    environment:
+      - DASHBOARD_HOST=0.0.0.0
+      - DASHBOARD_PORT=8800

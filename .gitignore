@@ -1,0 +1,11 @@
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+data/*.db
+data/engine.log
+exports/*
+!exports/.gitkeep
+.vscode/
+.idea/

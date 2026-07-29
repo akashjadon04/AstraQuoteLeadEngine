@@ -1,0 +1,13 @@
+{
+  "status": "completed",
+  "current_layer": 5,
+  "current_layer_name": "Deep Research",
+  "leads_discovered": 332,
+  "leads_filtered": 146,
+  "leads_qualified": 50,
+  "leads_researched": 43,
+  "leads_enriched": 100,
+  "last_log": "Performing deep AI research on 50 leads...",
+  "updated_at": "2026-07-19T18:30:07.249035",
+  "stop_requested": false
+}

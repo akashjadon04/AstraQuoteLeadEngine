@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="flex justify-between items-center mb-4">
+    <div>
+        <a href="{{ url_for('leads') }}" style="color: var(--text-muted); text-decoration: none; margin-bottom: 0.5rem; display: inline-block;">&larr; Back to Leads</a>
+        <h1 class="text-3xl flex items-center gap-2">
+            {{ lead.company_name }}
+            <span style="font-size: 1.2rem;">🇨🇭</span>
+        </h1>
+        <div style="margin-top: 0.5rem;">
+            <span class="badge" style="background: rgba(139, 92, 246, 0.2); color: var(--primary); border: 1px solid var(--primary);">{{ lead.niche }}</span>
+            <span class="badge" style="background: rgba(255, 255, 255, 0.1); border: 1px solid #666; margin-left: 0.5rem;">{{ lead.status }}</span>
+        </div>
+    </div>
+    
+    <div class="flex gap-2">
+        <a href="/api/export/pdf/{{ lead.id }}" class="btn btn-primary">📄 Export PDF</a>
+        <button class="btn btn-outline">✏️ Add Notes</button>
+    </div>
+</div>
+
+<div class="grid-charts">
+    <!-- Contact & DM Info -->
+    <div class="glass-card">
+        <h3 class="mb-4" style="color: var(--accent);">Contact Information</h3>
+        <p class="mb-2"><strong>📞 Phone:</strong> <a href="tel:{{ lead.phone }}" style="color: var(--text-main);">{{ lead.phone }}</a></p>
+        <p class="mb-2"><strong>✉️ Email:</strong> <a href="mailto:{{ lead.email }}" style="color: var(--text-main);">{{ lead.email }}</a></p>
+        <p class="mb-2"><strong>🔗 Website:</strong> <a href="{{ lead.website }}" target="_blank" style="color: var(--text-main);">{{ lead.website }}</a></p>
+        <p class="mb-2"><strong>📍 Address:</strong> {{ lead.address }}</p>
+        
+        <hr style="border-color: var(--border-color); margin: 1.5rem 0;">
+
+        <h3 class="mb-4" style="color: var(--accent);">Decision Maker</h3>
+        {% if lead.decision_maker_name %}
+        <p class="mb-2"><strong>👤 Name:</strong> {{ lead.decision_maker_name }}</p>
+        <p class="mb-2"><strong>💼 Title:</strong> {{ lead.decision_maker_title }}</p>
+        <p class="mb-2"><strong>🔗 LinkedIn:</strong> <a href="{{ lead.decision_maker_linkedin }}" target="_blank" style="color: var(--primary);">Profile</a></p>
+        {% if lead.contact_tier == 'inferred' %}
+        <p style="font-size: 0.8rem; color: var(--warning); margin-top: 0.5rem;">❔ Guessed from the company name only — confirm on the call.</p>
+        {% endif %}
+        {% else %}
+        <p class="mb-2" style="color: var(--danger); font-weight: 600;">⚠️ No named contact found.</p>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">Do not cold-call this number blind — dig manually (LinkedIn, local.ch listing, or ask reception for the gérant/directeur) before outreach.</p>
+        {% endif %}
+    </div>
+
+    <!-- Scores & Review -->
+    <div class="glass-card">
+        <h3 class="mb-4" style="color: var(--accent);">Scores dashboard</h3>
+
+        <div class="mb-4" style="padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
+            <div class="flex justify-between mb-1">
+                <span>Estimated Company Size</span>
+                {% set band = lead.size_band or 'unknown' %}
+                {% set band_color = 'var(--success)' if band in ['established','small'] else ('var(--warning)' if band in ['micro','unknown'] else 'var(--danger)') %}
+                <span style="font-weight: bold; color: {{ band_color }};">{{ lead.employees_estimate or 'unknown' }}</span>
+            </div>
+            {% if lead.size_signals %}
+            <ul style="list-style: none; padding: 0; margin-top: 0.5rem; font-size: 0.82rem; color: var(--text-muted);">
+                {% for sig in lead.size_signals %}
+                <li style="padding: 2px 0;">• {{ sig }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% if band in ['micro','sole_trader','unknown'] %}
+            <p style="font-size: 0.78rem; color: var(--warning); margin-top: 0.4rem;">⚠️ Below the target size — your sales team flagged one/two-person structures as not worth calling.</p>
+            {% endif %}
+            <p style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.4rem; font-style: italic;">Exact headcount isn't published for Swiss SMEs — this is an estimate from public signals. Confirm on the call.</p>
+        </div>
+
+        <div class="mb-4">
+            <div class="flex justify-between mb-1">
+                <span>AstraQuote Fit Score</span>
+                <span style="font-weight: bold; color: {% if lead.fit_score|default(0) >= 75 %}var(--success){% elif lead.fit_score|default(0) >= 50 %}var(--warning){% else %}var(--danger){% endif %};">{{ lead.fit_score|default(0) }}/100</span>
+            </div>
+            <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden;">
+                <div style="height: 100%; width: {{ lead.fit_score|default(0) }}%; background: {% if lead.fit_score|default(0) >= 75 %}var(--success){% elif lead.fit_score|default(0) >= 50 %}var(--warning){% else %}var(--danger){% endif %};"></div>
+            </div>
+            {% if lead.fit_score_breakdown %}
+            <div style="margin-top: 0.6rem; display: flex; gap: 0.4rem; flex-wrap: wrap;">
+                {% for key, val in lead.fit_score_breakdown.items() %}
+                <span class="badge" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: var(--text-muted);">{{ key|replace("_", " ")|title }}: <strong style="color: var(--text-main); margin-left: 3px;">{{ val }}</strong></span>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% if not lead.decision_maker_name %}
+            <p style="font-size: 0.78rem; color: var(--danger); margin-top: 0.5rem;">⚠️ Not ICP-qualified regardless of score — no named contact found.</p>
+            {% endif %}
+        </div>
+
+        <div class="mb-4">
+            <div class="flex justify-between mb-1">
+                <span>Urgency Score</span>
+                <span style="font-weight: bold; color: {% if lead.urgency_score|default(0) >= 8 %}var(--danger){% elif lead.urgency_score|default(0) >= 5 %}var(--warning){% else %}var(--success){% endif %};">{{ lead.urgency_score }}/10</span>
+            </div>
+            <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden;">
+                <div style="height: 100%; width: {{ (lead.urgency_score|default(0)) * 10 }}%; background: {% if lead.urgency_score|default(0) >= 8 %}var(--danger){% elif lead.urgency_score|default(0) >= 5 %}var(--warning){% else %}var(--success){% endif %};"></div>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <div class="flex justify-between mb-1">
+                <span>Digital Maturity</span>
+                <span style="font-weight: bold; color: var(--accent);">{{ lead.digital_score }}/5</span>
+            </div>
+            <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden;">
+                <div style="height: 100%; width: {{ (lead.digital_score|default(0)) * 20 }}%; background: var(--accent);"></div>
+            </div>
+        </div>
+        
+        <hr style="border-color: var(--border-color); margin: 1.5rem 0;">
+        
+        <h3 class="mb-2" style="color: var(--accent);">Google Review Summary</h3>
+        <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">{{ lead.google_review_summary }}</p>
+    </div>
+</div>
+
+<div class="glass-card mb-4">
+    <h3 class="mb-4" style="color: var(--accent);">Pain Points</h3>
+    <ul style="list-style-type: disc; margin-left: 20px; line-height: 1.8;">
+        {% if lead.pain_points is string %}
+            <li>{{ lead.pain_points }}</li>
+        {% elif lead.pain_points %}
+            {% for point in lead.pain_points %}
+                <li>{{ point }}</li>
+            {% endfor %}
+        {% else %}
+            <li>No pain points identified yet.</li>
+        {% endif %}
+    </ul>
+</div>
+
+<div class="grid-charts">
+    <div class="glass-card glow-box-cyan">
+        <h3 class="mb-4" style="color: var(--accent);">Pitch Strategy</h3>
+        <p style="line-height: 1.6; color: rgba(255, 255, 255, 0.85);">{{ lead.pitch_strategy }}</p>
+    </div>
+    
+    <div class="glass-card glow-box-purple">
+        <h3 class="mb-4" style="color: var(--primary);">Custom Opening Line</h3>
+        <div style="background: rgba(0,0,0,0.4); padding: 1.25rem; border-radius: 0.75rem; border-left: 4px solid var(--primary); font-style: italic; line-height: 1.6; position: relative;">
+            "{{ lead.custom_opening_line }}"
+            <button onclick="navigator.clipboard.writeText('{{ lead.custom_opening_line|replace("\'", "\\\'")|replace("\"", "\\\"") }}')" class="btn btn-outline" style="position: absolute; top: 10px; right: 10px; padding: 4px 8px; font-size: 12px;">Copy</button>
+        </div>
+    </div>
+</div>
+
+<div class="flex justify-between mt-4">
+    <button class="btn btn-outline" disabled>&larr; Previous Lead</button>
+    <button class="btn btn-outline" disabled>Next Lead &rarr;</button>
+</div>
+{% endblock %}

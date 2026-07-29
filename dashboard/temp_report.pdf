@@ -1,0 +1,1758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AstraQuote — Qualified Leads Report</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+    --bg-base: #040409;
+    --bg-card: rgba(13, 13, 27, 0.75);
+    --bg-card-hover: rgba(20, 20, 43, 0.9);
+    --border-color: rgba(255, 255, 255, 0.08);
+    --border-glow: rgba(139, 92, 246, 0.25);
+    --primary: #8b5cf6;
+    --accent: #06b6d4;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
+    background-color: var(--bg-base);
+    background-image:
+        radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.10) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.08) 0px, transparent 50%);
+    color: var(--text-main);
+    line-height: 1.5;
+    padding: 2.5rem clamp(1rem, 5vw, 4rem);
+    min-height: 100vh;
+}
+.report-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    flex-wrap: wrap; gap: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1.5rem; margin-bottom: 2rem;
+}
+.brand {
+    font-family: 'Outfit', sans-serif; font-size: 1.9rem; font-weight: 800;
+    background: linear-gradient(135deg, #fff 30%, var(--primary) 70%, var(--accent) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    letter-spacing: -0.02em;
+}
+.brand-sub { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem; }
+.report-meta { text-align: right; color: var(--text-muted); font-size: 0.85rem; }
+.report-meta strong { color: var(--text-main); }
+
+.stat-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem; margin-bottom: 2rem;
+}
+.stat-card {
+    background: var(--bg-card); border: 1px solid var(--border-color);
+    border-radius: 1rem; padding: 1.25rem 1.5rem; backdrop-filter: blur(16px);
+}
+.stat-value {
+    font-family: 'Outfit', sans-serif; font-size: 2rem; font-weight: 800; line-height: 1;
+}
+.stat-label { color: var(--text-muted); font-size: 0.8rem; margin-top: 0.4rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+.stat-card.accent-primary .stat-value { color: var(--primary); }
+.stat-card.accent-success .stat-value { color: var(--success); }
+.stat-card.accent-cyan .stat-value { color: var(--accent); }
+
+.methodology {
+    background: rgba(139, 92, 246, 0.05); border: 1px solid var(--border-glow);
+    border-radius: 1rem; padding: 1.25rem 1.5rem; margin-bottom: 2rem; font-size: 0.85rem; color: var(--text-muted);
+}
+.methodology strong { color: var(--text-main); }
+.methodology .weights { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 0.6rem; }
+.methodology .weight-chip { color: var(--text-main); }
+.methodology .weight-chip b { color: var(--accent); }
+
+.controls {
+    display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;
+    margin-bottom: 1.5rem; position: sticky; top: 0; z-index: 10;
+    background: rgba(4, 4, 9, 0.85); backdrop-filter: blur(12px);
+    padding: 0.75rem 0; border-bottom: 1px solid var(--border-color);
+}
+.controls input, .controls select {
+    background: rgba(0,0,0,0.4); border: 1px solid var(--border-color); border-radius: 0.6rem;
+    color: var(--text-main); padding: 0.55rem 0.9rem; font-family: inherit; font-size: 0.85rem;
+}
+.controls input:focus, .controls select:focus { outline: none; border-color: var(--primary); }
+.controls label {
+    display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; color: var(--text-muted);
+    cursor: pointer; user-select: none;
+}
+.controls .result-count { margin-left: auto; color: var(--text-muted); font-size: 0.85rem; }
+.sort-btn {
+    background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); color: var(--text-muted);
+    border-radius: 0.6rem; padding: 0.55rem 0.9rem; font-size: 0.8rem; cursor: pointer; font-weight: 600;
+}
+.sort-btn.active { color: var(--primary); border-color: var(--border-glow); }
+
+.lead-card {
+    background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 1rem;
+    margin-bottom: 0.75rem; backdrop-filter: blur(16px); overflow: hidden;
+    transition: border-color 0.2s;
+}
+.lead-card.qualified { border-left: 3px solid var(--success); }
+.lead-card:not(.qualified) { border-left: 3px solid var(--border-color); }
+.lead-card-head {
+    display: flex; align-items: center; gap: 1rem; padding: 1rem 1.25rem; cursor: pointer;
+}
+.lead-card-head:hover { background: rgba(255,255,255,0.02); }
+.fit-badge {
+    font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.05rem;
+    width: 3rem; height: 3rem; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+}
+.fit-90 { background: rgba(16,185,129,0.15); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.3); }
+.fit-75 { background: rgba(6,182,212,0.15); color: #67e8f9; border: 1px solid rgba(6,182,212,0.3); }
+.fit-50 { background: rgba(245,158,11,0.15); color: #fde047; border: 1px solid rgba(245,158,11,0.3); }
+.fit-0  { background: rgba(239,68,68,0.12); color: #fda4af; border: 1px solid rgba(239,68,68,0.25); }
+
+.lead-main { flex: 1; min-width: 0; }
+.lead-name { font-weight: 700; font-size: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lead-meta { color: var(--text-muted); font-size: 0.8rem; margin-top: 0.15rem; }
+.lead-quick-contact { display: flex; gap: 0.6rem; align-items: center; flex-shrink: 0; }
+.lead-quick-contact a {
+    color: var(--text-main); text-decoration: none; font-size: 0.8rem;
+    background: rgba(255,255,255,0.04); border: 1px solid var(--border-color);
+    padding: 0.4rem 0.7rem; border-radius: 0.5rem; white-space: nowrap;
+}
+.lead-quick-contact a:hover { border-color: var(--primary); }
+.pill { font-size: 0.7rem; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 1rem; white-space: nowrap; }
+.pill-hot { background: rgba(239,68,68,0.15); color: #fda4af; }
+.pill-warm { background: rgba(245,158,11,0.15); color: #fde047; }
+.pill-cool { background: rgba(16,185,129,0.12); color: #6ee7b7; }
+.expand-arrow { color: var(--text-muted); transition: transform 0.2s; flex-shrink: 0; }
+.lead-card.open .expand-arrow { transform: rotate(180deg); }
+
+.lead-card-body { display: none; padding: 0 1.25rem 1.25rem; border-top: 1px solid var(--border-color); }
+.lead-card.open .lead-card-body { display: block; }
+.detail-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.75rem; margin: 1rem 0;
+}
+.detail-item { font-size: 0.85rem; }
+.detail-item .label { color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; display: block; margin-bottom: 0.2rem; }
+.score-breakdown { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 0.75rem 0; }
+.score-chip {
+    font-size: 0.72rem; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color);
+    padding: 0.3rem 0.6rem; border-radius: 0.5rem; color: var(--text-muted);
+}
+.score-chip b { color: var(--text-main); }
+.pain-list { margin: 0.5rem 0 0.75rem 1.1rem; font-size: 0.85rem; color: var(--text-muted); }
+.pain-list li { margin-bottom: 0.3rem; }
+.opening-box {
+    background: rgba(0,0,0,0.35); border-left: 3px solid var(--primary); border-radius: 0.5rem;
+    padding: 0.9rem 1rem; font-style: italic; font-size: 0.88rem; margin-top: 0.5rem; color: #e2e8f0;
+}
+.section-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); font-weight: 700; margin-top: 1rem; display: block; }
+
+.empty-state { text-align: center; color: var(--text-muted); padding: 3rem 1rem; }
+
+@media print {
+    body { background: #fff; color: #111; padding: 1cm; }
+    .controls { display: none; }
+    .lead-card { break-inside: avoid; border: 1px solid #ddd; background: #fff; }
+    .lead-card-body { display: block !important; }
+    .expand-arrow { display: none; }
+    .stat-card, .methodology { background: #f8f8fb; border-color: #e5e7eb; }
+    .lead-name, .stat-value, .brand { color: #111 !important; -webkit-text-fill-color: initial; }
+}
+</style>
+</head>
+<body>
+    <div class="report-header">
+        <div>
+            <div class="brand">AstraQuote</div>
+            <div class="brand-sub">Qualified Leads Report · Built by Evolnex.digital</div>
+        </div>
+        <div class="report-meta">
+            Generated <strong>28 July 2026, 20:18</strong><br>
+            41 leads processed
+        </div>
+    </div>
+
+    <div class="stat-grid">
+        <div class="stat-card accent-success"><div class="stat-value">41</div><div class="stat-label">Delivered Leads (all verified)</div></div>
+        <div class="stat-card accent-primary"><div class="stat-value">79</div><div class="stat-label">Average Fit Score</div></div>
+        <div class="stat-card accent-cyan"><div class="stat-value">3.5</div><div class="stat-label">Average Urgency /10</div></div>
+        <div class="stat-card"><div class="stat-value">27</div><div class="stat-label">Top-Tier Fit (≥75)</div></div>
+    </div>
+
+    <div class="methodology">
+        <strong>How the Fit Score works</strong> — built specifically for AstraQuote's target customer: a Swiss trade
+        business with real staff, since the product is used by employees, not a single owner. A sole proprietorship
+        can score well on everything else and still fail to qualify — that's intentional. A lead with no named
+        contact also can't qualify, regardless of score: manager titles (gérant/directeur/responsable) score
+        highest, an owner/associate next, a name only guessed from the company name lowest, and no name at all
+        blocks qualification outright — you can't cold-call "the company," only a person.
+        <div class="weights">
+            <span class="weight-chip"><b>30pts</b> Company size (estimated band)</span>
+            <span class="weight-chip"><b>15pts</b> Verified active registration</span>
+            <span class="weight-chip"><b>15pts</b> Digital readiness to adopt software</span>
+            <span class="weight-chip"><b>10pts</b> Core niche match</span>
+            <span class="weight-chip"><b>30pts</b> Named decision-maker (manager preferred)</span>
+        </div>
+        <div style="margin-top:0.6rem;font-size:0.8rem;">Company size is <b>estimated</b> from public signals
+        (published headcount, officers registered in the SHAB gazette, legal form, name) — exact headcount
+        isn't published for Swiss SMEs. One/two-person structures are filtered out of this list; confirm team
+        size on the call.</div>
+    </div>
+
+    <div class="controls">
+        <input type="text" id="searchBox" placeholder="Search company name...">
+        <select id="cantonFilter"><option value="">All Cantons</option></select>
+        <label><input type="checkbox" id="qualifiedOnly"> Top-tier fit only (≥75) — off by default, every lead here is already delivered/call-ready</label>
+        <button class="sort-btn active" data-sort="fit" onclick="setSort('fit', this)">Sort: Fit Score</button>
+        <button class="sort-btn" data-sort="urgency" onclick="setSort('urgency', this)">Sort: Urgency</button>
+        <span class="result-count" id="resultCount"></span>
+    </div>
+
+    <div id="leadsContainer">
+        
+        <div class="lead-card qualified" data-fit="92" data-canton="Valais" data-niche="sanitaire" data-name="rappaz martial">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-90">92</div>
+                <div class="lead-main">
+                    <div class="lead-name">Rappaz Martial</div>
+                    <div class="lead-meta">Valais · Raison individuelle (probable) · sanitaire · Martial Meinrad Rappaz</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41244717405">📞 +41244717405</a><a href="mailto:martialrappaz@bluewin.ch">✉️ Email</a>
+                    <span class="pill pill-cool">Urgency 1/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>22</b></span><span class="score-chip">Legitimacy: <b>15</b></span><span class="score-chip">Digital Readiness: <b>15</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>30</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~4-9 (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="http://www.martial-rappaz.ch" style="color:var(--text-main)">http://www.martial-rappaz.ch</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Martial Meinrad Rappaz — associé et gérant (registre officiel SHAB)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>CHE-218.144.036</div>
+                    <div class="detail-item"><span class="label">Activity</span>exercice de toutes activités dans le domaine des installations sanitaires, du chauffage, de la ferblanterie, de la couverture, de la ventilation et de la pose d&#x27;aspirateur central ainsi que toutes activités connexes au but précité (cf. statuts pour but complet)</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Site visiblement pas mis à jour depuis 2021 — image vieillissante.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Le site de Rappaz Martial est daté — ce qui n&#x27;a aucune incidence sur AstraQuote, un outil utilisé en interne par l&#x27;équipe, pas par leurs clients. Montrer le gain de temps sur le chiffrage et le suivi des devis, indépendamment de l&#x27;état du site web.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Martial Meinrad Rappaz, associé et gérant, Je me permets de vous contacter au sujet de Rappaz Martial. Je ne vous appelle pas au sujet de votre site internet, mais de la façon dont votre équipe chiffre ses devis aujourd&#x27;hui — verriez-vous un intérêt à en discuter ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card qualified" data-fit="92" data-canton="Valais" data-niche="chauffage" data-name="berclaz et romailler sa">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-90">92</div>
+                <div class="lead-main">
+                    <div class="lead-name">Berclaz et Romailler SA</div>
+                    <div class="lead-meta">Valais · SA (société anonyme) · chauffage · Jean-François Romailler</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41274812259">📞 +41274812259</a><a href="mailto:info@berclaz-romailler.ch">✉️ Email</a>
+                    <span class="pill pill-cool">Urgency 1/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>30</b></span><span class="score-chip">Legitimacy: <b>15</b></span><span class="score-chip">Digital Readiness: <b>15</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>22</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~10+ (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="http://www.berclaz-romailler.ch" style="color:var(--text-main)">http://www.berclaz-romailler.ch</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Jean-François Romailler — président du conseil d&#x27;administration (registre officiel SHAB)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>CHE-102.531.697</div>
+                    <div class="detail-item"><span class="label">Activity</span>Bienvenue sur le site internet de la société Berclaz &amp;amp; Romailler SA, chauffagiste et installateur sanitaire situé à Mollens VS.
+</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Aucune présence sur les réseaux sociaux détectée — faible visibilité digitale.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Berclaz et Romailler SA n&#x27;a pas de présence détectée sur les réseaux sociaux — sans incidence sur AstraQuote, qui sert à chiffrer plus vite en interne, pas à la visibilité digitale de l&#x27;entreprise. Montrer le gain de temps sur la rédaction des devis et le suivi jusqu&#x27;à la facture.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Jean-François Romailler, président du conseil d&#x27;administration, Je vous contacte au sujet de Berclaz et Romailler SA. Nous aidons des équipes chauffagistes à diviser par 4 le temps passé sur la rédaction de leurs devis, indépendamment de leur présence en ligne. Seriez-vous ouvert à en discuter ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card qualified" data-fit="92" data-canton="Valais" data-niche="sanitaire" data-name="staub sanitaire chauffage sa">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-90">92</div>
+                <div class="lead-main">
+                    <div class="lead-name">STAUB Sanitaire Chauffage SA</div>
+                    <div class="lead-meta">Valais · SA (société anonyme) · sanitaire · Quentin Staub</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41792589295">📞 +41792589295</a><a href="mailto:staubsanitairechauffage@bluewin.ch">✉️ Email</a>
+                    <span class="pill pill-cool">Urgency 1/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>30</b></span><span class="score-chip">Legitimacy: <b>15</b></span><span class="score-chip">Digital Readiness: <b>15</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>22</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~10+ (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="https://www.staubsanitairechauffage.ch/" style="color:var(--text-main)">https://www.staubsanitairechauffage.ch/</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Quentin Staub — président du conseil d&#x27;administration (registre officiel SHAB)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>CHE-109.981.021</div>
+                    <div class="detail-item"><span class="label">Activity</span>Confiez-nous vos travaux de rénovation de salles de bains, installations sanitaires, solaires et remplacement de chauffage! Besoin d&#x27;un dépannage? Appelez-nous!</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Aucune présence sur les réseaux sociaux détectée — faible visibilité digitale.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">STAUB Sanitaire Chauffage SA n&#x27;a pas de présence détectée sur les réseaux sociaux — sans incidence sur AstraQuote, qui sert à chiffrer plus vite en interne, pas à la visibilité digitale de l&#x27;entreprise. Montrer le gain de temps sur la rédaction des devis et le suivi jusqu&#x27;à la facture.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Quentin Staub, président du conseil d&#x27;administration, Je vous contacte au sujet de STAUB Sanitaire Chauffage SA. Nous aidons des équipes installateurs sanitaires à diviser par 4 le temps passé sur la rédaction de leurs devis, indépendamment de leur présence en ligne. Seriez-vous ouvert à en discuter ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card qualified" data-fit="92" data-canton="Valais" data-niche="sanitaire" data-name="francioli et fils sa">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-90">92</div>
+                <div class="lead-main">
+                    <div class="lead-name">Francioli et fils SA</div>
+                    <div class="lead-meta">Valais · SA (société anonyme) · sanitaire · Brice Francioli</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41273221816">📞 +41273221816</a><a href="mailto:dfrancioli@bluewin.ch">✉️ Email</a>
+                    <span class="pill pill-cool">Urgency 1/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>30</b></span><span class="score-chip">Legitimacy: <b>15</b></span><span class="score-chip">Digital Readiness: <b>15</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>22</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~10+ (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="http://www.francioli-sanitaire.ch" style="color:var(--text-main)">http://www.francioli-sanitaire.ch</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Brice Francioli — administrateur unique (registre officiel SHAB)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>CHE-342.481.115</div>
+                    <div class="detail-item"><span class="label">Activity</span>Bienvenue chez Francioli, les professionnels du sanitaire &amp;amp; chauffage, à Sion en Valais. Le dépannage, la transformation ou la construction neuve est notre domaine depuis plus de 100 ans!</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Présence digitale déjà solide — argumentaire à orienter sur le gain de temps et le taux de conversion.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Présenter comment AstraQuote permet à l&#x27;équipe de Francioli et fils SA de générer un devis précis de plomberie/chauffage en moins de 5 minutes, directement sur le chantier, avec un catalogue fournisseur intégré et un suivi du devis jusqu&#x27;à la facture — et libère le temps administratif du gérant.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Brice Francioli, administrateur unique, Je vous contacte au sujet de Francioli et fils SA à Sion — nous aidons les installateurs sanitaires romands à diviser par 4 le temps passé sur la rédaction de leurs devis. Seriez-vous ouvert à en discuter ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card qualified" data-fit="92" data-canton="Valais" data-niche="sanitaire" data-name="water concept sàrl">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-90">92</div>
+                <div class="lead-main">
+                    <div class="lead-name">Water Concept Sàrl</div>
+                    <div class="lead-meta">Valais · Sàrl (société à responsabilité limitée) · sanitaire · Drago Jovic</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41244816666">📞 +41244816666</a><a href="mailto:info@www.water-concept.ch">✉️ Email</a>
+                    <span class="pill pill-cool">Urgency 1/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>22</b></span><span class="score-chip">Legitimacy: <b>15</b></span><span class="score-chip">Digital Readiness: <b>15</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>30</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~4-9 (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="https://www.water-concept.ch/" style="color:var(--text-main)">https://www.water-concept.ch/</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Drago Jovic — associé et gérant (registre officiel SHAB)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>CHE-358.357.337</div>
+                    <div class="detail-item"><span class="label">Activity</span>Installation sanitaire chauffage</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Aucune adresse email publique trouvée — canal de contact limité au téléphone.</li><li>Aucune présence sur les réseaux sociaux détectée — faible visibilité digitale.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Water Concept Sàrl n&#x27;a pas de présence détectée sur les réseaux sociaux — sans incidence sur AstraQuote, qui sert à chiffrer plus vite en interne, pas à la visibilité digitale de l&#x27;entreprise. Montrer le gain de temps sur la rédaction des devis et le suivi jusqu&#x27;à la facture.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Drago Jovic, associé et gérant, Je vous contacte au sujet de Water Concept Sàrl. Nous aidons des équipes installateurs sanitaires à diviser par 4 le temps passé sur la rédaction de leurs devis, indépendamment de leur présence en ligne. Seriez-vous ouvert à en discuter ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card qualified" data-fit="91" data-canton="Valais" data-niche="sanitaire" data-name="malu sanitär - heizung ag">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-90">91</div>
+                <div class="lead-main">
+                    <div class="lead-name">MALU Sanitär - Heizung AG</div>
+                    <div class="lead-meta">Valais · AG (Aktiengesellschaft) · sanitaire · Luan Januzaj</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41772076751">📞 +41772076751</a><a href="mailto:info@malu-sh.ch">✉️ Email</a>
+                    <span class="pill pill-hot">🔥 Urgency 10/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>30</b></span><span class="score-chip">Legitimacy: <b>15</b></span><span class="score-chip">Digital Readiness: <b>6</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>30</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~10+ (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span>-</div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Luan Januzaj — Mitglied des Verwaltungsrates + Geschäftsführer (registre officiel SHAB)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>CHE-344.849.077</div>
+                    <div class="detail-item"><span class="label">Activity</span>Die Gesellschaft bezweckt die Ausführung sämtlicher Sanitärinstallationsarbeiten und Heizungen sowie alle damit zusammenhängenden Arbeiten und Leistungen. Die Gesellschaft kann Zweigniederlassungen und Tochtergesellschaften errichten und sich an anderen Unternehmen beteiligen oder sich mit diesen zusammenschliessen sowie alle Geschäfte tätigen, die direkt oder indirekt mit ihrem Zweck in Zusammenhang stehen. Die Gesellschaft kann Grundeigentum erwerben, belasten, veräussern und verwalten. Sie kann auch Finanzierungen für eigene oder fremde Rechnung vornehmen sowie Garantien und Bürgschaften für Tochtergesellschaften und Dritte eingehen. Im Weiteren kann die Gesellschaft Lizenzen, Konzessionen und Rechte erwerben und verwerten, gleichartige oder verwandte Unternehmen erwerben oder sich mit solchen zusammenschliessen. Die Gesellschaft kann alle kommerziellen, finanziellen und anderen Tätigkeiten ausüben, welche mit dem Zweck der Gesellschaft im Zusammenhang stehen.</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Aucun site internet fonctionnel détecté — visibilité en ligne quasi nulle.</li><li>Aucune présence sur les réseaux sociaux détectée — faible visibilité digitale.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">MALU Sanitär - Heizung AG n&#x27;a pas de site internet trouvable, donc tout le chiffrage se fait aujourd&#x27;hui à la main — téléphone, calcul sur place ou tableur le soir. Montrer comment AstraQuote permet à l&#x27;équipe de générer un devis précis en moins de 5 minutes depuis le chantier, sans aucun rapport avec le fait d&#x27;avoir ou non un site web : c&#x27;est un outil interne, pas une vitrine.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Luan Januzaj, mitglied des verwaltungsrates + geschäftsführer, J&#x27;ai cherché MALU Sanitär - Heizung AG en ligne et je n&#x27;ai pas trouvé de site — j&#x27;imagine que vos devis se font encore à la main, par téléphone ou sur place. C&#x27;est exactement ce qu&#x27;AstraQuote automatise pour l&#x27;équipe, pas besoin d&#x27;un site pour ça. Est-ce un sujet qui vous intéresse ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card qualified" data-fit="86" data-canton="Valais" data-niche="sanitaire" data-name="dupasquier et ruga sa">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-75">86</div>
+                <div class="lead-main">
+                    <div class="lead-name">Dupasquier et Ruga SA</div>
+                    <div class="lead-meta">Valais · SA (société anonyme) · sanitaire · Astrid Dupasquier</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41244712220">📞 +41244712220</a><a href="mailto:contact@dupasquier-ruga.ch">✉️ Email</a>
+                    <span class="pill pill-cool">Urgency 2/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>30</b></span><span class="score-chip">Legitimacy: <b>15</b></span><span class="score-chip">Digital Readiness: <b>15</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>16</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~10+ (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="http://www.dupasquier-ruga.ch" style="color:var(--text-main)">http://www.dupasquier-ruga.ch</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Astrid Dupasquier — membre et secrétaire du conseil d&#x27;administration (registre officiel SHAB)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>CHE-106.987.518</div>
+                    <div class="detail-item"><span class="label">Activity</span>Dupasquier-Ruga SA</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Site non optimisé pour mobile — mauvaise expérience pour la majorité des visiteurs.</li><li>Aucune présence sur les réseaux sociaux détectée — faible visibilité digitale.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Dupasquier et Ruga SA n&#x27;a pas de présence détectée sur les réseaux sociaux — sans incidence sur AstraQuote, qui sert à chiffrer plus vite en interne, pas à la visibilité digitale de l&#x27;entreprise. Montrer le gain de temps sur la rédaction des devis et le suivi jusqu&#x27;à la facture.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Astrid Dupasquier Je vous contacte au sujet de Dupasquier et Ruga SA. Nous aidons des équipes installateurs sanitaires à diviser par 4 le temps passé sur la rédaction de leurs devis, indépendamment de leur présence en ligne. Seriez-vous ouvert à en discuter ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card qualified" data-fit="86" data-canton="Genève" data-niche="sanitaire" data-name="piralla sanitaires sa">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-75">86</div>
+                <div class="lead-main">
+                    <div class="lead-name">Piralla Sanitaires SA</div>
+                    <div class="lead-meta">Genève · SA (société anonyme) · sanitaire · Piralla Robert</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41227367265">📞 +41227367265</a><a href="mailto:info@piralla-sanitaires.ch">✉️ Email</a>
+                    <span class="pill pill-cool">Urgency 1/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>30</b></span><span class="score-chip">Legitimacy: <b>15</b></span><span class="score-chip">Digital Readiness: <b>15</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>16</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~10+ (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="http://www.piralla-sanitaires.ch" style="color:var(--text-main)">http://www.piralla-sanitaires.ch</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Piralla Robert — Piralla sanitaires SA</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>CHE-354.055.653</div>
+                    <div class="detail-item"><span class="label">Activity</span>Piralla Sanitaires est la référence pour vos installations et dépannages de sanitaires dans le canton de Vaud! Professionnalisme depuis 1899!</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Aucune présence sur les réseaux sociaux détectée — faible visibilité digitale.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Piralla Sanitaires SA n&#x27;a pas de présence détectée sur les réseaux sociaux — sans incidence sur AstraQuote, qui sert à chiffrer plus vite en interne, pas à la visibilité digitale de l&#x27;entreprise. Montrer le gain de temps sur la rédaction des devis et le suivi jusqu&#x27;à la facture.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Piralla Robert Je vous contacte au sujet de Piralla Sanitaires SA. Nous aidons des équipes installateurs sanitaires à diviser par 4 le temps passé sur la rédaction de leurs devis, indépendamment de leur présence en ligne. Seriez-vous ouvert à en discuter ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card qualified" data-fit="86" data-canton="Genève" data-niche="chauffage" data-name="rudaz sa">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-75">86</div>
+                <div class="lead-main">
+                    <div class="lead-name">Rudaz SA</div>
+                    <div class="lead-meta">Genève · SA (société anonyme) · chauffage · Jorge S.</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41227961929">📞 +41227961929</a><a href="mailto:contact@rudazsa.ch">✉️ Email</a>
+                    <span class="pill pill-cool">Urgency 2/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>30</b></span><span class="score-chip">Legitimacy: <b>15</b></span><span class="score-chip">Digital Readiness: <b>15</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>16</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~10+ (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="https://rudaz.digitalone.site" style="color:var(--text-main)">https://rudaz.digitalone.site</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Jorge S. — Rudaz SA</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>CHE-109.688.992</div>
+                    <div class="detail-item"><span class="label">Activity</span>fabrication d&#x27;amortisseurs, préparation et entretien de voitures de courses</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Aucune présence sur les réseaux sociaux détectée — faible visibilité digitale.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Rudaz SA n&#x27;a pas de présence détectée sur les réseaux sociaux — sans incidence sur AstraQuote, qui sert à chiffrer plus vite en interne, pas à la visibilité digitale de l&#x27;entreprise. Montrer le gain de temps sur la rédaction des devis et le suivi jusqu&#x27;à la facture.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Jorge S. Je vous contacte au sujet de Rudaz SA. Nous aidons des équipes chauffagistes à diviser par 4 le temps passé sur la rédaction de leurs devis, indépendamment de leur présence en ligne. Seriez-vous ouvert à en discuter ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card qualified" data-fit="86" data-canton="Genève" data-niche="chauffage" data-name="gs technics sa">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-75">86</div>
+                <div class="lead-main">
+                    <div class="lead-name">GS Technics SA</div>
+                    <div class="lead-meta">Genève · SA (société anonyme) · chauffage · Jérémy Lamier</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41223002929">📞 +41223002929</a><a href="mailto:info@gstechnics.ch">✉️ Email</a>
+                    <span class="pill pill-cool">Urgency 2/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>30</b></span><span class="score-chip">Legitimacy: <b>15</b></span><span class="score-chip">Digital Readiness: <b>15</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>16</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~10+ (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="https://gstechnics.ch" style="color:var(--text-main)">https://gstechnics.ch</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Jérémy Lamier — Technicien FM CICR chez Apleona Group...</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>CHE-398.851.508</div>
+                    <div class="detail-item"><span class="label">Activity</span>fournir des services et activités dans le domaine de la technique d&#x27;exploitation et du bâtiment; ingénierie, projet, exécution, service, exploitation et entretien de bâtiments, des installations de chauffage, ventilation, climatisation, ainsi que technique d&#x27;exploitation en rapport avec l&#x27;administration, l&#x27;exploitation et l&#x27;entretien des bâtiments, la gestion administrative et technique y compris la gestion, la location, l&#x27;entretien et le nettoyage des propriétés pour son propre compte et, en particulier, des biens commerciaux et industriels, ainsi qu&#x27;acquisition et transfert des terres et des biens (cf. statuts pour but complet)</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Aucune présence sur les réseaux sociaux détectée — faible visibilité digitale.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">GS Technics SA n&#x27;a pas de présence détectée sur les réseaux sociaux — sans incidence sur AstraQuote, qui sert à chiffrer plus vite en interne, pas à la visibilité digitale de l&#x27;entreprise. Montrer le gain de temps sur la rédaction des devis et le suivi jusqu&#x27;à la facture.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Jérémy Lamier Je vous contacte au sujet de GS Technics SA. Nous aidons des équipes chauffagistes à diviser par 4 le temps passé sur la rédaction de leurs devis, indépendamment de leur présence en ligne. Seriez-vous ouvert à en discuter ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card qualified" data-fit="85" data-canton="Genève" data-niche="sanitaire" data-name="dep sa dépannage sanitaire">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-75">85</div>
+                <div class="lead-main">
+                    <div class="lead-name">DEP SA Dépannage Sanitaire</div>
+                    <div class="lead-meta">Genève · SA (société anonyme) · sanitaire · Etienne Huibant</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41223287188">📞 +41223287188</a><a href="mailto:depsa@depsa.ch">✉️ Email</a>
+                    <span class="pill pill-cool">Urgency 1/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>30</b></span><span class="score-chip">Legitimacy: <b>0</b></span><span class="score-chip">Digital Readiness: <b>15</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>30</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~10+ (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="https://www.dep-plombier.ch" style="color:var(--text-main)">https://www.dep-plombier.ch</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Etienne Huibant — Gérant EH dépannage</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>Not verified</div>
+                    <div class="detail-item"><span class="label">Activity</span>DEP - Service plombier à genève pour urgence ou installation sanitaire 24/24 et 7/7</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Aucune présence sur les réseaux sociaux détectée — faible visibilité digitale.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">DEP SA Dépannage Sanitaire n&#x27;a pas de présence détectée sur les réseaux sociaux — sans incidence sur AstraQuote, qui sert à chiffrer plus vite en interne, pas à la visibilité digitale de l&#x27;entreprise. Montrer le gain de temps sur la rédaction des devis et le suivi jusqu&#x27;à la facture.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Etienne Huibant, gérant eh dépannage, Je vous contacte au sujet de DEP SA Dépannage Sanitaire. Nous aidons des équipes installateurs sanitaires à diviser par 4 le temps passé sur la rédaction de leurs devis, indépendamment de leur présence en ligne. Seriez-vous ouvert à en discuter ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card qualified" data-fit="84" data-canton="Valais" data-niche="sanitaire" data-name="install’eau">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-75">84</div>
+                <div class="lead-main">
+                    <div class="lead-name">Install’Eau</div>
+                    <div class="lead-meta">Valais · Raison individuelle (probable) · sanitaire · Kevin Corugelo Fernández</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41796894694">📞 +41796894694</a><a href="mailto:info@installeau.ch">✉️ Email</a>
+                    <span class="pill pill-cool">Urgency 1/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>22</b></span><span class="score-chip">Legitimacy: <b>15</b></span><span class="score-chip">Digital Readiness: <b>15</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>22</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~4-9 (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="https://www.installeau.ch/" style="color:var(--text-main)">https://www.installeau.ch/</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Kevin Corugelo Fernández — titulaire (registre officiel SHAB)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>CHE-216.885.819</div>
+                    <div class="detail-item"><span class="label">Activity</span>Nous vous offrons notre expertise dans les travaux sanitaires, les installations de chauffage, ainsi que dans le dépannage et les rénovations.</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Présence digitale déjà solide — argumentaire à orienter sur le gain de temps et le taux de conversion.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Présenter comment AstraQuote permet à l&#x27;équipe de Install’Eau de générer un devis précis de plomberie/chauffage en moins de 5 minutes, directement sur le chantier, avec un catalogue fournisseur intégré et un suivi du devis jusqu&#x27;à la facture — et libère le temps administratif du gérant.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Kevin Corugelo Fernández, titulaire, Je vous contacte au sujet de Install’Eau à Fully — nous aidons les installateurs sanitaires romands à diviser par 4 le temps passé sur la rédaction de leurs devis. Seriez-vous ouvert à en discuter ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card qualified" data-fit="84" data-canton="Jura" data-niche="sanitaire" data-name="ics, douvé mike">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-75">84</div>
+                <div class="lead-main">
+                    <div class="lead-name">ICS, Douvé Mike</div>
+                    <div class="lead-meta">Jura · Raison individuelle (probable) · sanitaire · Mike René Douvé</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41796745319">📞 +41796745319</a><a href="mailto:douvemike@gmail.com">✉️ Email</a>
+                    <span class="pill pill-cool">Urgency 1/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>22</b></span><span class="score-chip">Legitimacy: <b>15</b></span><span class="score-chip">Digital Readiness: <b>15</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>22</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~4-9 (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="https://www.sanitaire-jura.ch" style="color:var(--text-main)">https://www.sanitaire-jura.ch</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Mike René Douvé — titulaire (registre officiel SHAB)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>CHE-227.597.164</div>
+                    <div class="detail-item"><span class="label">Activity</span>ICS Chauffage et Sanitaire est une entreprise spécialisée dans les installations de chauffage et de sanitaires dans le Jura et le Jura-Bernois.</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Aucune présence sur les réseaux sociaux détectée — faible visibilité digitale.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">ICS, Douvé Mike n&#x27;a pas de présence détectée sur les réseaux sociaux — sans incidence sur AstraQuote, qui sert à chiffrer plus vite en interne, pas à la visibilité digitale de l&#x27;entreprise. Montrer le gain de temps sur la rédaction des devis et le suivi jusqu&#x27;à la facture.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Mike René Douvé, titulaire, Je vous contacte au sujet de ICS, Douvé Mike. Nous aidons des équipes installateurs sanitaires à diviser par 4 le temps passé sur la rédaction de leurs devis, indépendamment de leur présence en ligne. Seriez-vous ouvert à en discuter ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card qualified" data-fit="83" data-canton="Valais" data-niche="sanitaire" data-name="avanthey sa">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-75">83</div>
+                <div class="lead-main">
+                    <div class="lead-name">Avanthey SA</div>
+                    <div class="lead-meta">Valais · SA (société anonyme) · sanitaire · Samuel Marc Udriot</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41244714104">📞 +41244714104</a><a href="mailto:info@avanthey.ch">✉️ Email</a>
+                    <span class="pill pill-hot">🔥 Urgency 10/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>30</b></span><span class="score-chip">Legitimacy: <b>15</b></span><span class="score-chip">Digital Readiness: <b>6</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>22</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~10+ (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span>-</div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Samuel Marc Udriot — président du conseil d&#x27;administration (registre officiel SHAB)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>CHE-225.709.423</div>
+                    <div class="detail-item"><span class="label">Activity</span>exploitation d&#x27;une entreprise d&#x27;installations sanitaires, de chauffage, de ferblanterie, de couverture et de ventilation, ainsi que réalisation d&#x27;études techniques et d&#x27;expertises techniques (cf. statuts pour but complet)</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Aucun site internet fonctionnel détecté — visibilité en ligne quasi nulle.</li><li>Aucune présence sur les réseaux sociaux détectée — faible visibilité digitale.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Avanthey SA n&#x27;a pas de site internet trouvable, donc tout le chiffrage se fait aujourd&#x27;hui à la main — téléphone, calcul sur place ou tableur le soir. Montrer comment AstraQuote permet à l&#x27;équipe de générer un devis précis en moins de 5 minutes depuis le chantier, sans aucun rapport avec le fait d&#x27;avoir ou non un site web : c&#x27;est un outil interne, pas une vitrine.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Samuel Marc Udriot, président du conseil d&#x27;administration, J&#x27;ai cherché Avanthey SA en ligne et je n&#x27;ai pas trouvé de site — j&#x27;imagine que vos devis se font encore à la main, par téléphone ou sur place. C&#x27;est exactement ce qu&#x27;AstraQuote automatise pour l&#x27;équipe, pas besoin d&#x27;un site pour ça. Est-ce un sujet qui vous intéresse ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card qualified" data-fit="83" data-canton="Valais" data-niche="chauffage" data-name="bugna technical sa">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-75">83</div>
+                <div class="lead-main">
+                    <div class="lead-name">Bugna Technical SA</div>
+                    <div class="lead-meta">Valais · SA (société anonyme) · chauffage · Nicolas Stève Sierro</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41244712255">📞 +41244712255</a><a href="mailto:info@technical.ch">✉️ Email</a>
+                    <span class="pill pill-hot">🔥 Urgency 10/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>30</b></span><span class="score-chip">Legitimacy: <b>15</b></span><span class="score-chip">Digital Readiness: <b>6</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>22</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~10+ (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="http://www.technical.ch" style="color:var(--text-main)">http://www.technical.ch</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Nicolas Stève Sierro — président du conseil d&#x27;administration (registre officiel SHAB)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>CHE-112.122.142</div>
+                    <div class="detail-item"><span class="label">Activity</span>Travaux d&#x27;installations sanitaires, ferblanterie, couverture, étanchéité, ventilation, climatisation et chauffage ainsi que toutes opérations financières ou commerciales convergentes.</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Aucun site internet fonctionnel détecté — visibilité en ligne quasi nulle.</li><li>Aucune présence sur les réseaux sociaux détectée — faible visibilité digitale.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Bugna Technical SA n&#x27;a pas de site internet trouvable, donc tout le chiffrage se fait aujourd&#x27;hui à la main — téléphone, calcul sur place ou tableur le soir. Montrer comment AstraQuote permet à l&#x27;équipe de générer un devis précis en moins de 5 minutes depuis le chantier, sans aucun rapport avec le fait d&#x27;avoir ou non un site web : c&#x27;est un outil interne, pas une vitrine.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Nicolas Stève Sierro, président du conseil d&#x27;administration, J&#x27;ai cherché Bugna Technical SA en ligne et je n&#x27;ai pas trouvé de site — j&#x27;imagine que vos devis se font encore à la main, par téléphone ou sur place. C&#x27;est exactement ce qu&#x27;AstraQuote automatise pour l&#x27;équipe, pas besoin d&#x27;un site pour ça. Est-ce un sujet qui vous intéresse ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card qualified" data-fit="82" data-canton="Jura" data-niche="sanitaire" data-name="roland michel sa">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-75">82</div>
+                <div class="lead-main">
+                    <div class="lead-name">Roland Michel SA</div>
+                    <div class="lead-meta">Jura · SA (société anonyme) · sanitaire · Roland Michel</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41324266159">📞 +41324266159</a><a href="mailto:rolandmichelsa@bluewin.ch">✉️ Email</a>
+                    <span class="pill pill-cool">Urgency 1/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>30</b></span><span class="score-chip">Legitimacy: <b>15</b></span><span class="score-chip">Digital Readiness: <b>15</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>12</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~10+ (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="https://rolandmichelsa.digitalone.site" style="color:var(--text-main)">https://rolandmichelsa.digitalone.site</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Roland Michel — Propriétaire probable (déduit du nom de l&#x27;entreprise)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>CHE-103.217.944</div>
+                    <div class="detail-item"><span class="label">Activity</span>Commerce de médailles, de monnaies et objets anciens.</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Présence digitale déjà solide — argumentaire à orienter sur le gain de temps et le taux de conversion.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Présenter comment AstraQuote permet à l&#x27;équipe de Roland Michel SA de générer un devis précis de plomberie/chauffage en moins de 5 minutes, directement sur le chantier, avec un catalogue fournisseur intégré et un suivi du devis jusqu&#x27;à la facture — et libère le temps administratif du gérant.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Roland Michel Je vous contacte au sujet de Roland Michel SA à Glovelier — nous aidons les installateurs sanitaires romands à diviser par 4 le temps passé sur la rédaction de leurs devis. Seriez-vous ouvert à en discuter ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card qualified" data-fit="82" data-canton="Genève" data-niche="sanitaire" data-name="schmidt daniel sa">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-75">82</div>
+                <div class="lead-main">
+                    <div class="lead-name">Schmidt Daniel SA</div>
+                    <div class="lead-meta">Genève · SA (société anonyme) · sanitaire · Schmidt Daniel</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41223421455">📞 +41223421455</a><a href="mailto:info@schmidt-sa.ch">✉️ Email</a>
+                    <span class="pill pill-warm">Urgency 5/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>30</b></span><span class="score-chip">Legitimacy: <b>15</b></span><span class="score-chip">Digital Readiness: <b>15</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>12</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~10+ (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="http://www.schmidt-sa.ch" style="color:var(--text-main)">http://www.schmidt-sa.ch</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Schmidt Daniel — Propriétaire probable (déduit du nom de l&#x27;entreprise)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>CHE-103.200.731</div>
+                    <div class="detail-item"><span class="label">Activity</span>Saisissez votre slogan ici.</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Site sans certificat SSL (non sécurisé) — mauvaise image et pénalité SEO.</li><li>Site non optimisé pour mobile — mauvaise expérience pour la majorité des visiteurs.</li><li>Aucune présence sur les réseaux sociaux détectée — faible visibilité digitale.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Le site de Schmidt Daniel SA est daté — ce qui n&#x27;a aucune incidence sur AstraQuote, un outil utilisé en interne par l&#x27;équipe, pas par leurs clients. Montrer le gain de temps sur le chiffrage et le suivi des devis, indépendamment de l&#x27;état du site web.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Schmidt Daniel Je me permets de vous contacter au sujet de Schmidt Daniel SA. Je ne vous appelle pas au sujet de votre site internet, mais de la façon dont votre équipe chiffre ses devis aujourd&#x27;hui — verriez-vous un intérêt à en discuter ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card qualified" data-fit="82" data-canton="Vaud" data-niche="sanitaire" data-name="ernest deléderray sa">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-75">82</div>
+                <div class="lead-main">
+                    <div class="lead-name">Ernest Deléderray SA</div>
+                    <div class="lead-meta">Vaud · SA (société anonyme) · sanitaire · Ernest Deléderray</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41213121833">📞 +41213121833</a><a href="mailto:info@ed-sa.ch">✉️ Email</a>
+                    <span class="pill pill-cool">Urgency 2/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>30</b></span><span class="score-chip">Legitimacy: <b>15</b></span><span class="score-chip">Digital Readiness: <b>15</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>12</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~10+ (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="https://ernest-delederray.ch" style="color:var(--text-main)">https://ernest-delederray.ch</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Ernest Deléderray — Propriétaire probable (déduit du nom de l&#x27;entreprise)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>CHE-369.898.258</div>
+                    <div class="detail-item"><span class="label">Activity</span>Just another WordPress site</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Site visiblement pas mis à jour depuis 2016 — image vieillissante.</li><li>Aucune présence sur les réseaux sociaux détectée — faible visibilité digitale.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Le site de Ernest Deléderray SA est daté — ce qui n&#x27;a aucune incidence sur AstraQuote, un outil utilisé en interne par l&#x27;équipe, pas par leurs clients. Montrer le gain de temps sur le chiffrage et le suivi des devis, indépendamment de l&#x27;état du site web.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Ernest Deléderray Je me permets de vous contacter au sujet de Ernest Deléderray SA. Je ne vous appelle pas au sujet de votre site internet, mais de la façon dont votre équipe chiffre ses devis aujourd&#x27;hui — verriez-vous un intérêt à en discuter ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card qualified" data-fit="82" data-canton="Valais" data-niche="sanitaire" data-name="charly gaillard &amp; fils, sanitaire et ferblanterie sa, succursale de crans-montana">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-75">82</div>
+                <div class="lead-main">
+                    <div class="lead-name">Charly Gaillard &amp; Fils, sanitaire et ferblanterie SA, succursale de Crans-Montana</div>
+                    <div class="lead-meta">Valais · SA (société anonyme) · sanitaire · Charly Gaillard</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41273461841">📞 +41273461841</a><a href="mailto:info@charlygaillard.ch">✉️ Email</a>
+                    <span class="pill pill-cool">Urgency 1/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>30</b></span><span class="score-chip">Legitimacy: <b>15</b></span><span class="score-chip">Digital Readiness: <b>15</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>12</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~10+ (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="http://www.charlygaillard.ch/" style="color:var(--text-main)">http://www.charlygaillard.ch/</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Charly Gaillard — Propriétaire probable (déduit du nom de l&#x27;entreprise)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>CHE-409.163.834</div>
+                    <div class="detail-item"><span class="label">Activity</span>Découvrez notre large éventail de services : chauffage, sanitaire et Ferblanterie en Suisse Romande. Contactez-nous au +41 27 346 18 41.</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Présence digitale déjà solide — argumentaire à orienter sur le gain de temps et le taux de conversion.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Présenter comment AstraQuote permet à l&#x27;équipe de Charly Gaillard &amp; Fils, sanitaire et ferblanterie SA, succursale de Crans-Montana de générer un devis précis de plomberie/chauffage en moins de 5 minutes, directement sur le chantier, avec un catalogue fournisseur intégré et un suivi du devis jusqu&#x27;à la facture — et libère le temps administratif du gérant.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Charly Gaillard Je vous contacte au sujet de Charly Gaillard &amp; Fils, sanitaire et ferblanterie SA, succursale de Crans-Montana à Randogne — nous aidons les installateurs sanitaires romands à diviser par 4 le temps passé sur la rédaction de leurs devis. Seriez-vous ouvert à en discuter ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card qualified" data-fit="82" data-canton="Vaud" data-niche="sanitaire" data-name="constantin georges sa">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-75">82</div>
+                <div class="lead-main">
+                    <div class="lead-name">Constantin Georges SA</div>
+                    <div class="lead-meta">Vaud · SA (société anonyme) · sanitaire · Constantin Georges</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41223622063">📞 +41223622063</a><a href="mailto:info@constantin.ch">✉️ Email</a>
+                    <span class="pill pill-cool">Urgency 1/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>30</b></span><span class="score-chip">Legitimacy: <b>15</b></span><span class="score-chip">Digital Readiness: <b>15</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>12</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~10+ (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="http://www.constantin.ch" style="color:var(--text-main)">http://www.constantin.ch</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Constantin Georges — Propriétaire probable (déduit du nom de l&#x27;entreprise)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>CHE-102.975.456</div>
+                    <div class="detail-item"><span class="label">Activity</span>Constantin spécialiste à Genève et Vaud dans la construction, dépannage, rénovation et l’entretien d’installations sanitaires</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Aucune présence sur les réseaux sociaux détectée — faible visibilité digitale.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Constantin Georges SA n&#x27;a pas de présence détectée sur les réseaux sociaux — sans incidence sur AstraQuote, qui sert à chiffrer plus vite en interne, pas à la visibilité digitale de l&#x27;entreprise. Montrer le gain de temps sur la rédaction des devis et le suivi jusqu&#x27;à la facture.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Constantin Georges Je vous contacte au sujet de Constantin Georges SA. Nous aidons des équipes installateurs sanitaires à diviser par 4 le temps passé sur la rédaction de leurs devis, indépendamment de leur présence en ligne. Seriez-vous ouvert à en discuter ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card qualified" data-fit="82" data-canton="Neuchâtel" data-niche="sanitaire" data-name="christe pierre sa">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-75">82</div>
+                <div class="lead-main">
+                    <div class="lead-name">Christe Pierre SA</div>
+                    <div class="lead-meta">Neuchâtel · SA (société anonyme) · sanitaire · Christe Pierre</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41327315606">📞 +41327315606</a><a href="mailto:christe.sa@bluewin.ch">✉️ Email</a>
+                    <span class="pill pill-cool">Urgency 1/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>30</b></span><span class="score-chip">Legitimacy: <b>15</b></span><span class="score-chip">Digital Readiness: <b>15</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>12</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~10+ (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="https://www.pierrechriste-sanitaire.ch" style="color:var(--text-main)">https://www.pierrechriste-sanitaire.ch</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Christe Pierre — Propriétaire probable (déduit du nom de l&#x27;entreprise)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>CHE-106.989.368</div>
+                    <div class="detail-item"><span class="label">Activity</span>Depuis 1972, Pierre Christe SA est à votre service pour vos sanitaires. Neuf, rénovation, réparation, entretien… Contactez notre équipe pour un devis rapide!</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Aucune présence sur les réseaux sociaux détectée — faible visibilité digitale.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Christe Pierre SA n&#x27;a pas de présence détectée sur les réseaux sociaux — sans incidence sur AstraQuote, qui sert à chiffrer plus vite en interne, pas à la visibilité digitale de l&#x27;entreprise. Montrer le gain de temps sur la rédaction des devis et le suivi jusqu&#x27;à la facture.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Christe Pierre Je vous contacte au sujet de Christe Pierre SA. Nous aidons des équipes installateurs sanitaires à diviser par 4 le temps passé sur la rédaction de leurs devis, indépendamment de leur présence en ligne. Seriez-vous ouvert à en discuter ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card qualified" data-fit="82" data-canton="Vaud" data-niche="chauffage" data-name="michel rime sa">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-75">82</div>
+                <div class="lead-main">
+                    <div class="lead-name">Michel Rime SA</div>
+                    <div class="lead-meta">Vaud · SA (société anonyme) · chauffage · Michel Rime</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41218811170">📞 +41218811170</a><a href="mailto:info@michelrimesa.ch">✉️ Email</a>
+                    <span class="pill pill-cool">Urgency 1/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>30</b></span><span class="score-chip">Legitimacy: <b>15</b></span><span class="score-chip">Digital Readiness: <b>15</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>12</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~10+ (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="http://www.michelrimesa.ch" style="color:var(--text-main)">http://www.michelrimesa.ch</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Michel Rime — Propriétaire probable (déduit du nom de l&#x27;entreprise)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>CHE-107.933.695</div>
+                    <div class="detail-item"><span class="label">Activity</span>Michel Rime SA, est enraciné dans le canton de Vaud depuis 1898 et s&#x27;est spécialisé dans les domaines du sanitaire, du chauffage, de l&#x27;énergie récupérable et de</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Présence digitale déjà solide — argumentaire à orienter sur le gain de temps et le taux de conversion.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Présenter comment AstraQuote permet à l&#x27;équipe de Michel Rime SA de générer un devis précis de plomberie/chauffage en moins de 5 minutes, directement sur le chantier, avec un catalogue fournisseur intégré et un suivi du devis jusqu&#x27;à la facture — et libère le temps administratif du gérant.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Michel Rime Je vous contacte au sujet de Michel Rime SA à Echallens — nous aidons les chauffagistes romands à diviser par 4 le temps passé sur la rédaction de leurs devis. Seriez-vous ouvert à en discuter ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card qualified" data-fit="82" data-canton="Valais" data-niche="sanitaire" data-name="michel jacquier sa">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-75">82</div>
+                <div class="lead-main">
+                    <div class="lead-name">Michel Jacquier SA</div>
+                    <div class="lead-meta">Valais · SA (société anonyme) · sanitaire · Michel Jacquier</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41277712926">📞 +41277712926</a><a href="mailto:verbier@jacquiersa.ch">✉️ Email</a>
+                    <span class="pill pill-cool">Urgency 2/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>30</b></span><span class="score-chip">Legitimacy: <b>15</b></span><span class="score-chip">Digital Readiness: <b>15</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>12</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~10+ (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="https://www.jacquier-michel-sanitaires-chauffage-verbier.ch" style="color:var(--text-main)">https://www.jacquier-michel-sanitaires-chauffage-verbier.ch</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Michel Jacquier — Propriétaire probable (déduit du nom de l&#x27;entreprise)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>CHE-330.388.839</div>
+                    <div class="detail-item"><span class="label">Activity</span>Michel Jacquier SA à Verbier s&#x27;occupe de l&#x27;installations ou de la réparation d&#x27;appareils sanitaires : douche, baignoire, robinetterie, WC, lavabos.</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Site visiblement pas mis à jour depuis 2021 — image vieillissante.</li><li>Aucune présence sur les réseaux sociaux détectée — faible visibilité digitale.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Le site de Michel Jacquier SA est daté — ce qui n&#x27;a aucune incidence sur AstraQuote, un outil utilisé en interne par l&#x27;équipe, pas par leurs clients. Montrer le gain de temps sur le chiffrage et le suivi des devis, indépendamment de l&#x27;état du site web.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Michel Jacquier Je me permets de vous contacter au sujet de Michel Jacquier SA. Je ne vous appelle pas au sujet de votre site internet, mais de la façon dont votre équipe chiffre ses devis aujourd&#x27;hui — verriez-vous un intérêt à en discuter ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card qualified" data-fit="79" data-canton="Valais" data-niche="sanitaire" data-name="zehnder josef ag">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-75">79</div>
+                <div class="lead-main">
+                    <div class="lead-name">Zehnder Josef AG</div>
+                    <div class="lead-meta">Valais · AG (Aktiengesellschaft) · sanitaire · Zehnder Josef</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41279231213">📞 +41279231213</a><a href="mailto:info@zehnder-haustechnik.ch">✉️ Email</a>
+                    <span class="pill pill-cool">Urgency 3/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>30</b></span><span class="score-chip">Legitimacy: <b>15</b></span><span class="score-chip">Digital Readiness: <b>12</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>12</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~10+ (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="https://zehnder-haustechnik.ch" style="color:var(--text-main)">https://zehnder-haustechnik.ch</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Zehnder Josef — Propriétaire probable (déduit du nom de l&#x27;entreprise)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>CHE-107.010.454</div>
+                    <div class="detail-item"><span class="label">Activity</span>Willkommen bei Zehnder. Wir sind Ihr Partner im Bereich Sanitär &amp; Heizung in der Region Brig-Naters-Visp. Ihre Gebäudetechnik in guten Händen.</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Aucun formulaire de demande de devis en ligne — chaque demande passe par téléphone.</li><li>Aucune présence sur les réseaux sociaux détectée — faible visibilité digitale.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Le site de Zehnder Josef AG ne permet pas de démarrer un devis en ligne, ce qui suggère que le chiffrage se fait encore à la main en interne. Montrer comment AstraQuote remplace ce calcul manuel par un devis structuré généré par l&#x27;équipe en quelques minutes, avec un catalogue fournisseur intégré et un suivi jusqu&#x27;à la facture.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Zehnder Josef J&#x27;ai vu Zehnder Josef AG à Gamsen — pas de moyen de démarrer un devis en ligne sur votre site, ce qui laisse penser que le chiffrage se fait encore à la main en interne. Avez-vous déjà pensé à automatiser cette étape pour votre équipe ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card qualified" data-fit="79" data-canton="Valais" data-niche="sanitaire" data-name="otto stoffel ag">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-75">79</div>
+                <div class="lead-main">
+                    <div class="lead-name">Otto Stoffel AG</div>
+                    <div class="lead-meta">Valais · AG (Aktiengesellschaft) · sanitaire · Otto Stoffel</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41279484400">📞 +41279484400</a><a href="mailto:info@ottostoffelag.ch">✉️ Email</a>
+                    <span class="pill pill-warm">Urgency 5/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>30</b></span><span class="score-chip">Legitimacy: <b>15</b></span><span class="score-chip">Digital Readiness: <b>12</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>12</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~10+ (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="http://www.ottostoffelag.ch" style="color:var(--text-main)">http://www.ottostoffelag.ch</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Otto Stoffel — Propriétaire probable (déduit du nom de l&#x27;entreprise)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>CHE-106.988.682</div>
+                    <div class="detail-item"><span class="label">Activity</span>Planung und Ausführung von Haustechnikanlagen wie Sanitärinstallation, Spenglerei, Bedachungs- und Fassadenarbeiten sowie Wasserversorgungs- und Verteilnetzen. Kann mit sämtlichen Apparaten und Materialien der ausgeführten Tätigkeitsfelder Handel betreiben sowie Rechte, Lizenzen und Patente erwerben, veräussern und vermitteln. Kann Zweigniederlassungen errichten und sich an anderen Unternehmungen beteiligen oder solche erwerben.</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Aucun formulaire de demande de devis en ligne — chaque demande passe par téléphone.</li><li>Aucune présence sur les réseaux sociaux détectée — faible visibilité digitale.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Le site de Otto Stoffel AG ne permet pas de démarrer un devis en ligne, ce qui suggère que le chiffrage se fait encore à la main en interne. Montrer comment AstraQuote remplace ce calcul manuel par un devis structuré généré par l&#x27;équipe en quelques minutes, avec un catalogue fournisseur intégré et un suivi jusqu&#x27;à la facture.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Otto Stoffel J&#x27;ai vu Otto Stoffel AG à Visp — pas de moyen de démarrer un devis en ligne sur votre site, ce qui laisse penser que le chiffrage se fait encore à la main en interne. Avez-vous déjà pensé à automatiser cette étape pour votre équipe ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card qualified" data-fit="79" data-canton="Valais" data-niche="sanitaire" data-name="rieder &amp; ritler ag">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-75">79</div>
+                <div class="lead-main">
+                    <div class="lead-name">Rieder &amp; Ritler AG</div>
+                    <div class="lead-meta">Valais · AG (Aktiengesellschaft) · sanitaire · Rieder &amp; Ritler</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41279391136">📞 +41279391136</a><a href="mailto:info@riederritler.ch">✉️ Email</a>
+                    <span class="pill pill-warm">Urgency 5/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>30</b></span><span class="score-chip">Legitimacy: <b>15</b></span><span class="score-chip">Digital Readiness: <b>12</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>12</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~10+ (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="https://riederritler.ch/en/" style="color:var(--text-main)">https://riederritler.ch/en/</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Rieder &amp; Ritler — Associés fondateurs probables (déduit du nom de l&#x27;entreprise)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>CHE-107.013.139</div>
+                    <div class="detail-item"><span class="label">Activity</span>Ausführung von Sanitär- und Heizungsinstallationen, Spenglerei- Dachdecker- und Schlosserarbeiten; Beteiligung an verwandten Geschäften.</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Aucun formulaire de demande de devis en ligne — chaque demande passe par téléphone.</li><li>Aucune présence sur les réseaux sociaux détectée — faible visibilité digitale.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Le site de Rieder &amp; Ritler AG ne permet pas de démarrer un devis en ligne, ce qui suggère que le chiffrage se fait encore à la main en interne. Montrer comment AstraQuote remplace ce calcul manuel par un devis structuré généré par l&#x27;équipe en quelques minutes, avec un catalogue fournisseur intégré et un suivi jusqu&#x27;à la facture.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Rieder &amp; Ritler J&#x27;ai vu Rieder &amp; Ritler AG à Wiler (Lötschen) — pas de moyen de démarrer un devis en ligne sur votre site, ce qui laisse penser que le chiffrage se fait encore à la main en interne. Avez-vous déjà pensé à automatiser cette étape pour votre équipe ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card qualified" data-fit="77" data-canton="Vaud" data-niche="plomberie" data-name="plombier sanitaire montreux">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-75">77</div>
+                <div class="lead-main">
+                    <div class="lead-name">Plombier sanitaire Montreux</div>
+                    <div class="lead-meta">Vaud · Raison individuelle (probable) · plomberie · Pierre Pouillat</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41215050121">📞 +41215050121</a><a href="mailto:info@www.mbhabitat.ch">✉️ Email</a>
+                    <span class="pill pill-cool">Urgency 1/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>22</b></span><span class="score-chip">Legitimacy: <b>0</b></span><span class="score-chip">Digital Readiness: <b>15</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>30</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~4-9 (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="https://www.mbhabitat.ch/plombier-montreux/" style="color:var(--text-main)">https://www.mbhabitat.ch/plombier-montreux/</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Pierre Pouillat — Gérant</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>Not verified</div>
+                    <div class="detail-item"><span class="label">Activity</span>MBHabitat à Montreux est une entreprise Suisse spécialisée dans les travaux pour votre habitation. Dépannage et installation plomberie, sanitaire, débouchage canalisation, chauffage et climatisation en Suisse.</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Aucune adresse email publique trouvée — canal de contact limité au téléphone.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Présenter comment AstraQuote permet à l&#x27;équipe de Plombier sanitaire Montreux de générer un devis précis de plomberie/chauffage en moins de 5 minutes, directement sur le chantier, avec un catalogue fournisseur intégré et un suivi du devis jusqu&#x27;à la facture — et libère le temps administratif du gérant.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Pierre Pouillat, gérant, Je vous contacte au sujet de Plombier sanitaire Montreux à Montreux — nous aidons les plombiers romands à diviser par 4 le temps passé sur la rédaction de leurs devis. Seriez-vous ouvert à en discuter ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card " data-fit="74" data-canton="Valais" data-niche="sanitaire" data-name="frédéric zufferey &amp; cie sàrl">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-50">74</div>
+                <div class="lead-main">
+                    <div class="lead-name">Frédéric Zufferey &amp; cie Sàrl</div>
+                    <div class="lead-meta">Valais · Sàrl (société à responsabilité limitée) · sanitaire · Frédéric Zufferey</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41274802439">📞 +41274802439</a><a href="mailto:emile@zufferey-f.ch">✉️ Email</a>
+                    <span class="pill pill-cool">Urgency 1/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>22</b></span><span class="score-chip">Legitimacy: <b>15</b></span><span class="score-chip">Digital Readiness: <b>15</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>12</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~4-9 (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="https://www.zufferey-f.ch" style="color:var(--text-main)">https://www.zufferey-f.ch</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Frédéric Zufferey — Propriétaire probable (déduit du nom de l&#x27;entreprise)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>CHE-464.648.803</div>
+                    <div class="detail-item"><span class="label">Activity</span>Dépannage 24/24h et 7/7j de vos sanitaires, réparation et rénovation de toitures, faites-appel à nos couvreurs et installateurs professionnels!</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Aucune présence sur les réseaux sociaux détectée — faible visibilité digitale.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Frédéric Zufferey &amp; cie Sàrl n&#x27;a pas de présence détectée sur les réseaux sociaux — sans incidence sur AstraQuote, qui sert à chiffrer plus vite en interne, pas à la visibilité digitale de l&#x27;entreprise. Montrer le gain de temps sur la rédaction des devis et le suivi jusqu&#x27;à la facture.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Frédéric Zufferey Je vous contacte au sujet de Frédéric Zufferey &amp; cie Sàrl. Nous aidons des équipes installateurs sanitaires à diviser par 4 le temps passé sur la rédaction de leurs devis, indépendamment de leur présence en ligne. Seriez-vous ouvert à en discuter ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card " data-fit="74" data-canton="Valais" data-niche="sanitaire" data-name="vincent bourdin sàrl">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-50">74</div>
+                <div class="lead-main">
+                    <div class="lead-name">Vincent Bourdin Sàrl</div>
+                    <div class="lead-meta">Valais · Sàrl (société à responsabilité limitée) · sanitaire · Vincent Bourdin</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41796443293">📞 +41796443293</a><a href="mailto:info@vincentbourdin.ch">✉️ Email</a>
+                    <span class="pill pill-cool">Urgency 1/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>22</b></span><span class="score-chip">Legitimacy: <b>15</b></span><span class="score-chip">Digital Readiness: <b>15</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>12</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~4-9 (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="http://www.vincentbourdin.ch" style="color:var(--text-main)">http://www.vincentbourdin.ch</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Vincent Bourdin — Propriétaire probable (déduit du nom de l&#x27;entreprise)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>CHE-259.798.666</div>
+                    <div class="detail-item"><span class="label">Activity</span>Installations sanitaires, pose et entretien de systèmes de chauffage, aspirateurs centralisés : Vincent Bourdin Sàrl est là pour vous apporter des solutions.</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Présence digitale déjà solide — argumentaire à orienter sur le gain de temps et le taux de conversion.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Présenter comment AstraQuote permet à l&#x27;équipe de Vincent Bourdin Sàrl de générer un devis précis de plomberie/chauffage en moins de 5 minutes, directement sur le chantier, avec un catalogue fournisseur intégré et un suivi du devis jusqu&#x27;à la facture — et libère le temps administratif du gérant.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Vincent Bourdin Je vous contacte au sujet de Vincent Bourdin Sàrl à Sion — nous aidons les installateurs sanitaires romands à diviser par 4 le temps passé sur la rédaction de leurs devis. Seriez-vous ouvert à en discuter ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card " data-fit="74" data-canton="Vaud" data-niche="chauffage" data-name="delta t - de oliveira pacheco">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-50">74</div>
+                <div class="lead-main">
+                    <div class="lead-name">Delta T - De Oliveira Pacheco</div>
+                    <div class="lead-meta">Vaud · Raison individuelle (probable) · chauffage · Delta Oliveira Pacheco</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41774488525">📞 +41774488525</a><a href="mailto:deltatmail2014@gmail.com">✉️ Email</a>
+                    <span class="pill pill-cool">Urgency 2/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>22</b></span><span class="score-chip">Legitimacy: <b>15</b></span><span class="score-chip">Digital Readiness: <b>15</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>12</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~4-9 (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="https://delta-t-de-oliveira-pacheco.digitalone.site" style="color:var(--text-main)">https://delta-t-de-oliveira-pacheco.digitalone.site</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Delta Oliveira Pacheco — Propriétaire probable (déduit du nom de l&#x27;entreprise)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>CHE-206.704.922</div>
+                    <div class="detail-item"><span class="label">Activity</span>exécution de tous travaux dans le domaine de la construction et de la rénovation d&#x27;immeubles, en particulier dans les secteurs chauffage, ventilation et sanitaire, ainsi que l&#x27;importation, l&#x27;exportation, la distribution et le commerce de matériaux, produits et objets de toute nature.</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Aucune présence sur les réseaux sociaux détectée — faible visibilité digitale.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Delta T - De Oliveira Pacheco n&#x27;a pas de présence détectée sur les réseaux sociaux — sans incidence sur AstraQuote, qui sert à chiffrer plus vite en interne, pas à la visibilité digitale de l&#x27;entreprise. Montrer le gain de temps sur la rédaction des devis et le suivi jusqu&#x27;à la facture.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Delta Oliveira Pacheco Je vous contacte au sujet de Delta T - De Oliveira Pacheco. Nous aidons des équipes chauffagistes à diviser par 4 le temps passé sur la rédaction de leurs devis, indépendamment de leur présence en ligne. Seriez-vous ouvert à en discuter ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card " data-fit="73" data-canton="Genève" data-niche="sanitaire" data-name="portier eric sa">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-50">73</div>
+                <div class="lead-main">
+                    <div class="lead-name">Portier Eric SA</div>
+                    <div class="lead-meta">Genève · SA (société anonyme) · sanitaire · Portier Eric</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41227880990">📞 +41227880990</a><a href="mailto:eric-portier@eric-portier.ch">✉️ Email</a>
+                    <span class="pill pill-hot">🔥 Urgency 10/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>30</b></span><span class="score-chip">Legitimacy: <b>15</b></span><span class="score-chip">Digital Readiness: <b>6</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>12</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~10+ (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="http://www.eric-portier.ch" style="color:var(--text-main)">http://www.eric-portier.ch</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Portier Eric — Propriétaire probable (déduit du nom de l&#x27;entreprise)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>CHE-107.975.765</div>
+                    <div class="detail-item"><span class="label">Activity</span>plomberie, ferblanterie, couverture, étanchéité; entreprise générale dans le domaine de la construction.</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Aucun site internet fonctionnel détecté — visibilité en ligne quasi nulle.</li><li>Aucune présence sur les réseaux sociaux détectée — faible visibilité digitale.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Portier Eric SA n&#x27;a pas de site internet trouvable, donc tout le chiffrage se fait aujourd&#x27;hui à la main — téléphone, calcul sur place ou tableur le soir. Montrer comment AstraQuote permet à l&#x27;équipe de générer un devis précis en moins de 5 minutes depuis le chantier, sans aucun rapport avec le fait d&#x27;avoir ou non un site web : c&#x27;est un outil interne, pas une vitrine.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Portier Eric J&#x27;ai cherché Portier Eric SA en ligne et je n&#x27;ai pas trouvé de site — j&#x27;imagine que vos devis se font encore à la main, par téléphone ou sur place. C&#x27;est exactement ce qu&#x27;AstraQuote automatise pour l&#x27;équipe, pas besoin d&#x27;un site pour ça. Est-ce un sujet qui vous intéresse ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card " data-fit="73" data-canton="Vaud" data-niche="sanitaire" data-name="cappilli richard sa">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-50">73</div>
+                <div class="lead-main">
+                    <div class="lead-name">Cappilli Richard SA</div>
+                    <div class="lead-meta">Vaud · SA (société anonyme) · sanitaire · Cappilli Richard</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41219228777">📞 +41219228777</a><a href="mailto:cappillisanitaires@bluewin.ch">✉️ Email</a>
+                    <span class="pill pill-hot">🔥 Urgency 10/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>30</b></span><span class="score-chip">Legitimacy: <b>15</b></span><span class="score-chip">Digital Readiness: <b>6</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>12</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~10+ (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span>-</div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Cappilli Richard — Propriétaire probable (déduit du nom de l&#x27;entreprise)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>CHE-143.785.930</div>
+                    <div class="detail-item"><span class="label">Activity</span>La société a pour but toutes activités dans les domaines du sanitaire et du chauffage (pour but complet cf. statuts).</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Aucun site internet fonctionnel détecté — visibilité en ligne quasi nulle.</li><li>Aucune présence sur les réseaux sociaux détectée — faible visibilité digitale.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Cappilli Richard SA n&#x27;a pas de site internet trouvable, donc tout le chiffrage se fait aujourd&#x27;hui à la main — téléphone, calcul sur place ou tableur le soir. Montrer comment AstraQuote permet à l&#x27;équipe de générer un devis précis en moins de 5 minutes depuis le chantier, sans aucun rapport avec le fait d&#x27;avoir ou non un site web : c&#x27;est un outil interne, pas une vitrine.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Cappilli Richard J&#x27;ai cherché Cappilli Richard SA en ligne et je n&#x27;ai pas trouvé de site — j&#x27;imagine que vos devis se font encore à la main, par téléphone ou sur place. C&#x27;est exactement ce qu&#x27;AstraQuote automatise pour l&#x27;équipe, pas besoin d&#x27;un site pour ça. Est-ce un sujet qui vous intéresse ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card " data-fit="73" data-canton="Neuchâtel" data-niche="sanitaire" data-name="chiffelle &amp; moser sa">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-50">73</div>
+                <div class="lead-main">
+                    <div class="lead-name">Chiffelle &amp; Moser SA</div>
+                    <div class="lead-meta">Neuchâtel · SA (société anonyme) · sanitaire · Chiffelle &amp; Moser</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41327310357">📞 +41327310357</a><a href="mailto:info@chiffelle-moser.ch">✉️ Email</a>
+                    <span class="pill pill-hot">🔥 Urgency 10/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>30</b></span><span class="score-chip">Legitimacy: <b>15</b></span><span class="score-chip">Digital Readiness: <b>6</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>12</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~10+ (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="http://www.chiffelle-moser.ch" style="color:var(--text-main)">http://www.chiffelle-moser.ch</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Chiffelle &amp; Moser — Associés fondateurs probables (déduit du nom de l&#x27;entreprise)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>CHE-431.959.509</div>
+                    <div class="detail-item"><span class="label">Activity</span>exploitation d&#x27;une entreprise spécialisée dans la technique du bâtiment ainsi que toutes installations s&#x27;y rapportant y compris planification, suivi et réalisation.</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Aucun site internet fonctionnel détecté — visibilité en ligne quasi nulle.</li><li>Aucune présence sur les réseaux sociaux détectée — faible visibilité digitale.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Chiffelle &amp; Moser SA n&#x27;a pas de site internet trouvable, donc tout le chiffrage se fait aujourd&#x27;hui à la main — téléphone, calcul sur place ou tableur le soir. Montrer comment AstraQuote permet à l&#x27;équipe de générer un devis précis en moins de 5 minutes depuis le chantier, sans aucun rapport avec le fait d&#x27;avoir ou non un site web : c&#x27;est un outil interne, pas une vitrine.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Chiffelle &amp; Moser J&#x27;ai cherché Chiffelle &amp; Moser SA en ligne et je n&#x27;ai pas trouvé de site — j&#x27;imagine que vos devis se font encore à la main, par téléphone ou sur place. C&#x27;est exactement ce qu&#x27;AstraQuote automatise pour l&#x27;équipe, pas besoin d&#x27;un site pour ça. Est-ce un sujet qui vous intéresse ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card " data-fit="73" data-canton="Valais" data-niche="sanitaire" data-name="lauber iwisa ag">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-50">73</div>
+                <div class="lead-main">
+                    <div class="lead-name">Lauber IWISA AG</div>
+                    <div class="lead-meta">Valais · AG (Aktiengesellschaft) · sanitaire · Lauber Iwisa</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41279227722">📞 +41279227722</a><a href="mailto:info@lauber-iwisa.ch">✉️ Email</a>
+                    <span class="pill pill-hot">🔥 Urgency 10/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>30</b></span><span class="score-chip">Legitimacy: <b>15</b></span><span class="score-chip">Digital Readiness: <b>6</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>12</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~10+ (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span>-</div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Lauber Iwisa — Propriétaire probable (déduit du nom de l&#x27;entreprise)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>CHE-303.018.825</div>
+                    <div class="detail-item"><span class="label">Activity</span>Entreprise du secteur installateurs sanitaires à Visp.</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Aucun site internet fonctionnel détecté — visibilité en ligne quasi nulle.</li><li>Aucune présence sur les réseaux sociaux détectée — faible visibilité digitale.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Lauber IWISA AG n&#x27;a pas de site internet trouvable, donc tout le chiffrage se fait aujourd&#x27;hui à la main — téléphone, calcul sur place ou tableur le soir. Montrer comment AstraQuote permet à l&#x27;équipe de générer un devis précis en moins de 5 minutes depuis le chantier, sans aucun rapport avec le fait d&#x27;avoir ou non un site web : c&#x27;est un outil interne, pas une vitrine.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Lauber Iwisa J&#x27;ai cherché Lauber IWISA AG en ligne et je n&#x27;ai pas trouvé de site — j&#x27;imagine que vos devis se font encore à la main, par téléphone ou sur place. C&#x27;est exactement ce qu&#x27;AstraQuote automatise pour l&#x27;équipe, pas besoin d&#x27;un site pour ça. Est-ce un sujet qui vous intéresse ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card " data-fit="68" data-canton="Valais" data-niche="sanitaire" data-name="balzani pierre et fils sa">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-50">68</div>
+                <div class="lead-main">
+                    <div class="lead-name">Balzani Pierre et Fils SA</div>
+                    <div class="lead-meta">Valais · SA (société anonyme) · sanitaire · Pierre Balzani</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41274814791">📞 +41274814791</a><a href="mailto:balzani@bluewin.ch">✉️ Email</a>
+                    <span class="pill pill-hot">🔥 Urgency 10/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>30</b></span><span class="score-chip">Legitimacy: <b>0</b></span><span class="score-chip">Digital Readiness: <b>6</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>22</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~10+ (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span>-</div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Pierre Balzani — administrateur unique (registre officiel SHAB)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>Not verified</div>
+                    <div class="detail-item"><span class="label">Activity</span>Entreprise du secteur installateurs sanitaires à Crans-Montana.</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Aucun site internet fonctionnel détecté — visibilité en ligne quasi nulle.</li><li>Aucune présence sur les réseaux sociaux détectée — faible visibilité digitale.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Balzani Pierre et Fils SA n&#x27;a pas de site internet trouvable, donc tout le chiffrage se fait aujourd&#x27;hui à la main — téléphone, calcul sur place ou tableur le soir. Montrer comment AstraQuote permet à l&#x27;équipe de générer un devis précis en moins de 5 minutes depuis le chantier, sans aucun rapport avec le fait d&#x27;avoir ou non un site web : c&#x27;est un outil interne, pas une vitrine.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Pierre Balzani, administrateur unique, J&#x27;ai cherché Balzani Pierre et Fils SA en ligne et je n&#x27;ai pas trouvé de site — j&#x27;imagine que vos devis se font encore à la main, par téléphone ou sur place. C&#x27;est exactement ce qu&#x27;AstraQuote automatise pour l&#x27;équipe, pas besoin d&#x27;un site pour ça. Est-ce un sujet qui vous intéresse ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card " data-fit="67" data-canton="Vaud" data-niche="sanitaire" data-name="sanitaire chauffage à montreux, veytaux, les planches">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-50">67</div>
+                <div class="lead-main">
+                    <div class="lead-name">Sanitaire Chauffage à Montreux, Veytaux, Les Planches</div>
+                    <div class="lead-meta">Vaud · Raison individuelle (probable) · sanitaire · Veytaux Planches</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41795238769">📞 +41795238769</a><a href="mailto:info@imisarl.ch">✉️ Email</a>
+                    <span class="pill pill-cool">Urgency 1/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>30</b></span><span class="score-chip">Legitimacy: <b>0</b></span><span class="score-chip">Digital Readiness: <b>15</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>12</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~10+ (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="https://imi-industrie.ch/sanitaire-chauffage-montreux-veytaux/" style="color:var(--text-main)">https://imi-industrie.ch/sanitaire-chauffage-montreux-veytaux/</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Veytaux Planches — Propriétaire probable (déduit du nom de l&#x27;entreprise)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>Not verified</div>
+                    <div class="detail-item"><span class="label">Activity</span>Faites appel à IMI Industrie en cas de fuite, débouchage, rénovation de salle de bains, votre expert Sanitaire et Chauffage à Montreux, Veytaux ...</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Aucune présence sur les réseaux sociaux détectée — faible visibilité digitale.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Sanitaire Chauffage à Montreux, Veytaux, Les Planches n&#x27;a pas de présence détectée sur les réseaux sociaux — sans incidence sur AstraQuote, qui sert à chiffrer plus vite en interne, pas à la visibilité digitale de l&#x27;entreprise. Montrer le gain de temps sur la rédaction des devis et le suivi jusqu&#x27;à la facture.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Veytaux Planches Je vous contacte au sujet de Sanitaire Chauffage à Montreux, Veytaux, Les Planches. Nous aidons des équipes installateurs sanitaires à diviser par 4 le temps passé sur la rédaction de leurs devis, indépendamment de leur présence en ligne. Seriez-vous ouvert à en discuter ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card " data-fit="67" data-canton="Vaud" data-niche="sanitaire" data-name="bonatti &amp; goël sa">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-50">67</div>
+                <div class="lead-main">
+                    <div class="lead-name">Bonatti &amp; Goël SA</div>
+                    <div class="lead-meta">Vaud · SA (société anonyme) · sanitaire · Bonatti &amp; Goël</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41218013934">📞 +41218013934</a><a href="mailto:bonatti-goel@bluewin.ch">✉️ Email</a>
+                    <span class="pill pill-cool">Urgency 1/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>30</b></span><span class="score-chip">Legitimacy: <b>0</b></span><span class="score-chip">Digital Readiness: <b>15</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>12</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~10+ (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="https://wa.me/+41798517908" style="color:var(--text-main)">https://wa.me/+41798517908</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Bonatti &amp; Goël — Associés fondateurs probables (déduit du nom de l&#x27;entreprise)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>Not verified</div>
+                    <div class="detail-item"><span class="label">Activity</span>WhatsApp Messenger: More than 2 billion people
+          in over 180 countries use WhatsApp to stay in touch with friends and
+          family, anytime and anywhere. WhatsApp is free and offers simple, secure,
+          reliable messaging and calling, available on phones all over the world.</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Présence digitale déjà solide — argumentaire à orienter sur le gain de temps et le taux de conversion.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Présenter comment AstraQuote permet à l&#x27;équipe de Bonatti &amp; Goël SA de générer un devis précis de plomberie/chauffage en moins de 5 minutes, directement sur le chantier, avec un catalogue fournisseur intégré et un suivi du devis jusqu&#x27;à la facture — et libère le temps administratif du gérant.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Bonatti &amp; Goël Je vous contacte au sujet de Bonatti &amp; Goël SA à Morges — nous aidons les installateurs sanitaires romands à diviser par 4 le temps passé sur la rédaction de leurs devis. Seriez-vous ouvert à en discuter ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card " data-fit="63" data-canton="Valais" data-niche="sanitaire" data-name="bonvin b-groupe.ch">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-50">63</div>
+                <div class="lead-main">
+                    <div class="lead-name">bonvin b-groupe.ch</div>
+                    <div class="lead-meta">Valais · Raison individuelle (probable) · sanitaire · David Bonvin</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41274812717">📞 +41274812717</a><a href="mailto:crans-montana@b-groupe.ch">✉️ Email</a>
+                    <span class="pill pill-cool">Urgency 2/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>22</b></span><span class="score-chip">Legitimacy: <b>0</b></span><span class="score-chip">Digital Readiness: <b>15</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>16</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~4-9 (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="https://www.b-groupe.ch" style="color:var(--text-main)">https://www.b-groupe.ch</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>David Bonvin — Marcel Bonvin &amp; Fils SA b- groupe</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>Not verified</div>
+                    <div class="detail-item"><span class="label">Activity</span>Notre groupe est l&#x27;aboutissement de plus de 50 ans d&#x27;expérience dans la construction et de l&#x27;immobilier.</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Aucune présence sur les réseaux sociaux détectée — faible visibilité digitale.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">bonvin b-groupe.ch n&#x27;a pas de présence détectée sur les réseaux sociaux — sans incidence sur AstraQuote, qui sert à chiffrer plus vite en interne, pas à la visibilité digitale de l&#x27;entreprise. Montrer le gain de temps sur la rédaction des devis et le suivi jusqu&#x27;à la facture.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre David Bonvin Je vous contacte au sujet de bonvin b-groupe.ch. Nous aidons des équipes installateurs sanitaires à diviser par 4 le temps passé sur la rédaction de leurs devis, indépendamment de leur présence en ligne. Seriez-vous ouvert à en discuter ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card " data-fit="59" data-canton="Jura" data-niche="sanitaire" data-name="claude firmin et fils sàrl">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-50">59</div>
+                <div class="lead-main">
+                    <div class="lead-name">Claude Firmin et Fils Sàrl</div>
+                    <div class="lead-meta">Jura · Sàrl (société à responsabilité limitée) · sanitaire · Claude Firmin</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41324755627">📞 +41324755627</a><a href="mailto:jacky.claude@bluewin.ch">✉️ Email</a>
+                    <span class="pill pill-cool">Urgency 1/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>22</b></span><span class="score-chip">Legitimacy: <b>0</b></span><span class="score-chip">Digital Readiness: <b>15</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>12</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~4-9 (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="http://www.firminclaudeetfils.ch" style="color:var(--text-main)">http://www.firminclaudeetfils.ch</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Claude Firmin — Propriétaire probable (déduit du nom de l&#x27;entreprise)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>Not verified</div>
+                    <div class="detail-item"><span class="label">Activity</span>Firmin Claude et Fils Sàrl, basée à Boncourt, est votre partenaire de confiance pour vos installations sanitaires et de chauffage. Appelez-nous!</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Aucune présence sur les réseaux sociaux détectée — faible visibilité digitale.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Claude Firmin et Fils Sàrl n&#x27;a pas de présence détectée sur les réseaux sociaux — sans incidence sur AstraQuote, qui sert à chiffrer plus vite en interne, pas à la visibilité digitale de l&#x27;entreprise. Montrer le gain de temps sur la rédaction des devis et le suivi jusqu&#x27;à la facture.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Claude Firmin Je vous contacte au sujet de Claude Firmin et Fils Sàrl. Nous aidons des équipes installateurs sanitaires à diviser par 4 le temps passé sur la rédaction de leurs devis, indépendamment de leur présence en ligne. Seriez-vous ouvert à en discuter ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card " data-fit="59" data-canton="Genève" data-niche="chauffage" data-name="chauffagiste lancy. dépannage fuites et pannes de chaudières">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-50">59</div>
+                <div class="lead-main">
+                    <div class="lead-name">Chauffagiste Lancy. Dépannage Fuites et pannes de Chaudières</div>
+                    <div class="lead-meta">Genève · Raison individuelle (probable) · chauffage · Fuites Chaudières</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41228860232">📞 +41228860232</a><a href="mailto:info@www.sos-chauffage.ch">✉️ Email</a>
+                    <span class="pill pill-cool">Urgency 2/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>22</b></span><span class="score-chip">Legitimacy: <b>0</b></span><span class="score-chip">Digital Readiness: <b>15</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>12</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~4-9 (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span><a href="https://www.sos-chauffage.ch/lancy/" style="color:var(--text-main)">https://www.sos-chauffage.ch/lancy/</a></div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Fuites Chaudières — Propriétaire probable (déduit du nom de l&#x27;entreprise)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>Not verified</div>
+                    <div class="detail-item"><span class="label">Activity</span>Besoin d&#x27;un Dépannage Urgent pour votre Chauffage à Lancy ? Appelez notre Technicien au : 022 886 02 32. Devis Gratuit par Téléphone. Intervention garantie.</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Aucune adresse email publique trouvée — canal de contact limité au téléphone.</li><li>Aucune présence sur les réseaux sociaux détectée — faible visibilité digitale.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Chauffagiste Lancy. Dépannage Fuites et pannes de Chaudières n&#x27;a pas de présence détectée sur les réseaux sociaux — sans incidence sur AstraQuote, qui sert à chiffrer plus vite en interne, pas à la visibilité digitale de l&#x27;entreprise. Montrer le gain de temps sur la rédaction des devis et le suivi jusqu&#x27;à la facture.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Fuites Chaudières Je vous contacte au sujet de Chauffagiste Lancy. Dépannage Fuites et pannes de Chaudières. Nous aidons des équipes chauffagistes à diviser par 4 le temps passé sur la rédaction de leurs devis, indépendamment de leur présence en ligne. Seriez-vous ouvert à en discuter ?"</div>
+            </div>
+        </div>
+        
+        <div class="lead-card " data-fit="58" data-canton="Genève" data-niche="plomberie" data-name="maulini et prini sa">
+            <div class="lead-card-head" onclick="this.parentElement.classList.toggle('open')">
+                <div class="fit-badge fit-50">58</div>
+                <div class="lead-main">
+                    <div class="lead-name">Maulini et Prini SA</div>
+                    <div class="lead-meta">Genève · SA (société anonyme) · plomberie · Maulini &amp; Prini</div>
+                </div>
+                <div class="lead-quick-contact">
+                    <a href="tel:+41227945075">📞 +41227945075</a><a href="mailto:maulini.prini@bluewin.ch">✉️ Email</a>
+                    <span class="pill pill-hot">🔥 Urgency 10/10</span>
+                </div>
+                <div class="expand-arrow">▾</div>
+            </div>
+            <div class="lead-card-body">
+                <span class="section-label">Why this score</span>
+                <div class="score-breakdown"><span class="score-chip">Size: <b>30</b></span><span class="score-chip">Legitimacy: <b>0</b></span><span class="score-chip">Digital Readiness: <b>6</b></span><span class="score-chip">Niche: <b>10</b></span><span class="score-chip">Contact: <b>12</b></span></div>
+
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="label">Est. Company Size</span>~10+ (est.)</div>
+                    <div class="detail-item"><span class="label">Website</span>-</div>
+                    <div class="detail-item"><span class="label">Decision Maker</span>Maulini &amp; Prini — Associés fondateurs probables (déduit du nom de l&#x27;entreprise)</div>
+                    <div class="detail-item"><span class="label">Registry (Zefix)</span>Not verified</div>
+                    <div class="detail-item"><span class="label">Activity</span>Entreprise du secteur plombiers à Grand-Lancy.</div>
+                </div>
+
+                <span class="section-label">Pain Points</span>
+                <ul class="pain-list"><li>Aucun site internet fonctionnel détecté — visibilité en ligne quasi nulle.</li><li>Aucune présence sur les réseaux sociaux détectée — faible visibilité digitale.</li></ul>
+
+                <span class="section-label">Pitch Angle</span>
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Maulini et Prini SA n&#x27;a pas de site internet trouvable, donc tout le chiffrage se fait aujourd&#x27;hui à la main — téléphone, calcul sur place ou tableur le soir. Montrer comment AstraQuote permet à l&#x27;équipe de générer un devis précis en moins de 5 minutes depuis le chantier, sans aucun rapport avec le fait d&#x27;avoir ou non un site web : c&#x27;est un outil interne, pas une vitrine.</p>
+
+                <span class="section-label">Suggested Opening</span>
+                <div class="opening-box">"Bonjour, je cherche à joindre Maulini &amp; Prini J&#x27;ai cherché Maulini et Prini SA en ligne et je n&#x27;ai pas trouvé de site — j&#x27;imagine que vos devis se font encore à la main, par téléphone ou sur place. C&#x27;est exactement ce qu&#x27;AstraQuote automatise pour l&#x27;équipe, pas besoin d&#x27;un site pour ça. Est-ce un sujet qui vous intéresse ?"</div>
+            </div>
+        </div>
+        
+    </div>
+    <div class="empty-state" id="emptyState" style="display:none;">No leads match the current filters.</div>
+
+<script>
+(function() {
+    var cards = Array.prototype.slice.call(document.querySelectorAll('.lead-card'));
+    var cantonSet = new Set();
+    cards.forEach(function(c) { if (c.dataset.canton && c.dataset.canton !== '-') cantonSet.add(c.dataset.canton); });
+    var cantonSelect = document.getElementById('cantonFilter');
+    Array.from(cantonSet).sort().forEach(function(c) {
+        var opt = document.createElement('option'); opt.value = c; opt.textContent = c;
+        cantonSelect.appendChild(opt);
+    });
+
+    var currentSort = 'fit';
+
+    function applyFilters() {
+        var search = document.getElementById('searchBox').value.toLowerCase();
+        var canton = cantonSelect.value;
+        var qualifiedOnly = document.getElementById('qualifiedOnly').checked;
+        var visible = 0;
+
+        cards.sort(function(a, b) {
+            var av = currentSort === 'fit' ? parseInt(a.dataset.fit) : parseFloat(a.querySelector('.pill') ? a.querySelector('.pill').textContent.match(/[\d.]+/)[0] : 0);
+            var bv = currentSort === 'fit' ? parseInt(b.dataset.fit) : parseFloat(b.querySelector('.pill') ? b.querySelector('.pill').textContent.match(/[\d.]+/)[0] : 0);
+            return bv - av;
+        });
+        var container = document.getElementById('leadsContainer');
+        cards.forEach(function(c) { container.appendChild(c); });
+
+        cards.forEach(function(c) {
+            var matches = true;
+            if (search && c.dataset.name.indexOf(search) === -1) matches = false;
+            if (canton && c.dataset.canton !== canton) matches = false;
+            if (qualifiedOnly && !c.classList.contains('qualified')) matches = false;
+            c.style.display = matches ? '' : 'none';
+            if (matches) visible++;
+        });
+        document.getElementById('resultCount').textContent = visible + ' of ' + cards.length + ' shown';
+        document.getElementById('emptyState').style.display = visible === 0 ? 'block' : 'none';
+    }
+
+    window.setSort = function(key, btn) {
+        currentSort = key;
+        document.querySelectorAll('.sort-btn').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        applyFilters();
+    };
+
+    document.getElementById('searchBox').addEventListener('input', applyFilters);
+    cantonSelect.addEventListener('change', applyFilters);
+    document.getElementById('qualifiedOnly').addEventListener('change', applyFilters);
+
+    applyFilters();
+})();
+</script>
+</body>
+</html>

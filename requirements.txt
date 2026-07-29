@@ -1,0 +1,32 @@
+# AstraQuote Lead Engine — Dependencies
+# Install: pip install -r requirements.txt
+
+# ── Web Search & Crawling (4 Open Source Tools) ──
+ddgs>=7.0                      # DuckDuckGo search (renamed from duckduckgo_search)
+crawl4ai>=0.5                  # AI-powered web crawling
+httpx>=0.27                    # Async HTTP client
+beautifulsoup4>=4.12           # HTML parsing
+
+# ── Phone & Email Validation ──
+phonenumbers>=8.13             # Swiss phone number validation
+dnspython>=2.6                 # DNS MX record checks for email validation
+
+# ── AI ──
+# Groq API is accessed via httpx (OpenAI-compatible REST API)
+
+# ── Dashboard ──
+flask>=3.0                     # Web dashboard server
+jinja2>=3.1                    # HTML templating
+weasyprint>=62.0               # PDF generation with Evolnex watermark
+pandas>=2.2                    # Data manipulation for exports
+openpyxl>=3.1                  # Excel export
+xlsxwriter>=3.2                # Excel formatting
+
+# ── CLI & Logging ──
+rich>=13.0                     # Beautiful terminal output
+tqdm>=4.66                     # Progress bars
+colorama>=0.4                  # Windows color support
+
+# ── Utils ──
+python-dotenv>=1.0             # Environment variable loading
+aiohttp>=3.9                   # Async HTTP (crawl4ai dependency)

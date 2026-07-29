@@ -1,0 +1,44 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Lead Card - Portier Eric SA</title>
+    </head>
+    <body>
+        <div class="watermark">EVOLNEX</div>
+        <h1>Portier Eric SA <span style="font-size: 16px; color: #666;">(Genève)</span></h1>
+
+        <div class="card">
+            <h2>Contact Information</h2>
+            <p><strong>Phone:</strong> +41227880990</p>
+            <p><strong>Email:</strong> eric-portier@eric-portier.ch</p>
+            <p><strong>Website:</strong> http://www.eric-portier.ch</p>
+            <p><strong>Address:</strong> Route de l'Etraz 130, 1290 Versoix</p>
+        </div>
+
+        <div class="card">
+            <h2>Decision Maker</h2>
+            <p><strong>Name:</strong> Portier Eric</p>
+            <p><strong>Title:</strong> Propriétaire (déduit du nom de l'entreprise)</p>
+            <p><strong>LinkedIn:</strong> N/A</p>
+        </div>
+
+        <div class="card">
+            <h2>Scores & Analysis</h2>
+            <p><strong>Urgency Score:</strong> <span class="badge badge-high">9/10</span></p>
+            <p><strong>Digital Maturity:</strong> 2/5</p>
+            <p><strong>Contact Score:</strong> 100%</p>
+            <p><strong>Pain Points:</strong> <ul><li>Aucun site internet fonctionnel détecté — visibilité en ligne quasi nulle.</li><li>Aucune présence sur les réseaux sociaux détectée — faible visibilité digitale.</li></ul></p>
+        </div>
+
+        <div class="card">
+            <h2>Pitch Strategy</h2>
+            <p>Portier Eric SA n'a pas de site internet trouvable : chaque demande de devis passe encore par téléphone. Positionner AstraQuote comme la page de devis instantané prête à l'emploi qui capte ces demandes 24/7, sans que l'entreprise ait à construire un site.</p>
+            <div style="background: #f3f4f6; padding: 15px; border-left: 4px solid #8b5cf6; margin-top: 10px;">
+                <strong>Suggested Opening:</strong><br/>
+                Bonjour, j'ai cherché Portier Eric SA en ligne et je n'ai pas trouvé de site — j'imagine que la majorité de vos devis se font encore par téléphone ou sur place. Est-ce un sujet qui vous intéresse ?
+            </div>
+        </div>
+    </body>
+    </html>
+    

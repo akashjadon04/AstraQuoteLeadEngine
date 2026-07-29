@@ -1,0 +1,931 @@
+2026-07-19 15:54:59,104 - layer5 - WARNING - Social search failed for Chabloz Alain Service Rapide: Request timed out: ConnectTimeout('timed out')
+2026-07-19 15:54:59,795 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 2 seconds...
+2026-07-19 15:55:01,887 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 4 seconds...
+2026-07-19 15:55:05,978 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 8 seconds...
+2026-07-19 15:55:23,123 - Database - INFO - All leads cleared from database.
+2026-07-19 15:55:30,146 - Database - INFO - Database initialized at data/leads.db
+2026-07-19 15:55:30,840 - SearchCh - INFO - Initializing search.ch directory crawler fallback (no key provided)
+2026-07-19 15:55:30,957 - SearchCh - INFO - Querying local.ch directory: plombier in Genève
+2026-07-19 15:55:40,922 - SearchCh - INFO - Successfully scraped listing: RS Sanitaire (Phone: +41766167223)
+2026-07-19 15:55:42,911 - SearchCh - INFO - Successfully scraped listing: RAPID'EAU SANITAIRE Meckes (Phone: +41765164906)
+2026-07-19 15:55:44,911 - SearchCh - INFO - Successfully scraped listing: ALLOFUITES SA (Phone: +41800621622)
+2026-07-19 15:55:47,291 - SearchCh - INFO - Successfully scraped listing: Sanfer SA (Phone: +41223280426)
+2026-07-19 15:55:49,307 - SearchCh - INFO - Querying local.ch directory: plombier in Vernier
+2026-07-19 15:55:57,722 - SearchCh - INFO - Successfully scraped listing: AVAI.CH S?rl (Phone: +41794723198)
+2026-07-19 15:55:59,730 - SearchCh - INFO - Successfully scraped listing: ALLOFUITES SA (Phone: +41800621622)
+2026-07-19 15:56:03,820 - SearchCh - INFO - Successfully scraped listing: ISOLTOUT SA (Phone: +41764436962)
+2026-07-19 15:56:05,905 - SearchCh - INFO - Successfully scraped listing: SM Piscines (Phone: +41786561379)
+2026-07-19 15:56:08,382 - SearchCh - INFO - Successfully scraped listing: Avilag Energies SA (Phone: +41223324444)
+2026-07-19 15:56:10,400 - SearchCh - INFO - Querying local.ch directory: plombier in Lancy
+2026-07-19 15:56:19,125 - SearchCh - INFO - Successfully scraped listing: L?man Fluides SA (Phone: +41227330072)
+2026-07-19 15:56:20,847 - SearchCh - INFO - Successfully scraped listing: SB Sanitaires S?rl (Phone: +41227967984)
+2026-07-19 15:56:22,886 - SearchCh - INFO - Successfully scraped listing: Dalloyeau S?rl (Phone: +41223000219)
+2026-07-19 15:56:25,413 - SearchCh - INFO - Successfully scraped listing: ROBATTI S?rl (Phone: +41227940182)
+2026-07-19 15:56:27,423 - SearchCh - INFO - Querying local.ch directory: plombier in Meyrin
+2026-07-19 15:56:36,461 - SearchCh - INFO - Successfully scraped listing: Luca entreprise g?n?rale (Phone: +41798703209)
+2026-07-19 15:56:38,477 - SearchCh - INFO - Successfully scraped listing: iSanit S?rl (Phone: +41223413730)
+2026-07-19 15:56:40,513 - SearchCh - INFO - Successfully scraped listing: L?man D?pannage s?rl (Phone: +41228860226)
+2026-07-19 15:56:42,441 - SearchCh - INFO - Successfully scraped listing: OSCAR PLOMBIER SARL - Installations sanitaires et D?pannages 24/24 - Gen?ve et Vaud (Phone: +41227828780)
+2026-07-19 15:56:44,458 - SearchCh - INFO - Querying local.ch directory: plombier in Carouge
+2026-07-19 15:56:54,979 - SearchCh - INFO - Successfully scraped listing: Schneider Sanitaires SA (Phone: +41228271010)
+2026-07-19 15:56:57,047 - SearchCh - INFO - Successfully scraped listing: ACEOGREEN SA (Phone: +41798009995)
+2026-07-19 15:56:58,979 - layer1 - INFO - Reached 150 DDGS leads, stopping DDGS search early.
+2026-07-19 15:56:59,336 - SearchCh - INFO - Successfully scraped listing: KGS Sanitaires S?rl (Phone: +41796193434)
+2026-07-19 15:57:01,225 - SearchCh - INFO - Successfully scraped listing: Schmidt Daniel SA (Phone: +41223421455)
+2026-07-19 15:57:03,255 - SearchCh - INFO - Querying local.ch directory: plombier in Fribourg
+2026-07-19 15:57:11,966 - SearchCh - INFO - Successfully scraped listing: TS La bricole (Phone: +41791707974)
+2026-07-19 15:57:15,336 - SearchCh - INFO - Successfully scraped listing: sanitherm installation s?rl (Phone: +41797839700)
+2026-07-19 15:57:19,347 - SearchCh - INFO - Successfully scraped listing: Mabec (Phone: +41263505590)
+2026-07-19 15:57:21,364 - SearchCh - INFO - Querying local.ch directory: plombier in Bulle
+2026-07-19 15:57:31,436 - SearchCh - INFO - Successfully scraped listing: AQUA Tech 3000 S?rl (Phone: +41794302492)
+2026-07-19 15:57:33,440 - SearchCh - INFO - Successfully scraped listing: Intera SA (Phone: +41269122232)
+2026-07-19 15:57:35,896 - SearchCh - INFO - Successfully scraped listing: Lionel Cantin S?rl (Phone: +41269123544)
+2026-07-19 15:57:37,904 - SearchCh - INFO - Querying local.ch directory: plombier in Villars-sur-Glâne
+2026-07-19 15:57:45,476 - layer5 - WARNING - Social search failed for iSanit Sàrl: Request timed out: ConnectTimeout('timed out')
+2026-07-19 15:57:46,029 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 2 seconds...
+2026-07-19 15:57:46,192 - SearchCh - INFO - Successfully scraped listing: Solutechnique S?rl (Phone: +41762306707)
+2026-07-19 15:57:48,115 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 4 seconds...
+2026-07-19 15:57:49,864 - SearchCh - INFO - Successfully scraped listing: JMartinez Sanitaire (Phone: +41765698415)
+2026-07-19 15:57:52,203 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 8 seconds...
+2026-07-19 15:57:53,383 - SearchCh - INFO - Successfully scraped listing: Mabec (Phone: +41263505590)
+2026-07-19 15:57:55,401 - SearchCh - INFO - Querying local.ch directory: plombier in Estavayer
+2026-07-19 15:58:04,283 - SearchCh - INFO - Successfully scraped listing: Daniel Ansermet (Phone: +41266634166)
+2026-07-19 15:58:08,807 - SearchCh - INFO - Successfully scraped listing: D?cotterd & Bulliard S?rl (Phone: +41266600866)
+2026-07-19 15:58:13,871 - SearchCh - INFO - Successfully scraped listing: ENDRY SA (Phone: +41266633060)
+2026-07-19 15:58:16,760 - SearchCh - INFO - Successfully scraped listing: Alfred Bise & Fils S.A. (Phone: +41266631864)
+2026-07-19 15:58:18,894 - SearchCh - INFO - Querying local.ch directory: plombier in Marly
+2026-07-19 15:58:33,991 - SearchCh - INFO - Successfully scraped listing: Hayoz & Brulhart SA (Phone: +41264812048)
+2026-07-19 15:58:38,556 - SearchCh - INFO - Successfully scraped listing: R.J. Technique (Phone: +41796633616)
+2026-07-19 15:58:41,002 - SearchCh - INFO - Successfully scraped listing: Kreienb?hl Alfred (Phone: +41264363226)
+2026-07-19 15:58:45,158 - SearchCh - INFO - Successfully scraped listing: Cossa Cotting Sanitaires SA (Phone: +41264652555)
+2026-07-19 15:58:47,190 - SearchCh - INFO - Querying local.ch directory: plombier in Sion
+2026-07-19 15:59:03,361 - SearchCh - INFO - Successfully scraped listing: FP Climat S?rl (Phone: +41272030566)
+2026-07-19 15:59:05,086 - layer5 - WARNING - Social search failed for Léman Dépannage sàrl: Request timed out: ConnectTimeout('timed out')
+2026-07-19 15:59:05,731 - SearchCh - INFO - Successfully scraped listing: Gasanin Sanitaire Chauffage S?rl (Phone: +41795656502)
+2026-07-19 15:59:05,819 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 2 seconds...
+2026-07-19 15:59:07,941 - SearchCh - INFO - Successfully scraped listing: Francioli et fils SA (Phone: +41273221816)
+2026-07-19 15:59:07,952 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 4 seconds...
+2026-07-19 15:59:09,953 - SearchCh - INFO - Querying local.ch directory: plombier in Martigny
+2026-07-19 15:59:12,104 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 8 seconds...
+2026-07-19 15:59:18,068 - SearchCh - INFO - Successfully scraped listing: CVS Confort & Cie SA (Phone: +41277221760)
+2026-07-19 15:59:21,689 - SearchCh - INFO - Successfully scraped listing: Tecnoservice Engineering SA (Phone: +41277217171)
+2026-07-19 15:59:24,129 - SearchCh - INFO - Successfully scraped listing: Bestazzoni SA (Phone: +41277204820)
+2026-07-19 15:59:26,507 - SearchCh - INFO - Successfully scraped listing: ARBERIA S?rl - D?pannage Sanitaire Chauffage (Phone: +41787753600)
+2026-07-19 15:59:28,557 - SearchCh - INFO - Successfully scraped listing: STAUB Sanitaire Chauffage SA (Phone: +41792589295)
+2026-07-19 15:59:30,564 - SearchCh - INFO - Querying local.ch directory: plombier in Monthey
+2026-07-19 15:59:40,413 - SearchCh - INFO - Successfully scraped listing: Franco D?pannages (Phone: +41244958291)
+2026-07-19 15:59:42,364 - SearchCh - INFO - Successfully scraped listing: Gollut Hydrotec S?rl (Phone: +41244774902)
+2026-07-19 15:59:43,972 - SearchCh - INFO - Successfully scraped listing: Vieira Dos Santos, Sanitaire et Chauffage (Phone: +41788736076)
+2026-07-19 15:59:45,982 - SearchCh - INFO - Querying local.ch directory: plombier in Sierre
+2026-07-19 15:59:55,683 - SearchCh - INFO - Successfully scraped listing: Revey S?rl (Phone: +41798217188)
+2026-07-19 15:59:57,342 - SearchCh - INFO - Successfully scraped listing: AF Antonio Fernandes S?rl (Phone: +41774225354)
+2026-07-19 15:59:59,328 - SearchCh - INFO - Successfully scraped listing: Zampilli Salvatore (Phone: +41788421779)
+2026-07-19 16:00:01,583 - SearchCh - INFO - Successfully scraped listing: Berclaz et Romailler SA (Phone: +41274812259)
+2026-07-19 16:00:03,352 - SearchCh - INFO - Successfully scraped listing: Fr?d?ric Zufferey & cie S?rl (Phone: +41274802439)
+2026-07-19 16:00:05,361 - SearchCh - INFO - Querying local.ch directory: plombier in Brig-Glis
+2026-07-19 16:00:17,082 - layer5 - WARNING - Social search failed for OSCAR PLOMBIER SARL - Installations sanitaires et Dépannages 24/24 - Genève et Vaud: Request timed out: ConnectTimeout('timed out')
+2026-07-19 16:00:18,123 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 2 seconds...
+2026-07-19 16:00:20,277 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 4 seconds...
+2026-07-19 16:00:24,502 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 8 seconds...
+2026-07-19 16:02:00,166 - layer5 - WARNING - Social search failed for Aly Andrea: Request timed out: ConnectTimeout('timed out')
+2026-07-19 16:02:00,679 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 2 seconds...
+2026-07-19 16:02:02,819 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 4 seconds...
+2026-07-19 16:02:06,918 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 8 seconds...
+2026-07-19 16:03:04,297 - Database - INFO - All leads cleared from database.
+2026-07-19 16:03:11,818 - Database - INFO - Database initialized at data/leads.db
+2026-07-19 16:03:14,355 - SearchCh - INFO - Initializing search.ch directory crawler fallback (no key provided)
+2026-07-19 16:03:14,756 - SearchCh - INFO - Querying local.ch directory: plombier in Genève
+2026-07-19 16:03:25,862 - SearchCh - INFO - Successfully scraped listing: Luca entreprise g?n?rale (Phone: +41798703209)
+2026-07-19 16:03:27,807 - SearchCh - INFO - Successfully scraped listing: ALLOFUITES SA (Phone: +41800621622)
+2026-07-19 16:03:30,264 - SearchCh - INFO - Successfully scraped listing: DALLAIS SA (Phone: +41223486191)
+2026-07-19 16:03:33,271 - SearchCh - INFO - Successfully scraped listing: L?man Fluides SA (Phone: +41227330072)
+2026-07-19 16:03:35,291 - SearchCh - INFO - Querying local.ch directory: plombier in Vernier
+2026-07-19 16:03:46,793 - SearchCh - INFO - Successfully scraped listing: ISOLTOUT SA (Phone: +41764436962)
+2026-07-19 16:03:50,262 - SearchCh - INFO - Successfully scraped listing: AVAI.CH S?rl (Phone: +41794723198)
+2026-07-19 16:03:55,603 - SearchCh - INFO - Successfully scraped listing: ALLOFUITES SA (Phone: +41800621622)
+2026-07-19 16:03:58,288 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 2 seconds...
+2026-07-19 16:03:58,337 - SearchCh - INFO - Successfully scraped listing: SM Piscines (Phone: +41786561379)
+2026-07-19 16:04:00,427 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 4 seconds...
+2026-07-19 16:04:01,296 - SearchCh - INFO - Successfully scraped listing: TS Sanitaire S?rl (Phone: +41799382942)
+2026-07-19 16:04:03,484 - SearchCh - INFO - Querying local.ch directory: plombier in Lancy
+2026-07-19 16:04:04,650 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 8 seconds...
+2026-07-19 16:04:17,136 - layer1 - WARNING - Maps search error: Request timed out: ConnectTimeout('timed out')
+2026-07-19 16:04:24,254 - SearchCh - INFO - Successfully scraped listing: L?man Fluides SA (Phone: +41227330072)
+2026-07-19 16:04:26,799 - SearchCh - INFO - Successfully scraped listing: SB Sanitaires S?rl (Phone: +41227967984)
+2026-07-19 16:04:31,793 - SearchCh - INFO - Successfully scraped listing: D?tartrage-Secours S?rl (Phone: +41223492078)
+2026-07-19 16:04:35,307 - SearchCh - INFO - Successfully scraped listing: ROBATTI S?rl (Phone: +41227940182)
+2026-07-19 16:04:37,392 - SearchCh - INFO - Querying local.ch directory: plombier in Meyrin
+2026-07-19 16:04:54,614 - SearchCh - INFO - Successfully scraped listing: Luca entreprise g?n?rale (Phone: +41798703209)
+2026-07-19 16:04:59,111 - SearchCh - INFO - Successfully scraped listing: iSanit S?rl (Phone: +41223413730)
+2026-07-19 16:05:02,779 - SearchCh - INFO - Successfully scraped listing: L?man D?pannage s?rl (Phone: +41228860226)
+2026-07-19 16:05:06,292 - SearchCh - INFO - Successfully scraped listing: OSCAR PLOMBIER SARL - Installations sanitaires et D?pannages 24/24 - Gen?ve et Vaud (Phone: +41227828780)
+2026-07-19 16:05:08,314 - SearchCh - INFO - Querying local.ch directory: plombier in Carouge
+2026-07-19 16:05:13,880 - layer1 - INFO - Reached 150 DDGS leads, stopping DDGS search early.
+2026-07-19 16:05:23,650 - SearchCh - INFO - Successfully scraped listing: Schneider Sanitaires SA (Phone: +41228271010)
+2026-07-19 16:05:26,151 - SearchCh - INFO - Successfully scraped listing: ACEOGREEN SA (Phone: +41798009995)
+2026-07-19 16:05:29,878 - SearchCh - INFO - Successfully scraped listing: KGS Sanitaires S?rl (Phone: +41796193434)
+2026-07-19 16:05:32,042 - SearchCh - INFO - Successfully scraped listing: Canal'eau S?rl (Phone: +41225577671)
+2026-07-19 16:05:34,058 - SearchCh - INFO - Querying local.ch directory: plombier in Fribourg
+2026-07-19 16:05:43,595 - SearchCh - INFO - Successfully scraped listing: sanitherm installation s?rl (Phone: +41797839700)
+2026-07-19 16:05:45,571 - SearchCh - INFO - Successfully scraped listing: TS La bricole (Phone: +41791707974)
+2026-07-19 16:05:47,517 - SearchCh - INFO - Successfully scraped listing: Schaeffer SA (Phone: +41264247125)
+2026-07-19 16:05:49,515 - SearchCh - INFO - Querying local.ch directory: plombier in Bulle
+2026-07-19 16:05:54,665 - layer5 - WARNING - Social search failed for ENERGY 4 CONCEPT SA: Request timed out: ConnectTimeout('timed out')
+2026-07-19 16:05:55,254 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 2 seconds...
+2026-07-19 16:05:57,355 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 4 seconds...
+2026-07-19 16:05:57,514 - SearchCh - INFO - Successfully scraped listing: AQUA Tech 3000 S?rl (Phone: +41794302492)
+2026-07-19 16:05:59,673 - SearchCh - INFO - Successfully scraped listing: Intera SA (Phone: +41269122232)
+2026-07-19 16:06:01,479 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 8 seconds...
+2026-07-19 16:06:03,340 - SearchCh - INFO - Successfully scraped listing: Di Benedetto S?rl (Phone: +41794332860)
+2026-07-19 16:06:05,360 - SearchCh - INFO - Querying local.ch directory: plombier in Villars-sur-Glâne
+2026-07-19 16:06:13,903 - SearchCh - INFO - Successfully scraped listing: Solutechnique S?rl (Phone: +41762306707)
+2026-07-19 16:06:15,799 - SearchCh - INFO - Successfully scraped listing: JMartinez Sanitaire (Phone: +41765698415)
+2026-07-19 16:06:19,386 - SearchCh - INFO - Successfully scraped listing: Mabec (Phone: +41263505590)
+2026-07-19 16:06:21,395 - SearchCh - INFO - Querying local.ch directory: plombier in Estavayer
+2026-07-19 16:06:28,946 - SearchCh - INFO - Successfully scraped listing: Daniel Ansermet (Phone: +41266634166)
+2026-07-19 16:06:32,212 - SearchCh - INFO - Successfully scraped listing: D?cotterd & Bulliard S?rl (Phone: +41266600866)
+2026-07-19 16:06:34,388 - SearchCh - INFO - Successfully scraped listing: ENDRY SA (Phone: +41266633060)
+2026-07-19 16:06:36,409 - SearchCh - INFO - Successfully scraped listing: Alfred Bise & Fils S.A. (Phone: +41266631864)
+2026-07-19 16:06:38,426 - SearchCh - INFO - Querying local.ch directory: plombier in Marly
+2026-07-19 16:06:48,754 - SearchCh - INFO - Successfully scraped listing: Hayoz & Brulhart SA (Phone: +41264812048)
+2026-07-19 16:06:50,797 - SearchCh - INFO - Successfully scraped listing: R.J. Technique (Phone: +41796633616)
+2026-07-19 16:06:52,396 - SearchCh - INFO - Successfully scraped listing: Kreienb?hl Alfred (Phone: +41264363226)
+2026-07-19 16:06:54,446 - SearchCh - INFO - Successfully scraped listing: Cossa Cotting Sanitaires SA (Phone: +41264652555)
+2026-07-19 16:06:56,462 - SearchCh - INFO - Querying local.ch directory: plombier in Sion
+2026-07-19 16:07:08,084 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 2 seconds...
+2026-07-19 16:07:10,344 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 4 seconds...
+2026-07-19 16:07:11,598 - SearchCh - INFO - Successfully scraped listing: FP Climat S?rl (Phone: +41272030566)
+2026-07-19 16:07:14,519 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 8 seconds...
+2026-07-19 16:07:19,456 - SearchCh - INFO - Successfully scraped listing: Vincent Bourdin S?rl (Phone: +41796443293)
+2026-07-19 16:07:21,573 - SearchCh - INFO - Querying local.ch directory: plombier in Martigny
+2026-07-19 16:07:44,773 - SearchCh - INFO - Successfully scraped listing: CVS Confort & Cie SA (Phone: +41277221760)
+2026-07-19 16:07:50,307 - SearchCh - INFO - Successfully scraped listing: Valtherm Tech S?rl (Phone: +41277444848)
+2026-07-19 16:07:53,552 - SearchCh - INFO - Successfully scraped listing: Tecnoservice Engineering SA (Phone: +41277217171)
+2026-07-19 16:07:56,545 - SearchCh - INFO - Successfully scraped listing: ARBERIA S?rl - D?pannage Sanitaire Chauffage (Phone: +41787753600)
+2026-07-19 16:08:02,683 - SearchCh - INFO - Successfully scraped listing: Bestazzoni SA (Phone: +41277204820)
+2026-07-19 16:08:04,695 - SearchCh - INFO - Querying local.ch directory: plombier in Monthey
+2026-07-19 16:08:29,057 - SearchCh - INFO - Successfully scraped listing: Franco D?pannages (Phone: +41244958291)
+2026-07-19 16:08:34,718 - SearchCh - INFO - Successfully scraped listing: Gollut Hydrotec S?rl (Phone: +41244774902)
+2026-07-19 16:08:40,180 - SearchCh - INFO - Successfully scraped listing: Vieira Dos Santos, Sanitaire et Chauffage (Phone: +41788736076)
+2026-07-19 16:08:42,344 - SearchCh - INFO - Querying local.ch directory: plombier in Sierre
+2026-07-19 16:08:59,921 - SearchCh - INFO - Successfully scraped listing: Revey S?rl (Phone: +41798217188)
+2026-07-19 16:09:04,744 - SearchCh - INFO - Successfully scraped listing: AF Antonio Fernandes S?rl (Phone: +41774225354)
+2026-07-19 16:09:07,613 - SearchCh - INFO - Successfully scraped listing: Zampilli Salvatore (Phone: +41788421779)
+2026-07-19 16:09:10,309 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 2 seconds...
+2026-07-19 16:09:10,429 - SearchCh - INFO - Successfully scraped listing: Berclaz et Romailler SA (Phone: +41274812259)
+2026-07-19 16:09:12,508 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 4 seconds...
+2026-07-19 16:09:14,397 - SearchCh - INFO - Successfully scraped listing: Fr?d?ric Zufferey & cie S?rl (Phone: +41274802439)
+2026-07-19 16:09:16,460 - SearchCh - INFO - Querying local.ch directory: plombier in Brig-Glis
+2026-07-19 16:09:16,693 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 8 seconds...
+2026-07-19 16:09:34,391 - SearchCh - INFO - Successfully scraped listing: Ryantec AG (Phone: +41279237400)
+2026-07-19 16:09:39,078 - SearchCh - INFO - Successfully scraped listing: Hurni Haustechnik (Phone: +41796008346)
+2026-07-19 16:09:55,718 - SearchCh - WARNING - Error fetching detail page https://www.local.ch/fr/d/gamsen/3900/sanitaire/zehnder-josef-ag-KQPva6gliP6zwXn3tgpjsQ: The read operation timed out
+2026-07-19 16:09:56,707 - SearchCh - WARNING - Error fetching detail page https://www.local.ch/fr/d/gamsen/3900/sanitaire/schnydrig-r-haustechnik-ag-6SSLCS2s_-U19pj_Dpa5-w: [Errno 11001] getaddrinfo failed
+2026-07-19 16:09:58,727 - SearchCh - INFO - Querying local.ch directory: plombier in Lausanne
+2026-07-19 16:09:59,066 - SearchCh - ERROR - Local.ch scraping error: [Errno 11001] getaddrinfo failed
+2026-07-19 16:10:01,082 - SearchCh - INFO - Querying local.ch directory: plombier in Yverdon-les-Bains
+2026-07-19 16:10:01,830 - layer1 - WARNING - Maps search error: error sending request for url (https://search.yahoo.com/search;_ylt=jOP1lXDgN3qHkoq-WAkKLxaX;_ylu=N2YymcYa80rRR__meXWaz6l2vjpPJaqZUuVohgYZ7grvZPo?p=chauffagiste+Grand-Saconnex+site%3Agoogle.com%2Fmaps) > operation timed out
+2026-07-19 16:10:08,021 - SearchCh - ERROR - Local.ch scraping error: [Errno 11001] getaddrinfo failed
+2026-07-19 16:10:10,065 - SearchCh - INFO - Querying local.ch directory: plombier in Montreux
+2026-07-19 16:10:14,810 - SearchCh - ERROR - Local.ch scraping error: [Errno 11001] getaddrinfo failed
+2026-07-19 16:10:16,143 - layer1 - WARNING - Maps search error: ConnectError: ConnectError('error sending request for url (https://yandex.com/search/site/?text=chauffagiste+Ch%C3%AAne-Bougeries+site%3Agoogle.com%2Fmaps&web=1&searchid=6368612) > client error (Connect) > tcp connect error > A socket operation was attempted to an unreachable host. (os error 10065)')
+2026-07-19 16:10:16,856 - SearchCh - INFO - Querying local.ch directory: plombier in Renens
+2026-07-19 16:10:19,148 - SearchCh - ERROR - Local.ch scraping error: [Errno 11001] getaddrinfo failed
+2026-07-19 16:10:20,799 - layer1 - WARNING - Maps search error: ConnectError: ConnectError('error sending request for url (https://search.yahoo.com/search;_ylt=0HWjrAF3-0mn6mb9RCetqEQL;_ylu=Kdoq8icmw9RPAITH_pAISFJvFptYifKIl2wm6RMoCp3riHM?p=sanitaire+Gen%C3%A8ve+site%3Agoogle.com%2Fmaps) > client error (Connect) > dns error > no connections available')
+2026-07-19 16:10:21,244 - SearchCh - INFO - Querying local.ch directory: plombier in Nyon
+2026-07-19 16:10:24,494 - layer1 - WARNING - Maps search error: ConnectError: ConnectError('error sending request for url (https://www.mojeek.com/search?q=sanitaire+Vernier+site%3Agoogle.com%2Fmaps) > client error (Connect) > tcp connect error > A socket operation was attempted to an unreachable host. (os error 10065)')
+2026-07-19 16:10:24,534 - layer1 - ERROR - Too many consecutive Maps errors, pausing Maps for 15s...
+2026-07-19 16:10:25,877 - SearchCh - ERROR - Local.ch scraping error: [Errno 11001] getaddrinfo failed
+2026-07-19 16:10:27,927 - SearchCh - INFO - Querying local.ch directory: plombier in Neuchâtel
+2026-07-19 16:10:28,615 - SearchCh - ERROR - Local.ch scraping error: [Errno 11001] getaddrinfo failed
+2026-07-19 16:10:30,630 - SearchCh - INFO - Querying local.ch directory: plombier in La Chaux-de-Fonds
+2026-07-19 16:10:31,052 - SearchCh - ERROR - Local.ch scraping error: [Errno 11001] getaddrinfo failed
+2026-07-19 16:10:33,069 - SearchCh - INFO - Querying local.ch directory: plombier in Le Locle
+2026-07-19 16:10:33,438 - SearchCh - ERROR - Local.ch scraping error: [Errno 11001] getaddrinfo failed
+2026-07-19 16:10:34,590 - WebAnalyzer - ERROR - Fallback analysis failed for https://www.swissmadesoftware.org/home.html: [Errno 11001] getaddrinfo failed
+2026-07-19 16:10:35,448 - SearchCh - INFO - Querying local.ch directory: plombier in Val-de-Travers
+2026-07-19 16:10:35,994 - SearchCh - ERROR - Local.ch scraping error: [Errno 11001] getaddrinfo failed
+2026-07-19 16:10:38,014 - SearchCh - INFO - Querying local.ch directory: plombier in Val-de-Ruz
+2026-07-19 16:10:38,414 - SearchCh - ERROR - Local.ch scraping error: [Errno 11001] getaddrinfo failed
+2026-07-19 16:10:39,779 - layer1 - WARNING - Maps search error: ConnectError: ConnectError('[Errno 11001] getaddrinfo failed')
+2026-07-19 16:10:40,437 - SearchCh - INFO - Querying local.ch directory: plombier in Delémont
+2026-07-19 16:10:40,603 - SearchCh - ERROR - Local.ch scraping error: [Errno 11001] getaddrinfo failed
+2026-07-19 16:10:42,615 - SearchCh - INFO - Querying local.ch directory: plombier in Porrentruy
+2026-07-19 16:10:42,837 - layer1 - WARNING - Maps search error: ConnectError: ConnectError('[Errno 11001] getaddrinfo failed')
+2026-07-19 16:10:43,380 - SearchCh - ERROR - Local.ch scraping error: [Errno 11001] getaddrinfo failed
+2026-07-19 16:10:45,393 - SearchCh - INFO - Querying local.ch directory: plombier in Courroux
+2026-07-19 16:11:06,867 - SearchCh - INFO - Successfully scraped listing: Denis Paratte S?rl (Phone: +41324225881)
+2026-07-19 16:11:16,824 - SearchCh - INFO - Successfully scraped listing: Aquatherm Courroux Sarl (Phone: +41791283432)
+2026-07-19 16:11:18,903 - SearchCh - INFO - Querying local.ch directory: plombier in Courrendlin
+2026-07-19 16:11:39,177 - SearchCh - INFO - Successfully scraped listing: Eco6therm S?rl (Phone: +41324355511)
+2026-07-19 16:11:40,724 - SearchCh - INFO - Successfully scraped listing: Schaller Olivier S?rl (Phone: +41324355515)
+2026-07-19 16:11:42,940 - layer5 - WARNING - Social search failed for Tec Energie SA: Request timed out: ConnectTimeout('timed out')
+2026-07-19 16:11:43,017 - SearchCh - INFO - Successfully scraped listing: Emipuls Swiss SA (Phone: +41323851622)
+2026-07-19 16:11:43,629 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 2 seconds...
+2026-07-19 16:11:45,022 - SearchCh - INFO - Querying local.ch directory: plombier in Saignelégier
+2026-07-19 16:11:45,733 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 4 seconds...
+2026-07-19 16:11:49,837 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 8 seconds...
+2026-07-19 16:11:54,176 - SearchCh - INFO - Successfully scraped listing: Quentin Bertrand S?rl (Phone: +41329513764)
+2026-07-19 16:11:56,330 - SearchCh - INFO - Successfully scraped listing: Steiner Nicolas (Phone: +41329511113)
+2026-07-19 16:11:58,263 - SearchCh - INFO - Successfully scraped listing: Eco6therm S?rl (Phone: +41324355511)
+2026-07-19 16:12:00,278 - SearchCh - INFO - Querying local.ch directory: plomberie in Genève
+2026-07-19 16:12:08,559 - SearchCh - INFO - Successfully scraped listing: Piralla Sanitaires SA (Phone: +41227367265)
+2026-07-19 16:12:16,442 - SearchCh - INFO - Successfully scraped listing: L'Art de l'eau (Phone: +41792876523)
+2026-07-19 16:12:25,719 - SearchCh - INFO - Successfully scraped listing: Wolff Nicole & Louis SA (Phone: +41227531350)
+2026-07-19 16:12:30,662 - SearchCh - INFO - Successfully scraped listing: depann24.ch Plombier Gen?ve et Vaud (Phone: +41764492051)
+2026-07-19 16:12:32,797 - SearchCh - INFO - Querying local.ch directory: plomberie in Vernier
+2026-07-19 16:13:15,603 - SearchCh - INFO - Successfully scraped listing: ALLOFUITES SA (Phone: +41800621622)
+2026-07-19 16:13:22,079 - SearchCh - INFO - Successfully scraped listing: AVAI.CH S?rl (Phone: +41794723198)
+2026-07-19 16:13:27,853 - SearchCh - INFO - Successfully scraped listing: Sanitaire Garin Marcel (Phone: +41223411225)
+2026-07-19 16:13:31,620 - SearchCh - INFO - Successfully scraped listing: RF-Sanitaire (Phone: +41793553308)
+2026-07-19 16:13:33,805 - SearchCh - INFO - Querying local.ch directory: plomberie in Lancy
+2026-07-19 16:14:04,743 - SearchCh - INFO - Successfully scraped listing: Dalloyeau S?rl (Phone: +41223000219)
+2026-07-19 16:14:08,948 - SearchCh - INFO - Successfully scraped listing: Maulini et Prini SA (Phone: +41227945075)
+2026-07-19 16:14:14,171 - SearchCh - INFO - Successfully scraped listing: ROBATTI S?rl (Phone: +41227940182)
+2026-07-19 16:14:20,832 - SearchCh - INFO - Successfully scraped listing: C&J INNOVATION S?rl (Phone: +41223402265)
+2026-07-19 16:14:22,840 - SearchCh - INFO - Querying local.ch directory: plomberie in Meyrin
+2026-07-19 16:14:51,740 - SearchCh - INFO - Successfully scraped listing: Luca entreprise g?n?rale (Phone: +41798703209)
+2026-07-19 16:14:57,670 - SearchCh - INFO - Successfully scraped listing: L?man D?pannage s?rl (Phone: +41228860226)
+2026-07-19 16:15:00,339 - SearchCh - INFO - Successfully scraped listing: Baronciani One Plomberie (Phone: +41786531074)
+2026-07-19 16:15:05,721 - SearchCh - INFO - Successfully scraped listing: C&J INNOVATION S?rl (Phone: +41223402265)
+2026-07-19 16:15:07,804 - SearchCh - INFO - Querying local.ch directory: plomberie in Carouge
+2026-07-19 16:15:37,669 - SearchCh - INFO - Successfully scraped listing: Schneider Sanitaires SA (Phone: +41228271010)
+2026-07-19 16:15:45,469 - layer5 - WARNING - Social search failed for Schneider Sanitaires SA: ConnectError: ConnectError('error sending request for url (https://www.startpage.com/) > client error (Connect) > tcp connect error > No connection could be made because the target machine actively refused it. (os error 10061)')
+2026-07-19 16:15:46,353 - SearchCh - INFO - Successfully scraped listing: Depano Plombier (Phone: +41779242660)
+2026-07-19 16:15:51,753 - SearchCh - INFO - Successfully scraped listing: SR plomberie (Phone: +41793173614)
+2026-07-19 16:15:53,894 - SearchCh - INFO - Querying local.ch directory: plomberie in Fribourg
+2026-07-19 16:15:59,536 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 2 seconds...
+2026-07-19 16:16:01,987 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 4 seconds...
+2026-07-19 16:16:06,278 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 8 seconds...
+2026-07-19 16:16:28,374 - SearchCh - INFO - Successfully scraped listing: DC.CIS Plombier / Installations Sanitaires / Conception Sanitaire (Phone: +41788506434)
+2026-07-19 16:16:35,539 - SearchCh - INFO - Successfully scraped listing: FJ Sanitaire S?rl (Phone: +41782609799)
+2026-07-19 16:16:40,212 - SearchCh - INFO - Successfully scraped listing: DgGExpertise Fribourg (Phone: +41265580120)
+2026-07-19 16:16:44,739 - SearchCh - INFO - Successfully scraped listing: GENOUD INSTALLATIONS SANITAIRES SA (Phone: +41792084659)
+2026-07-19 16:16:46,790 - SearchCh - INFO - Querying local.ch directory: plomberie in Bulle
+2026-07-19 16:17:07,973 - SearchCh - INFO - Successfully scraped listing: Intera SA (Phone: +41269122232)
+2026-07-19 16:17:12,023 - SearchCh - INFO - Successfully scraped listing: Philippe Andrey Installations Sanitaires et Chauffage SA (Phone: +41269124760)
+2026-07-19 16:17:14,035 - SearchCh - INFO - Successfully scraped listing: R.J. Technique (Phone: +41796633616)
+2026-07-19 16:17:16,041 - SearchCh - INFO - Querying local.ch directory: plomberie in Villars-sur-Glâne
+2026-07-19 16:17:22,704 - SearchCh - INFO - Successfully scraped listing: Cossa Cotting Sanitaires SA (Phone: +41264652555)
+2026-07-19 16:17:26,339 - SearchCh - INFO - Successfully scraped listing: JEM Services (Phone: +41797539585)
+2026-07-19 16:17:29,840 - SearchCh - INFO - Successfully scraped listing: R.J. Technique (Phone: +41796633616)
+2026-07-19 16:17:31,601 - SearchCh - INFO - Successfully scraped listing: TK Installations Chauffage & Sanitaire (Phone: +41795204546)
+2026-07-19 16:17:33,278 - SearchCh - INFO - Successfully scraped listing: Cossa Cotting Sanitaires SA (Phone: +41264652555)
+2026-07-19 16:17:35,291 - SearchCh - INFO - Querying local.ch directory: plomberie in Estavayer
+2026-07-19 16:17:39,001 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 2 seconds...
+2026-07-19 16:17:41,117 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 4 seconds...
+2026-07-19 16:17:43,802 - SearchCh - INFO - Successfully scraped listing: Daniel Ansermet (Phone: +41266634166)
+2026-07-19 16:17:45,398 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 8 seconds...
+2026-07-19 16:17:47,097 - SearchCh - INFO - Successfully scraped listing: Daniel Ansermet (Phone: +41266634166)
+2026-07-19 16:17:49,112 - SearchCh - INFO - Querying local.ch directory: plomberie in Marly
+2026-07-19 16:18:09,948 - SearchCh - INFO - Successfully scraped listing: R.J. Technique (Phone: +41796633616)
+2026-07-19 16:18:12,160 - SearchCh - INFO - Successfully scraped listing: Frid?sam SA (Phone: +41798002443)
+2026-07-19 16:18:14,292 - SearchCh - INFO - Successfully scraped listing: Plomberie Ferblanterie Monney S?rl (Phone: +41264135050)
+2026-07-19 16:18:16,201 - SearchCh - INFO - Successfully scraped listing: Cossa Cotting Sanitaires SA (Phone: +41264652555)
+2026-07-19 16:18:27,099 - Database - INFO - All leads cleared from database.
+2026-07-19 16:18:35,743 - Database - INFO - Database initialized at data/leads.db
+2026-07-19 16:18:36,611 - SearchCh - INFO - Initializing search.ch directory crawler fallback (no key provided)
+2026-07-19 16:18:36,804 - SearchCh - INFO - Querying local.ch directory: plombier in Genève
+2026-07-19 16:18:48,669 - SearchCh - INFO - Successfully scraped listing: Pool Sanit S?rl (Phone: +41782699380)
+2026-07-19 16:18:50,767 - SearchCh - INFO - Successfully scraped listing: ACEOGREEN SA (Phone: +41798009995)
+2026-07-19 16:18:52,457 - SearchCh - INFO - Successfully scraped listing: Schneider Sanitaires SA (Phone: +41228271010)
+2026-07-19 16:18:56,243 - SearchCh - INFO - Querying local.ch directory: plombier in Vernier
+2026-07-19 16:19:04,499 - SearchCh - INFO - Successfully scraped listing: ISOLTOUT SA (Phone: +41764436962)
+2026-07-19 16:19:06,496 - SearchCh - INFO - Successfully scraped listing: AVAI.CH S?rl (Phone: +41794723198)
+2026-07-19 16:19:08,173 - SearchCh - INFO - Successfully scraped listing: ALLOFUITES SA (Phone: +41800621622)
+2026-07-19 16:19:09,788 - SearchCh - INFO - Successfully scraped listing: SM Piscines (Phone: +41786561379)
+2026-07-19 16:19:11,880 - SearchCh - INFO - Successfully scraped listing: TS Sanitaire S?rl (Phone: +41799382942)
+2026-07-19 16:19:13,872 - SearchCh - INFO - Querying local.ch directory: plombier in Lancy
+2026-07-19 16:19:23,502 - SearchCh - INFO - Successfully scraped listing: L?man Fluides SA (Phone: +41227330072)
+2026-07-19 16:19:25,280 - SearchCh - INFO - Successfully scraped listing: SB Sanitaires S?rl (Phone: +41227967984)
+2026-07-19 16:19:28,786 - SearchCh - INFO - Successfully scraped listing: Romande Energie Services SA (Phone: +41223093860)
+2026-07-19 16:19:31,954 - SearchCh - INFO - Successfully scraped listing: Maulini et Prini SA (Phone: +41227945075)
+2026-07-19 16:19:40,258 - SearchCh - INFO - Successfully scraped listing: Dalloyeau S?rl (Phone: +41223000219)
+2026-07-19 16:19:41,653 - layer1 - WARNING - Maps search error: Request timed out: ConnectTimeout('timed out')
+2026-07-19 16:19:42,409 - SearchCh - INFO - Querying local.ch directory: plombier in Meyrin
+2026-07-19 16:19:45,773 - layer5 - WARNING - Social search failed for Schmidt Daniel SA: ConnectError: ConnectError('error sending request for url (https://www.startpage.com/) > client error (Connect) > tcp connect error > No connection could be made because the target machine actively refused it. (os error 10061)')
+2026-07-19 16:19:50,556 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 2 seconds...
+2026-07-19 16:19:52,902 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 4 seconds...
+2026-07-19 16:19:54,765 - layer1 - INFO - Reached 100 DDGS leads, stopping DDGS search early.
+2026-07-19 16:19:57,839 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 8 seconds...
+2026-07-19 16:20:18,787 - SearchCh - INFO - Successfully scraped listing: Luca entreprise g?n?rale (Phone: +41798703209)
+2026-07-19 16:20:23,746 - SearchCh - INFO - Successfully scraped listing: iSanit S?rl (Phone: +41223413730)
+2026-07-19 16:20:28,861 - SearchCh - INFO - Successfully scraped listing: L?man D?pannage s?rl (Phone: +41228860226)
+2026-07-19 16:20:31,427 - SearchCh - INFO - Successfully scraped listing: OSCAR PLOMBIER SARL - Installations sanitaires et D?pannages 24/24 - Gen?ve et Vaud (Phone: +41227828780)
+2026-07-19 16:20:33,545 - SearchCh - INFO - Querying local.ch directory: plombier in Carouge
+2026-07-19 16:20:52,034 - SearchCh - INFO - Successfully scraped listing: ACEOGREEN SA (Phone: +41798009995)
+2026-07-19 16:20:54,901 - SearchCh - INFO - Successfully scraped listing: Schneider Sanitaires SA (Phone: +41228271010)
+2026-07-19 16:21:01,494 - SearchCh - INFO - Successfully scraped listing: KGS Sanitaires S?rl (Phone: +41796193434)
+2026-07-19 16:21:14,727 - SearchCh - INFO - Successfully scraped listing: Canal'eau S?rl (Phone: +41225577671)
+2026-07-19 16:21:16,762 - SearchCh - INFO - Querying local.ch directory: plombier in Fribourg
+2026-07-19 16:21:28,411 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 2 seconds...
+2026-07-19 16:21:30,530 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 4 seconds...
+2026-07-19 16:21:35,389 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 8 seconds...
+2026-07-19 16:21:50,322 - SearchCh - INFO - Successfully scraped listing: TS La bricole (Phone: +41791707974)
+2026-07-19 16:21:56,112 - SearchCh - INFO - Successfully scraped listing: sanitherm installation s?rl (Phone: +41797839700)
+2026-07-19 16:22:15,547 - SearchCh - INFO - Successfully scraped listing: Mabec (Phone: +41263505590)
+2026-07-19 16:22:17,911 - SearchCh - INFO - Querying local.ch directory: plombier in Bulle
+2026-07-19 16:22:51,431 - SearchCh - INFO - Successfully scraped listing: AQUA Tech 3000 S?rl (Phone: +41794302492)
+2026-07-19 16:22:59,299 - SearchCh - INFO - Successfully scraped listing: Elinsa S?rl (Phone: +41269138908)
+2026-07-19 16:23:08,344 - SearchCh - INFO - Successfully scraped listing: RIEDO Clima SA Bulle (Phone: +41269196727)
+2026-07-19 16:23:16,101 - SearchCh - INFO - Successfully scraped listing: Di Benedetto S?rl (Phone: +41794332860)
+2026-07-19 16:23:18,127 - SearchCh - INFO - Querying local.ch directory: plombier in Villars-sur-Glâne
+2026-07-19 16:23:18,132 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 2 seconds...
+2026-07-19 16:23:21,187 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 4 seconds...
+2026-07-19 16:23:25,556 - GroqClient - WARNING - 429 Too Many Requests. Retrying in 8 seconds...
+2026-07-19 16:23:45,248 - SearchCh - INFO - Successfully scraped listing: Solutechnique S?rl (Phone: +41762306707)
+2026-07-19 16:23:52,123 - SearchCh - INFO - Successfully scraped listing: JMartinez Sanitaire (Phone: +41765698415)
+2026-07-19 16:24:01,010 - SearchCh - INFO - Successfully scraped listing: Mabec (Phone: +41263505590)
+2026-07-19 16:24:03,341 - SearchCh - INFO - Querying local.ch directory: plombier in Estavayer
+2026-07-19 16:24:38,120 - SearchCh - INFO - Successfully scraped listing: Daniel Ansermet (Phone: +41266634166)
+2026-07-19 16:24:40,970 - layer6 - WARNING - Decision-maker search failed for Bugna Technical SA – Chauffages à Monthey | local.ch: ConnectError: ConnectError('error sending request for url (https://www.startpage.com/) > client error (Connect) > tcp connect error > No connection could be made because the target machine actively refused it. (os error 10061)')
+2026-07-19 16:24:44,742 - SearchCh - INFO - Successfully scraped listing: D?cotterd & Bulliard S?rl (Phone: +41266600866)
+2026-07-19 16:24:49,282 - SearchCh - INFO - Successfully scraped listing: ENDRY SA (Phone: +41266633060)
+2026-07-19 16:24:51,810 - SearchCh - INFO - Successfully scraped listing: Alfred Bise & Fils S.A. (Phone: +41266631864)
+2026-07-19 16:24:53,841 - SearchCh - INFO - Querying local.ch directory: plombier in Marly
+2026-07-19 16:25:31,666 - SearchCh - INFO - Successfully scraped listing: Hayoz & Brulhart SA (Phone: +41264812048)
+2026-07-19 16:25:36,541 - SearchCh - INFO - Successfully scraped listing: R.J. Technique (Phone: +41796633616)
+2026-07-19 16:25:41,765 - SearchCh - INFO - Successfully scraped listing: Kreienb?hl Alfred (Phone: +41264363226)
+2026-07-19 16:25:44,309 - layer6 - WARNING - Decision-maker search failed for Chauffagiste Lancy. Dépannage Fuites et pannes de Chaudières: ConnectError: ConnectError('error sending request for url (https://www.startpage.com/) > client error (Connect) > tcp connect error > No connection could be made because the target machine actively refused it. (os error 10061)')
+2026-07-19 16:25:47,998 - SearchCh - INFO - Successfully scraped listing: Cossa Cotting Sanitaires SA (Phone: +41264652555)
+2026-07-19 16:25:50,040 - SearchCh - INFO - Querying local.ch directory: plombier in Sion
+2026-07-19 16:26:12,211 - layer6 - WARNING - Decision-maker search failed for Offre pour Plombier Trouver - Portail des artisans en Suisse: Request timed out: ConnectTimeout('timed out')
+2026-07-19 16:26:13,741 - SearchCh - INFO - Successfully scraped listing: FP Climat S?rl (Phone: +41272030566)
+2026-07-19 16:26:22,643 - SearchCh - INFO - Successfully scraped listing: Vincent Bourdin S?rl (Phone: +41796443293)
+2026-07-19 16:26:24,657 - SearchCh - INFO - Querying local.ch directory: plombier in Martigny
+2026-07-19 16:26:32,595 - SearchCh - INFO - Successfully scraped listing: CVS Confort & Cie SA (Phone: +41277221760)
+2026-07-19 16:26:34,848 - SearchCh - INFO - Successfully scraped listing: STAUB Sanitaire Chauffage SA (Phone: +41792589295)
+2026-07-19 16:26:37,005 - SearchCh - INFO - Successfully scraped listing: ARBERIA S?rl - D?pannage Sanitaire Chauffage (Phone: +41787753600)
+2026-07-19 16:26:39,438 - SearchCh - INFO - Successfully scraped listing: Tecnoservice Engineering SA (Phone: +41277217171)
+2026-07-19 16:26:42,945 - SearchCh - INFO - Successfully scraped listing: Bestazzoni SA (Phone: +41277204820)
+2026-07-19 16:26:44,969 - SearchCh - INFO - Querying local.ch directory: plombier in Monthey
+2026-07-19 16:26:49,713 - layer6 - WARNING - Decision-maker search failed for Kaufmann Sanitaire & CVC SA | 022 345 92 53 | Vernier (Genève): Request timed out: ConnectTimeout('timed out')
+2026-07-19 16:26:53,466 - SearchCh - INFO - Successfully scraped listing: Franco D?pannages (Phone: +41244958291)
+2026-07-19 16:26:55,417 - SearchCh - INFO - Successfully scraped listing: Vieira Dos Santos, Sanitaire et Chauffage (Phone: +41788736076)
+2026-07-19 16:26:57,346 - SearchCh - INFO - Successfully scraped listing: Gollut Hydrotec S?rl (Phone: +41244774902)
+2026-07-19 16:26:59,372 - SearchCh - INFO - Querying local.ch directory: plombier in Sierre
+2026-07-19 16:27:03,794 - layer6 - WARNING - Decision-maker search failed for Plombier Vernier - AquaVernier Services | Urgence 24h/24: Request timed out: ConnectTimeout('timed out')
+2026-07-19 16:27:11,283 - SearchCh - INFO - Successfully scraped listing: Revey S?rl (Phone: +41798217188)
+2026-07-19 16:27:13,453 - SearchCh - INFO - Successfully scraped listing: AF Antonio Fernandes S?rl (Phone: +41774225354)
+2026-07-19 16:27:15,491 - SearchCh - INFO - Successfully scraped listing: Zampilli Salvatore (Phone: +41788421779)
+2026-07-19 16:27:17,872 - SearchCh - INFO - Successfully scraped listing: Berclaz et Romailler SA (Phone: +41274812259)
+2026-07-19 16:27:19,779 - SearchCh - INFO - Successfully scraped listing: Fr?d?ric Zufferey & cie S?rl (Phone: +41274802439)
+2026-07-19 16:27:21,805 - SearchCh - INFO - Querying local.ch directory: plombier in Brig-Glis
+2026-07-19 16:27:31,067 - layer6 - WARNING - Decision-maker search failed for Plombier Lausanne - Sanitaire Région Lausannoise | 021 519 24 90: ConnectError: ConnectError('error sending request for url (https://www.startpage.com/) > client error (Connect) > tcp connect error > No connection could be made because the target machine actively refused it. (os error 10061)')
+2026-07-19 16:27:33,570 - SearchCh - INFO - Successfully scraped listing: Ryantec AG (Phone: +41279237400)
+2026-07-19 16:27:36,172 - SearchCh - INFO - Successfully scraped listing: Hurni Haustechnik (Phone: +41796008346)
+2026-07-19 16:27:38,634 - SearchCh - INFO - Successfully scraped listing: Zehnder Josef AG (Phone: +41279231213)
+2026-07-19 16:27:40,855 - SearchCh - INFO - Successfully scraped listing: Schnydrig R. Haustechnik AG (Phone: +41279236369)
+2026-07-19 16:27:42,886 - SearchCh - INFO - Querying local.ch directory: plombier in Lausanne
+2026-07-19 16:27:55,226 - SearchCh - INFO - Successfully scraped listing: Sani-Dep SA (Phone: +41216481068)
+2026-07-19 16:27:58,044 - SearchCh - INFO - Successfully scraped listing: Amaron Maintenance SA (Phone: +41266561816)
+2026-07-19 16:28:00,500 - SearchCh - INFO - Successfully scraped listing: Frangu S?rl Sanitaire - Depannage 24h 7-7 (Phone: +41765880173)
+2026-07-19 16:28:02,835 - SearchCh - INFO - Successfully scraped listing: Ernest Del?derray SA (Phone: +41213121833)
+2026-07-19 16:28:04,858 - SearchCh - INFO - Querying local.ch directory: plombier in Yverdon-les-Bains
+2026-07-19 16:28:19,104 - SearchCh - INFO - Successfully scraped listing: VIVATEC ENERGIES SA (Phone: +41245667076)
+2026-07-19 16:28:22,132 - SearchCh - INFO - Successfully scraped listing: Constantin Georges SA (Phone: +41245650017)
+2026-07-19 16:28:25,662 - SearchCh - INFO - Successfully scraped listing: DAN sanitaire S?rl (Phone: +41787166971)
+2026-07-19 16:28:28,286 - SearchCh - INFO - Successfully scraped listing: Pfister & Cie SA (Phone: +41244252788)
+2026-07-19 16:28:30,587 - SearchCh - INFO - Successfully scraped listing: TM Douche Montage S?rl (Phone: +41795552474)
+2026-07-19 16:28:32,608 - SearchCh - INFO - Querying local.ch directory: plombier in Montreux
+2026-07-19 16:28:45,775 - SearchCh - INFO - Successfully scraped listing: FERNANDES & Fils S?rl (Phone: +41219644462)
+2026-07-19 16:28:47,935 - SearchCh - INFO - Successfully scraped listing: Swiss Plomberie (Phone: +41219619797)
+2026-07-19 16:28:50,507 - SearchCh - INFO - Successfully scraped listing: Proplombier - Chauffage & Sanitaire (Phone: +41793041093)
+2026-07-19 16:28:52,522 - layer1 - INFO - Reached 70 directory leads, stopping search.ch early.
+2026-07-19 16:29:23,721 - layer6 - WARNING - Decision-maker search failed for Chauffagistes à Villars-sur-Glâne ️ renovero: Request timed out: ConnectTimeout('timed out')
+2026-07-19 16:30:45,646 - layer6 - WARNING - Decision-maker search failed for 14 Inscriptions pour Climatisation à Sion - search.ch: Request timed out: ConnectTimeout('timed out')
+2026-07-19 16:31:13,880 - layer6 - WARNING - Decision-maker search failed for Plombier Urgence Genève 7j/7 | +41 77 205 80 48 | Intervention 30 min: ConnectError: ConnectError('error sending request for url (https://www.startpage.com/) > client error (Connect) > tcp connect error > No connection could be made because the target machine actively refused it. (os error 10061)')
+2026-07-19 16:31:32,429 - layer6 - WARNING - Decision-maker search failed for ZIP.ch | Bulloni Gabriel, installateur sanitaire - Delémont: ConnectError: ConnectError('error sending request for url (https://www.startpage.com/) > client error (Connect) > tcp connect error > No connection could be made because the target machine actively refused it. (os error 10061)')
+2026-07-19 16:31:51,086 - layer6 - WARNING - Decision-maker search failed for JM Rossa SA - Installation Sanitaire & Chauffage | Simplement ...: ConnectError: ConnectError('error sending request for url (https://www.startpage.com/) > client error (Connect) > tcp connect error > No connection could be made because the target machine actively refused it. (os error 10061)')
+2026-07-19 16:31:51,251 - layer4 - WARNING - Recrawl error: Request timed out: ConnectTimeout('timed out')
+2026-07-19 16:32:08,932 - layer6 - WARNING - Decision-maker search failed for Porrentruy en ligne: ConnectError: ConnectError('error sending request for url (https://www.startpage.com/) > client error (Connect) > tcp connect error > No connection could be made because the target machine actively refused it. (os error 10061)')
+2026-07-19 16:32:20,539 - layer4 - WARNING - Recrawl error: ConnectError: ConnectError('error sending request for url (https://www.startpage.com/) > client error (Connect) > tcp connect error > No connection could be made because the target machine actively refused it. (os error 10061)')
+2026-07-19 16:33:12,131 - layer6 - WARNING - Decision-maker search failed for Sanitaire - binerbitschnau: ConnectError: ConnectError('error sending request for url (https://www.startpage.com/) > client error (Connect) > tcp connect error > No connection could be made because the target machine actively refused it. (os error 10061)')
+2026-07-19 16:33:32,782 - layer6 - WARNING - Decision-maker search failed for Installation Sanitaire Montreux - Installateur SanitaireFM Isotech | Services complets pour vos besoins en plomberie ...Installation sanitaire Montreux | Pose WC, lavabo, douchePlombier sanitaire Montreux | 021 505 01 21 | Devis Gratuit ...Proplombier - Chauffage & Sanitaire - sanitaires-romands.ch: ConnectError: ConnectError('error sending request for url (https://www.startpage.com/) > client error (Connect) > tcp connect error > No connection could be made because the target machine actively refused it. (os error 10061)')
+2026-07-19 16:34:19,639 - layer6 - WARNING - Decision-maker search failed for Maffiolo SA – Chauffages à Grand-Lancy | local.ch: ConnectError: ConnectError('error sending request for url (https://www.startpage.com/) > client error (Connect) > tcp connect error > No connection could be made because the target machine actively refused it. (os error 10061)')
+2026-07-19 16:34:40,815 - layer6 - WARNING - Decision-maker search failed for Contact - climatisation-shop.ch: Request timed out: ConnectTimeout('timed out')
+2026-07-19 16:35:36,901 - layer4 - WARNING - Recrawl error: Request timed out: ConnectTimeout('timed out')
+2026-07-19 16:36:35,436 - layer6 - WARNING - Decision-maker search failed for Plombier Genève : Dépannage et sanitaire A l'Eau Plombier: ConnectError: ConnectError('error sending request for url (https://www.startpage.com/) > client error (Connect) > tcp connect error > No connection could be made because the target machine actively refused it. (os error 10061)')
+2026-07-19 16:36:52,859 - layer6 - WARNING - Decision-maker search failed for Climatisation à Delemont | Demandez un devis Gratuit: Request timed out: ConnectTimeout('timed out')
+2026-07-19 16:36:56,680 - Database - INFO - All leads cleared from database.
+2026-07-19 16:37:05,049 - Database - INFO - Database initialized at data/leads.db
+2026-07-19 16:37:06,317 - SearchCh - INFO - Initializing search.ch directory crawler fallback (no key provided)
+2026-07-19 16:37:06,541 - SearchCh - INFO - Querying local.ch directory: plombier in Genève
+2026-07-19 16:37:17,375 - SearchCh - INFO - Successfully scraped listing: L'Art de l'eau (Phone: +41792876523)
+2026-07-19 16:37:19,659 - SearchCh - INFO - Successfully scraped listing: C&J INNOVATION S?rl (Phone: +41223402265)
+2026-07-19 16:37:22,761 - layer6 - WARNING - Decision-maker search failed for Alvazzi Groupe SA – Sanitaire à Yverdon-les-Bains | local.ch: ConnectError: ConnectError('error sending request for url (https://www.startpage.com/) > client error (Connect) > tcp connect error > No connection could be made because the target machine actively refused it. (os error 10061)')
+2026-07-19 16:37:23,581 - SearchCh - INFO - Successfully scraped listing: Ambiance sanitaire - D?pannage 7/7 24/24 (Phone: +41795218654)
+2026-07-19 16:37:25,587 - SearchCh - INFO - Querying local.ch directory: plombier in Vernier
+2026-07-19 16:37:35,751 - SearchCh - INFO - Successfully scraped listing: ISOLTOUT SA (Phone: +41764436962)
+2026-07-19 16:37:37,384 - SearchCh - INFO - Successfully scraped listing: ALLOFUITES SA (Phone: +41800621622)
+2026-07-19 16:37:39,347 - SearchCh - INFO - Successfully scraped listing: AVAI.CH S?rl (Phone: +41794723198)
+2026-07-19 16:37:41,836 - layer6 - WARNING - Decision-maker search failed for Plombier Montreux 1818 Devis 100% Gratuit par téléphone.Accueil | plombier-montreux.chPlombier Montreux 24h | Urgence Plomberie Riviera Vaud 24h/24Plombier à Montreux : urgence plomberie 7/7 - PLOMBIER VAUDOIS6 entries for Plomberie in Montreux - search.chDépannage Fuites & Débouchage. Plombier Expert Montreux: Request timed out: ConnectTimeout('timed out')
+2026-07-19 16:37:42,466 - SearchCh - INFO - Successfully scraped listing: SM Piscines (Phone: +41786561379)
+2026-07-19 16:37:44,580 - SearchCh - INFO - Successfully scraped listing: Avilag Energies SA (Phone: +41223324444)
+2026-07-19 16:37:46,591 - SearchCh - INFO - Querying local.ch directory: plombier in Lancy
+2026-07-19 16:37:56,528 - SearchCh - INFO - Successfully scraped listing: L?man Fluides SA (Phone: +41227330072)
+2026-07-19 16:37:57,413 - layer6 - WARNING - Decision-maker search failed for Portier Eric SA: ConnectError: ConnectError('error sending request for url (https://www.startpage.com/) > client error (Connect) > tcp connect error > No connection could be made because the target machine actively refused it. (os error 10061)')
+2026-07-19 16:37:58,701 - SearchCh - INFO - Successfully scraped listing: SB Sanitaires S?rl (Phone: +41227967984)
+2026-07-19 16:38:00,674 - SearchCh - INFO - Successfully scraped listing: ROBATTI S?rl (Phone: +41227940182)
+2026-07-19 16:38:03,029 - SearchCh - INFO - Successfully scraped listing: Dalloyeau S?rl (Phone: +41223000219)
+2026-07-19 16:38:05,052 - SearchCh - INFO - Querying local.ch directory: plombier in Meyrin
+2026-07-19 16:38:13,310 - SearchCh - INFO - Successfully scraped listing: Luca entreprise g?n?rale (Phone: +41798703209)
+2026-07-19 16:38:15,571 - SearchCh - INFO - Successfully scraped listing: iSanit S?rl (Phone: +41223413730)
+2026-07-19 16:38:17,600 - SearchCh - INFO - Successfully scraped listing: L?man D?pannage s?rl (Phone: +41228860226)
+2026-07-19 16:38:19,239 - SearchCh - INFO - Successfully scraped listing: OSCAR PLOMBIER SARL - Installations sanitaires et D?pannages 24/24 - Gen?ve et Vaud (Phone: +41227828780)
+2026-07-19 16:38:21,240 - SearchCh - INFO - Querying local.ch directory: plombier in Carouge
+2026-07-19 16:38:29,248 - SearchCh - INFO - Successfully scraped listing: Schneider Sanitaires SA (Phone: +41228271010)
+2026-07-19 16:38:32,887 - SearchCh - INFO - Successfully scraped listing: ACEOGREEN SA (Phone: +41798009995)
+2026-07-19 16:38:35,219 - SearchCh - INFO - Successfully scraped listing: KGS Sanitaires S?rl (Phone: +41796193434)
+2026-07-19 16:38:37,030 - SearchCh - INFO - Successfully scraped listing: Schmidt Daniel SA (Phone: +41223421455)
+2026-07-19 16:38:39,042 - SearchCh - INFO - Querying local.ch directory: plombier in Fribourg
+2026-07-19 16:38:47,341 - SearchCh - INFO - Successfully scraped listing: TS La bricole (Phone: +41791707974)
+2026-07-19 16:38:47,842 - layer1 - INFO - Reached 150 DDGS leads, stopping DDGS search early.
+2026-07-19 16:38:49,767 - SearchCh - INFO - Successfully scraped listing: sanitherm installation s?rl (Phone: +41797839700)
+2026-07-19 16:38:53,606 - SearchCh - INFO - Successfully scraped listing: Schaeffer SA (Phone: +41264247125)
+2026-07-19 16:38:55,614 - SearchCh - INFO - Querying local.ch directory: plombier in Bulle
+2026-07-19 16:38:57,167 - layer6 - WARNING - Decision-maker search failed for Luca entreprise générale: ConnectError: ConnectError('error sending request for url (https://www.startpage.com/sp/search) > client error (Connect) > tcp connect error > No connection could be made because the target machine actively refused it. (os error 10061)')
+2026-07-19 16:39:05,315 - SearchCh - INFO - Successfully scraped listing: AQUA Tech 3000 S?rl (Phone: +41794302492)
+2026-07-19 16:39:07,332 - SearchCh - INFO - Successfully scraped listing: Sanichauffe (Phone: +41772334970)
+2026-07-19 16:39:09,427 - SearchCh - INFO - Successfully scraped listing: Di Benedetto S?rl (Phone: +41794332860)
+2026-07-19 16:39:11,420 - SearchCh - INFO - Querying local.ch directory: plombier in Villars-sur-Glâne
+2026-07-19 16:39:20,723 - SearchCh - INFO - Successfully scraped listing: Solutechnique S?rl (Phone: +41762306707)
+2026-07-19 16:39:23,931 - SearchCh - INFO - Successfully scraped listing: JMartinez Sanitaire (Phone: +41765698415)
+2026-07-19 16:39:28,173 - SearchCh - INFO - Successfully scraped listing: Mabec (Phone: +41263505590)
+2026-07-19 16:39:30,185 - SearchCh - INFO - Querying local.ch directory: plombier in Estavayer
+2026-07-19 16:39:40,371 - SearchCh - INFO - Successfully scraped listing: Daniel Ansermet (Phone: +41266634166)
+2026-07-19 16:39:41,940 - SearchCh - INFO - Successfully scraped listing: D?cotterd & Bulliard S?rl (Phone: +41266600866)
+2026-07-19 16:39:43,592 - SearchCh - INFO - Successfully scraped listing: ENDRY SA (Phone: +41266633060)
+2026-07-19 16:39:45,281 - SearchCh - INFO - Successfully scraped listing: Alfred Bise & Fils S.A. (Phone: +41266631864)
+2026-07-19 16:39:47,287 - SearchCh - INFO - Querying local.ch directory: plombier in Marly
+2026-07-19 16:39:58,901 - SearchCh - INFO - Successfully scraped listing: Hayoz & Brulhart SA (Phone: +41264812048)
+2026-07-19 16:40:00,779 - layer6 - WARNING - Decision-maker search failed for AVAI.CH Sàrl: ConnectError: ConnectError('error sending request for url (https://www.startpage.com/) > client error (Connect) > tcp connect error > No connection could be made because the target machine actively refused it. (os error 10061)')
+2026-07-19 16:40:01,276 - SearchCh - INFO - Successfully scraped listing: R.J. Technique (Phone: +41796633616)
+2026-07-19 16:40:02,860 - SearchCh - INFO - Successfully scraped listing: Kreienb?hl Alfred (Phone: +41264363226)
+2026-07-19 16:40:04,622 - SearchCh - INFO - Successfully scraped listing: Cossa Cotting Sanitaires SA (Phone: +41264652555)
+2026-07-19 16:40:06,634 - SearchCh - INFO - Querying local.ch directory: plombier in Sion
+2026-07-19 16:40:16,867 - SearchCh - INFO - Successfully scraped listing: FP Climat S?rl (Phone: +41272030566)
+2026-07-19 16:40:22,460 - SearchCh - INFO - Successfully scraped listing: Gasanin Sanitaire Chauffage S?rl (Phone: +41795656502)
+2026-07-19 16:40:24,476 - SearchCh - INFO - Querying local.ch directory: plombier in Martigny
+2026-07-19 16:40:32,855 - SearchCh - INFO - Successfully scraped listing: CVS Confort & Cie SA (Phone: +41277221760)
+2026-07-19 16:40:34,680 - SearchCh - INFO - Successfully scraped listing: ARBERIA S?rl - D?pannage Sanitaire Chauffage (Phone: +41787753600)
+2026-07-19 16:40:36,712 - SearchCh - INFO - Successfully scraped listing: Valtherm Tech S?rl (Phone: +41277444848)
+2026-07-19 16:40:38,816 - SearchCh - INFO - Successfully scraped listing: Bestazzoni SA (Phone: +41277204820)
+2026-07-19 16:40:40,958 - SearchCh - INFO - Successfully scraped listing: STAUB Sanitaire Chauffage SA (Phone: +41792589295)
+2026-07-19 16:40:43,014 - SearchCh - INFO - Querying local.ch directory: plombier in Monthey
+2026-07-19 16:40:53,565 - SearchCh - INFO - Successfully scraped listing: Franco D?pannages (Phone: +41244958291)
+2026-07-19 16:40:55,759 - SearchCh - INFO - Successfully scraped listing: Dupasquier et Ruga SA (Phone: +41244712220)
+2026-07-19 16:40:58,400 - SearchCh - INFO - Successfully scraped listing: Vieira Dos Santos, Sanitaire et Chauffage (Phone: +41788736076)
+2026-07-19 16:41:00,314 - SearchCh - INFO - Successfully scraped listing: Gollut Hydrotec S?rl (Phone: +41244774902)
+2026-07-19 16:41:02,331 - SearchCh - INFO - Querying local.ch directory: plombier in Sierre
+2026-07-19 16:41:12,712 - SearchCh - INFO - Successfully scraped listing: Revey S?rl (Phone: +41798217188)
+2026-07-19 16:41:14,848 - SearchCh - INFO - Successfully scraped listing: AF Antonio Fernandes S?rl (Phone: +41774225354)
+2026-07-19 16:41:17,131 - SearchCh - INFO - Successfully scraped listing: Zampilli Salvatore (Phone: +41788421779)
+2026-07-19 16:41:18,907 - SearchCh - INFO - Successfully scraped listing: Berclaz et Romailler SA (Phone: +41274812259)
+2026-07-19 16:41:20,632 - SearchCh - INFO - Successfully scraped listing: Fr?d?ric Zufferey & cie S?rl (Phone: +41274802439)
+2026-07-19 16:41:22,646 - SearchCh - INFO - Querying local.ch directory: plombier in Brig-Glis
+2026-07-19 16:41:23,785 - layer6 - WARNING - Decision-maker search failed for ROBY Sanitaire SA: Request timed out: ConnectTimeout('timed out')
+2026-07-19 16:41:33,524 - SearchCh - INFO - Successfully scraped listing: Ryantec AG (Phone: +41279237400)
+2026-07-19 16:41:35,247 - SearchCh - INFO - Successfully scraped listing: Hurni Haustechnik (Phone: +41796008346)
+2026-07-19 16:41:36,975 - SearchCh - INFO - Successfully scraped listing: Zehnder Josef AG (Phone: +41279231213)
+2026-07-19 16:41:39,222 - SearchCh - INFO - Successfully scraped listing: Schnydrig R. Haustechnik AG (Phone: +41279236369)
+2026-07-19 16:41:41,228 - SearchCh - INFO - Querying local.ch directory: plombier in Lausanne
+2026-07-19 16:41:49,815 - SearchCh - INFO - Successfully scraped listing: Frangu S?rl Sanitaire - Depannage 24h 7-7 (Phone: +41765880173)
+2026-07-19 16:41:51,491 - SearchCh - INFO - Successfully scraped listing: Amaron Maintenance SA (Phone: +41266561816)
+2026-07-19 16:41:53,569 - SearchCh - INFO - Successfully scraped listing: Sani-Dep SA (Phone: +41216481068)
+2026-07-19 16:41:55,298 - SearchCh - INFO - Successfully scraped listing: GH.F SA DEPANNAGE 24/24-7/7 DEBOUCHAGE & SANITAIRE & CHAUFFAGE (Phone: +41791790202)
+2026-07-19 16:41:57,307 - SearchCh - INFO - Querying local.ch directory: plombier in Yverdon-les-Bains
+2026-07-19 16:42:06,460 - SearchCh - INFO - Successfully scraped listing: VIVATEC ENERGIES SA (Phone: +41245667076)
+2026-07-19 16:42:08,745 - SearchCh - INFO - Successfully scraped listing: Constantin Georges SA (Phone: +41245650017)
+2026-07-19 16:42:10,409 - SearchCh - INFO - Successfully scraped listing: DAN sanitaire S?rl (Phone: +41787166971)
+2026-07-19 16:42:12,138 - SearchCh - INFO - Successfully scraped listing: Alvazzi Groupe SA (Phone: +41244248260)
+2026-07-19 16:42:14,141 - SearchCh - INFO - Querying local.ch directory: plombier in Montreux
+2026-07-19 16:42:24,685 - SearchCh - INFO - Successfully scraped listing: Swiss Plomberie (Phone: +41219619797)
+2026-07-19 16:42:38,368 - Database - INFO - All leads cleared from database.
+2026-07-19 16:42:47,221 - Database - INFO - Database initialized at data/leads.db
+2026-07-19 16:42:49,139 - SearchCh - INFO - Initializing search.ch directory crawler fallback (no key provided)
+2026-07-19 16:42:49,312 - SearchCh - INFO - Querying local.ch directory: plombier in Genève
+2026-07-19 16:43:01,239 - SearchCh - INFO - Successfully scraped listing: ELP Services S?rl (Phone: +41786933342)
+2026-07-19 16:43:03,195 - SearchCh - INFO - Successfully scraped listing: SANI-RENOV SARL (Phone: +41227821244)
+2026-07-19 16:43:05,067 - SearchCh - INFO - Successfully scraped listing: Forster Plombier S?rl (Phone: +41227846450)
+2026-07-19 16:43:07,433 - SearchCh - INFO - Successfully scraped listing: Portier Eric SA (Phone: +41227880990)
+2026-07-19 16:43:10,524 - SearchCh - INFO - Successfully scraped listing: DEP SA D?pannage Sanitaire (Phone: +41223287188)
+2026-07-19 16:43:12,552 - SearchCh - INFO - Querying local.ch directory: plombier in Vernier
+2026-07-19 16:43:17,801 - layer6 - WARNING - Decision-maker search failed for Chabloz Alain Service Rapide: Request timed out: ConnectTimeout('timed out')
+2026-07-19 16:43:22,881 - SearchCh - INFO - Successfully scraped listing: ISOLTOUT SA (Phone: +41764436962)
+2026-07-19 16:43:25,789 - SearchCh - INFO - Successfully scraped listing: ALLOFUITES SA (Phone: +41800621622)
+2026-07-19 16:43:29,582 - SearchCh - INFO - Successfully scraped listing: AVAI.CH S?rl (Phone: +41794723198)
+2026-07-19 16:43:31,635 - SearchCh - INFO - Successfully scraped listing: SM Piscines (Phone: +41786561379)
+2026-07-19 16:43:33,551 - SearchCh - INFO - Successfully scraped listing: Avilag Energies SA (Phone: +41223324444)
+2026-07-19 16:43:35,588 - SearchCh - INFO - Querying local.ch directory: plombier in Lancy
+2026-07-19 16:43:44,163 - SearchCh - INFO - Successfully scraped listing: L?man Fluides SA (Phone: +41227330072)
+2026-07-19 16:43:47,676 - SearchCh - INFO - Successfully scraped listing: SB Sanitaires S?rl (Phone: +41227967984)
+2026-07-19 16:43:49,359 - SearchCh - INFO - Successfully scraped listing: Maulini et Prini SA (Phone: +41227945075)
+2026-07-19 16:43:51,046 - SearchCh - INFO - Successfully scraped listing: Dalloyeau S?rl (Phone: +41223000219)
+2026-07-19 16:43:52,943 - SearchCh - INFO - Successfully scraped listing: Romande Energie Services SA (Phone: +41223093860)
+2026-07-19 16:43:54,950 - SearchCh - INFO - Querying local.ch directory: plombier in Meyrin
+2026-07-19 16:44:03,569 - SearchCh - INFO - Successfully scraped listing: Luca entreprise g?n?rale (Phone: +41798703209)
+2026-07-19 16:44:06,835 - SearchCh - INFO - Successfully scraped listing: iSanit S?rl (Phone: +41223413730)
+2026-07-19 16:44:09,149 - SearchCh - INFO - Successfully scraped listing: L?man D?pannage s?rl (Phone: +41228860226)
+2026-07-19 16:44:09,903 - layer1 - WARNING - Maps search error: Request timed out: ConnectTimeout('timed out')
+2026-07-19 16:44:11,380 - SearchCh - INFO - Successfully scraped listing: OSCAR PLOMBIER SARL - Installations sanitaires et D?pannages 24/24 - Gen?ve et Vaud (Phone: +41227828780)
+2026-07-19 16:44:13,859 - SearchCh - INFO - Querying local.ch directory: plombier in Carouge
+2026-07-19 16:44:16,718 - layer6 - WARNING - Decision-maker search failed for Baronciani One Plomberie: Request timed out: ConnectTimeout('timed out')
+2026-07-19 16:44:20,593 - SearchCh - INFO - Successfully scraped listing: ACEOGREEN SA (Phone: +41798009995)
+2026-07-19 16:44:22,660 - SearchCh - INFO - Successfully scraped listing: Schneider Sanitaires SA (Phone: +41228271010)
+2026-07-19 16:44:24,820 - SearchCh - INFO - Successfully scraped listing: KGS Sanitaires S?rl (Phone: +41796193434)
+2026-07-19 16:44:26,937 - SearchCh - INFO - Successfully scraped listing: Schmidt Daniel SA (Phone: +41223421455)
+2026-07-19 16:44:28,946 - SearchCh - INFO - Querying local.ch directory: plombier in Fribourg
+2026-07-19 16:44:33,597 - layer1 - INFO - Reached 150 DDGS leads, stopping DDGS search early.
+2026-07-19 16:44:38,885 - SearchCh - INFO - Successfully scraped listing: sanitherm installation s?rl (Phone: +41797839700)
+2026-07-19 16:44:41,009 - SearchCh - INFO - Successfully scraped listing: TS La bricole (Phone: +41791707974)
+2026-07-19 16:44:42,683 - SearchCh - INFO - Successfully scraped listing: Mabec (Phone: +41263505590)
+2026-07-19 16:44:44,391 - SearchCh - INFO - Successfully scraped listing: Schaeffer SA (Phone: +41264247125)
+2026-07-19 16:44:46,398 - SearchCh - INFO - Querying local.ch directory: plombier in Bulle
+2026-07-19 16:44:54,616 - SearchCh - INFO - Successfully scraped listing: AQUA Tech 3000 S?rl (Phone: +41794302492)
+2026-07-19 16:44:56,517 - SearchCh - INFO - Successfully scraped listing: Lionel Cantin S?rl (Phone: +41269123544)
+2026-07-19 16:44:58,533 - SearchCh - INFO - Successfully scraped listing: Di Benedetto S?rl (Phone: +41794332860)
+2026-07-19 16:45:00,548 - SearchCh - INFO - Querying local.ch directory: plombier in Villars-sur-Glâne
+2026-07-19 16:45:10,814 - SearchCh - INFO - Successfully scraped listing: Solutechnique S?rl (Phone: +41762306707)
+2026-07-19 16:45:11,086 - layer6 - WARNING - Decision-maker search failed for Tec Energie SA: Request timed out: ConnectTimeout('timed out')
+2026-07-19 16:45:12,938 - SearchCh - INFO - Successfully scraped listing: JMartinez Sanitaire (Phone: +41765698415)
+2026-07-19 16:45:17,335 - SearchCh - INFO - Successfully scraped listing: Mabec (Phone: +41263505590)
+2026-07-19 16:45:19,349 - SearchCh - INFO - Querying local.ch directory: plombier in Estavayer
+2026-07-19 16:45:25,688 - SearchCh - INFO - Successfully scraped listing: Daniel Ansermet (Phone: +41266634166)
+2026-07-19 16:45:27,071 - layer6 - WARNING - Decision-maker search failed for ACEOGREEN SA: Request timed out: ConnectTimeout('timed out')
+2026-07-19 16:45:28,974 - SearchCh - INFO - Successfully scraped listing: D?cotterd & Bulliard S?rl (Phone: +41266600866)
+2026-07-19 16:45:30,946 - SearchCh - INFO - Successfully scraped listing: ENDRY SA (Phone: +41266633060)
+2026-07-19 16:45:33,002 - SearchCh - INFO - Successfully scraped listing: Alfred Bise & Fils S.A. (Phone: +41266631864)
+2026-07-19 16:45:35,033 - SearchCh - INFO - Querying local.ch directory: plombier in Marly
+2026-07-19 16:45:44,157 - SearchCh - INFO - Successfully scraped listing: Hayoz & Brulhart SA (Phone: +41264812048)
+2026-07-19 16:45:46,395 - SearchCh - INFO - Successfully scraped listing: R.J. Technique (Phone: +41796633616)
+2026-07-19 16:45:48,453 - SearchCh - INFO - Successfully scraped listing: Kreienb?hl Alfred (Phone: +41264363226)
+2026-07-19 16:45:50,390 - SearchCh - INFO - Successfully scraped listing: Cossa Cotting Sanitaires SA (Phone: +41264652555)
+2026-07-19 16:45:52,403 - SearchCh - INFO - Querying local.ch directory: plombier in Sion
+2026-07-19 16:46:00,323 - SearchCh - INFO - Successfully scraped listing: FP Climat S?rl (Phone: +41272030566)
+2026-07-19 16:46:07,602 - SearchCh - INFO - Successfully scraped listing: Gasanin Sanitaire Chauffage S?rl (Phone: +41795656502)
+2026-07-19 16:46:07,776 - layer6 - WARNING - Decision-maker search failed for Schmidt Daniel SA: Request timed out: ConnectTimeout('timed out')
+2026-07-19 16:46:09,632 - SearchCh - INFO - Querying local.ch directory: plombier in Martigny
+2026-07-19 16:46:17,871 - SearchCh - INFO - Successfully scraped listing: CVS Confort & Cie SA (Phone: +41277221760)
+2026-07-19 16:46:20,007 - SearchCh - INFO - Successfully scraped listing: ARBERIA S?rl - D?pannage Sanitaire Chauffage (Phone: +41787753600)
+2026-07-19 16:46:22,293 - SearchCh - INFO - Successfully scraped listing: Tecnoservice Engineering SA (Phone: +41277217171)
+2026-07-19 16:46:25,839 - SearchCh - INFO - Successfully scraped listing: Valtherm Tech S?rl (Phone: +41277444848)
+2026-07-19 16:46:27,942 - SearchCh - INFO - Successfully scraped listing: STAUB Sanitaire Chauffage SA (Phone: +41792589295)
+2026-07-19 16:46:29,947 - SearchCh - INFO - Querying local.ch directory: plombier in Monthey
+2026-07-19 16:46:37,652 - SearchCh - INFO - Successfully scraped listing: Franco D?pannages (Phone: +41244958291)
+2026-07-19 16:46:39,394 - SearchCh - INFO - Successfully scraped listing: Vieira Dos Santos, Sanitaire et Chauffage (Phone: +41788736076)
+2026-07-19 16:46:41,658 - SearchCh - INFO - Successfully scraped listing: BE4 Technics SA (Phone: +41768407383)
+2026-07-19 16:46:43,718 - SearchCh - INFO - Successfully scraped listing: Gollut Hydrotec S?rl (Phone: +41244774902)
+2026-07-19 16:46:45,733 - SearchCh - INFO - Querying local.ch directory: plombier in Sierre
+2026-07-19 16:46:52,359 - SearchCh - INFO - Successfully scraped listing: Revey S?rl (Phone: +41798217188)
+2026-07-19 16:46:55,816 - SearchCh - INFO - Successfully scraped listing: AF Antonio Fernandes S?rl (Phone: +41774225354)
+2026-07-19 16:46:59,429 - SearchCh - INFO - Successfully scraped listing: Zampilli Salvatore (Phone: +41788421779)
+2026-07-19 16:47:01,488 - SearchCh - INFO - Successfully scraped listing: Berclaz et Romailler SA (Phone: +41274812259)
+2026-07-19 16:47:03,397 - SearchCh - INFO - Successfully scraped listing: Fr?d?ric Zufferey & cie S?rl (Phone: +41274802439)
+2026-07-19 16:47:05,420 - SearchCh - INFO - Querying local.ch directory: plombier in Brig-Glis
+2026-07-19 17:22:54,118 - layer1 - WARNING - Maps search error: ConnectError: ConnectError('error sending request for url (https://search.brave.com/search?q=chauffagiste+Gen%C3%A8ve+site%3Agoogle.com%2Fmaps&source=web) > client error (Connect) > dns error > no connections available')
+2026-07-19 17:23:06,073 - SearchCh - ERROR - Local.ch scraping error: The read operation timed out
+2026-07-19 17:23:08,099 - SearchCh - INFO - Querying local.ch directory: plombier in Lausanne
+2026-07-19 17:23:18,230 - SearchCh - INFO - Successfully scraped listing: Amaron Maintenance SA (Phone: +41266561816)
+2026-07-19 17:23:20,253 - SearchCh - INFO - Successfully scraped listing: Sani-Dep SA (Phone: +41216481068)
+2026-07-19 17:23:21,884 - SearchCh - INFO - Successfully scraped listing: Frangu S?rl Sanitaire - Depannage 24h 7-7 (Phone: +41765880173)
+2026-07-19 17:23:24,012 - SearchCh - INFO - Successfully scraped listing: Osec S?rl (Phone: +41216352556)
+2026-07-19 17:23:26,021 - SearchCh - INFO - Querying local.ch directory: plombier in Yverdon-les-Bains
+2026-07-19 17:23:33,927 - SearchCh - INFO - Successfully scraped listing: VIVATEC ENERGIES SA (Phone: +41245667076)
+2026-07-19 17:23:37,521 - SearchCh - INFO - Successfully scraped listing: DAN sanitaire S?rl (Phone: +41787166971)
+2026-07-19 17:23:39,672 - SearchCh - INFO - Successfully scraped listing: Constantin Georges SA (Phone: +41245650017)
+2026-07-19 17:23:41,597 - SearchCh - INFO - Successfully scraped listing: TM Douche Montage S?rl (Phone: +41795552474)
+2026-07-19 17:23:43,213 - SearchCh - INFO - Successfully scraped listing: Alvazzi Groupe SA (Phone: +41244248260)
+2026-07-19 17:23:45,230 - SearchCh - INFO - Querying local.ch directory: plombier in Montreux
+2026-07-19 17:23:52,819 - SearchCh - INFO - Successfully scraped listing: Lauffer-Borlat SA (Phone: +41219892151)
+2026-07-19 17:23:55,997 - SearchCh - INFO - Successfully scraped listing: Proplombier - Chauffage & Sanitaire (Phone: +41793041093)
+2026-07-19 17:23:58,162 - SearchCh - INFO - Successfully scraped listing: FERNANDES & Fils S?rl (Phone: +41219644462)
+2026-07-19 17:24:00,165 - SearchCh - INFO - Querying local.ch directory: plombier in Renens
+2026-07-19 17:24:10,776 - SearchCh - INFO - Successfully scraped listing: MD Tuyaux Groupe SA (Phone: +41216350924)
+2026-07-19 17:24:12,801 - SearchCh - INFO - Successfully scraped listing: MGA Sanitaire et Service S?rl (Phone: +41783037128)
+2026-07-19 17:24:14,994 - SearchCh - INFO - Successfully scraped listing: CS Confort Service SA (Phone: +41216206400)
+2026-07-19 17:24:17,005 - SearchCh - INFO - Querying local.ch directory: plombier in Nyon
+2026-07-19 17:24:26,261 - SearchCh - INFO - Successfully scraped listing: Aqua Sanitaires S?rl (Phone: +41782534656)
+2026-07-19 17:24:27,975 - SearchCh - INFO - Successfully scraped listing: M B Habitat S?rl, succursale de Nyon (Phone: +41215050133)
+2026-07-19 17:24:29,859 - SearchCh - INFO - Successfully scraped listing: Constantin Georges SA (Phone: +41223622063)
+2026-07-19 17:24:31,785 - SearchCh - INFO - Successfully scraped listing: Air-Eau-Concept S?rl (Phone: +41764166134)
+2026-07-19 17:24:33,793 - SearchCh - INFO - Querying local.ch directory: plombier in Neuchâtel
+2026-07-19 17:24:43,794 - SearchCh - INFO - Successfully scraped listing: Di Marzo Eco-Energies S?rl (Phone: +41327301737)
+2026-07-19 17:24:45,959 - SearchCh - INFO - Successfully scraped listing: Chiffelle & Moser SA (Phone: +41327310357)
+2026-07-19 17:24:47,784 - SearchCh - INFO - Successfully scraped listing: MPI TECH s?rl (Phone: +41325524202)
+2026-07-19 17:24:49,702 - SearchCh - INFO - Successfully scraped listing: RIEDO Clima SA Neuch?tel (Phone: +41327210101)
+2026-07-19 17:24:51,822 - SearchCh - INFO - Successfully scraped listing: Minder & Co SA (Phone: +41327317676)
+2026-07-19 17:24:53,833 - SearchCh - INFO - Querying local.ch directory: plombier in La Chaux-de-Fonds
+2026-07-19 17:25:02,860 - SearchCh - INFO - Successfully scraped listing: Robert-Sanitaire-Chauffage (Phone: +41329641038)
+2026-07-19 17:25:06,001 - SearchCh - INFO - Successfully scraped listing: J. Arnet SA (Phone: +41329132818)
+2026-07-19 17:25:08,035 - SearchCh - INFO - Successfully scraped listing: A.P.A Conception (Phone: +41791293878)
+2026-07-19 17:25:10,049 - SearchCh - INFO - Querying local.ch directory: plombier in Le Locle
+2026-07-19 17:25:19,705 - SearchCh - INFO - Successfully scraped listing: Pro-Tech chauffage S?rl (Phone: +41329311384)
+2026-07-19 17:25:22,016 - SearchCh - INFO - Successfully scraped listing: Schindelholz SA (Phone: +41329316500)
+2026-07-19 17:25:25,630 - SearchCh - INFO - Successfully scraped listing: RFC Chauffage (Phone: +41329314151)
+2026-07-19 17:25:27,638 - SearchCh - INFO - Querying local.ch directory: plombier in Val-de-Travers
+2026-07-19 17:25:36,183 - SearchCh - INFO - Successfully scraped listing: Groupe E (Phone: +41327251712)
+2026-07-19 17:25:39,719 - SearchCh - INFO - Successfully scraped listing: MBS  Sanitaire et Chauffage (Phone: +41783098202)
+2026-07-19 17:25:41,357 - SearchCh - INFO - Successfully scraped listing: Paillard Fabio (Phone: +41328635000)
+2026-07-19 17:25:43,293 - SearchCh - INFO - Successfully scraped listing: K.F. ?nergies S?rl (Phone: +41328601291)
+2026-07-19 17:25:45,300 - SearchCh - INFO - Querying local.ch directory: plombier in Val-de-Ruz
+2026-07-19 17:25:54,353 - SearchCh - INFO - Successfully scraped listing: Cavaler Claudio S?rl (Phone: +41328537010)
+2026-07-19 17:25:56,770 - SearchCh - INFO - Successfully scraped listing: Rosselet & Manco S?rl (Phone: +41796366638)
+2026-07-19 17:25:58,615 - layer1 - WARNING - Maps search error: Request timed out: ConnectTimeout('timed out')
+2026-07-19 17:25:58,695 - SearchCh - INFO - Successfully scraped listing: Quentin Libert (Phone: +41788127571)
+2026-07-19 17:26:02,894 - SearchCh - INFO - Successfully scraped listing: F. Gabus SA (Phone: +41328572616)
+2026-07-19 17:26:04,906 - SearchCh - INFO - Querying local.ch directory: plombier in Delémont
+2026-07-19 17:26:14,103 - SearchCh - INFO - Successfully scraped listing: Entreprise du Gaz SA (Phone: +41324222925)
+2026-07-19 17:26:17,648 - SearchCh - INFO - Successfully scraped listing: Buchwalder S?rl (Phone: +41324356688)
+2026-07-19 17:26:21,612 - SearchCh - INFO - Successfully scraped listing: Thermosan SA (Phone: +41324223945)
+2026-07-19 17:26:23,619 - SearchCh - INFO - Querying local.ch directory: plombier in Porrentruy
+2026-07-19 17:26:32,666 - SearchCh - INFO - Successfully scraped listing: Entreprise du Gaz SA (Phone: +41324659620)
+2026-07-19 17:26:35,051 - SearchCh - INFO - Successfully scraped listing: JuraService R?novation, Abdellah Yagoub (Phone: +41795232900)
+2026-07-19 17:26:37,091 - SearchCh - INFO - Successfully scraped listing: Humbert Michael (Phone: +41324666115)
+2026-07-19 17:26:39,036 - SearchCh - INFO - Successfully scraped listing: Claude Firmin et Fils S?rl (Phone: +41324755627)
+2026-07-19 17:26:41,922 - SearchCh - INFO - Successfully scraped listing: Roland Michel SA (Phone: +41324266159)
+2026-07-19 17:26:43,937 - SearchCh - INFO - Querying local.ch directory: plombier in Courroux
+2026-07-19 17:26:55,971 - SearchCh - INFO - Successfully scraped listing: Denis Paratte S?rl (Phone: +41324225881)
+2026-07-19 17:26:58,104 - SearchCh - INFO - Successfully scraped listing: Aquatherm Courroux Sarl (Phone: +41791283432)
+2026-07-19 17:27:00,124 - SearchCh - INFO - Querying local.ch directory: plombier in Courrendlin
+2026-07-19 17:27:09,527 - SearchCh - INFO - Successfully scraped listing: Eco6therm S?rl (Phone: +41324355511)
+2026-07-19 17:27:11,782 - SearchCh - INFO - Successfully scraped listing: Schaller Olivier S?rl (Phone: +41324355515)
+2026-07-19 17:27:13,895 - SearchCh - INFO - Successfully scraped listing: Emipuls Swiss SA (Phone: +41323851622)
+2026-07-19 17:27:15,902 - SearchCh - INFO - Querying local.ch directory: plombier in Saignelégier
+2026-07-19 17:27:24,177 - SearchCh - INFO - Successfully scraped listing: Quentin Bertrand S?rl (Phone: +41329513764)
+2026-07-19 17:27:26,564 - SearchCh - INFO - Successfully scraped listing: Steiner Nicolas (Phone: +41329511113)
+2026-07-19 17:27:28,861 - SearchCh - INFO - Successfully scraped listing: Eco6therm S?rl (Phone: +41324355511)
+2026-07-19 17:27:30,880 - SearchCh - INFO - Querying local.ch directory: plomberie in Genève
+2026-07-19 17:27:40,204 - SearchCh - INFO - Successfully scraped listing: Piralla Sanitaires SA (Phone: +41227367265)
+2026-07-19 17:27:42,674 - SearchCh - INFO - Successfully scraped listing: L'Art de l'eau (Phone: +41792876523)
+2026-07-19 17:27:44,586 - SearchCh - INFO - Successfully scraped listing: Wolff Nicole & Louis SA (Phone: +41227531350)
+2026-07-19 17:27:46,414 - SearchCh - INFO - Successfully scraped listing: depann24.ch Plombier Gen?ve et Vaud (Phone: +41764492051)
+2026-07-19 17:27:48,422 - SearchCh - INFO - Querying local.ch directory: plomberie in Vernier
+2026-07-19 17:27:59,046 - SearchCh - INFO - Successfully scraped listing: ALLOFUITES SA (Phone: +41800621622)
+2026-07-19 17:28:03,332 - SearchCh - INFO - Successfully scraped listing: AVAI.CH S?rl (Phone: +41794723198)
+2026-07-19 17:28:05,897 - SearchCh - INFO - Successfully scraped listing: Sanitaire Garin Marcel (Phone: +41223411225)
+2026-07-19 17:28:08,967 - SearchCh - INFO - Successfully scraped listing: RF-Sanitaire (Phone: +41793553308)
+2026-07-19 17:28:10,973 - SearchCh - INFO - Querying local.ch directory: plomberie in Lancy
+2026-07-19 17:28:21,323 - SearchCh - INFO - Successfully scraped listing: Maulini et Prini SA (Phone: +41227945075)
+2026-07-19 17:28:23,683 - SearchCh - INFO - Successfully scraped listing: Dalloyeau S?rl (Phone: +41223000219)
+2026-07-19 17:28:26,040 - SearchCh - INFO - Successfully scraped listing: ROBATTI S?rl (Phone: +41227940182)
+2026-07-19 17:28:28,081 - SearchCh - INFO - Successfully scraped listing: C&J INNOVATION S?rl (Phone: +41223402265)
+2026-07-19 17:28:30,095 - SearchCh - INFO - Querying local.ch directory: plomberie in Meyrin
+2026-07-19 17:28:40,031 - SearchCh - INFO - Successfully scraped listing: Luca entreprise g?n?rale (Phone: +41798703209)
+2026-07-19 17:28:42,331 - SearchCh - INFO - Successfully scraped listing: L?man D?pannage s?rl (Phone: +41228860226)
+2026-07-19 17:28:44,324 - SearchCh - INFO - Successfully scraped listing: Baronciani One Plomberie (Phone: +41786531074)
+2026-07-19 17:28:46,360 - SearchCh - INFO - Successfully scraped listing: C&J INNOVATION S?rl (Phone: +41223402265)
+2026-07-19 17:28:48,369 - SearchCh - INFO - Querying local.ch directory: plomberie in Carouge
+2026-07-19 17:28:58,419 - SearchCh - INFO - Successfully scraped listing: Schneider Sanitaires SA (Phone: +41228271010)
+2026-07-19 17:29:02,336 - SearchCh - INFO - Successfully scraped listing: Depano Plombier (Phone: +41779242660)
+2026-07-19 17:29:04,577 - SearchCh - INFO - Successfully scraped listing: SR plomberie (Phone: +41793173614)
+2026-07-19 17:29:06,597 - SearchCh - INFO - Querying local.ch directory: plomberie in Fribourg
+2026-07-19 17:29:17,389 - SearchCh - INFO - Successfully scraped listing: DC.CIS Plombier / Installations Sanitaires / Conception Sanitaire (Phone: +41788506434)
+2026-07-19 17:29:19,486 - SearchCh - INFO - Successfully scraped listing: FJ Sanitaire S?rl (Phone: +41782609799)
+2026-07-19 17:29:21,612 - SearchCh - INFO - Successfully scraped listing: DgGExpertise Fribourg (Phone: +41265580120)
+2026-07-19 17:29:24,190 - SearchCh - INFO - Successfully scraped listing: GENOUD INSTALLATIONS SANITAIRES SA (Phone: +41792084659)
+2026-07-19 17:29:26,203 - SearchCh - INFO - Querying local.ch directory: plomberie in Bulle
+2026-07-19 17:29:37,101 - SearchCh - INFO - Successfully scraped listing: Intera SA (Phone: +41269122232)
+2026-07-19 17:29:39,471 - SearchCh - INFO - Successfully scraped listing: Philippe Andrey Installations Sanitaires et Chauffage SA (Phone: +41269124760)
+2026-07-19 17:29:41,145 - SearchCh - INFO - Successfully scraped listing: R.J. Technique (Phone: +41796633616)
+2026-07-19 17:29:43,165 - SearchCh - INFO - Querying local.ch directory: plomberie in Villars-sur-Glâne
+2026-07-19 17:29:51,376 - SearchCh - INFO - Successfully scraped listing: Cossa Cotting Sanitaires SA (Phone: +41264652555)
+2026-07-19 17:29:53,688 - SearchCh - INFO - Successfully scraped listing: JEM Services (Phone: +41797539585)
+2026-07-19 17:29:56,045 - SearchCh - INFO - Successfully scraped listing: R.J. Technique (Phone: +41796633616)
+2026-07-19 17:29:59,451 - SearchCh - INFO - Successfully scraped listing: TK Installations Chauffage & Sanitaire (Phone: +41795204546)
+2026-07-19 17:30:01,461 - SearchCh - INFO - Successfully scraped listing: Cossa Cotting Sanitaires SA (Phone: +41264652555)
+2026-07-19 17:30:03,472 - SearchCh - INFO - Querying local.ch directory: plomberie in Estavayer
+2026-07-19 17:30:11,178 - SearchCh - INFO - Successfully scraped listing: Daniel Ansermet (Phone: +41266634166)
+2026-07-19 17:30:14,535 - SearchCh - INFO - Successfully scraped listing: Daniel Ansermet (Phone: +41266634166)
+2026-07-19 17:30:16,546 - SearchCh - INFO - Querying local.ch directory: plomberie in Marly
+2026-07-19 17:30:26,179 - SearchCh - INFO - Successfully scraped listing: R.J. Technique (Phone: +41796633616)
+2026-07-19 17:30:27,980 - SearchCh - INFO - Successfully scraped listing: Frid?sam SA (Phone: +41798002443)
+2026-07-19 17:30:30,100 - SearchCh - INFO - Successfully scraped listing: Plomberie Ferblanterie Monney S?rl (Phone: +41264135050)
+2026-07-19 17:30:32,497 - SearchCh - INFO - Successfully scraped listing: Cossa Cotting Sanitaires SA (Phone: +41264652555)
+2026-07-19 17:30:34,516 - SearchCh - INFO - Querying local.ch directory: plomberie in Sion
+2026-07-19 17:30:42,903 - SearchCh - INFO - Successfully scraped listing: FL Express S?rl (Phone: +41794543213)
+2026-07-19 17:30:45,146 - SearchCh - INFO - Successfully scraped listing: P.B.R. Plombier General Elguemri (Phone: +41779210594)
+2026-07-19 17:30:49,254 - SearchCh - INFO - Successfully scraped listing: Sp?cibois S?rl (Phone: +41273067508)
+2026-07-19 17:30:51,049 - SearchCh - INFO - Successfully scraped listing: Plomb Chantal (Phone: +41276032188)
+2026-07-19 17:30:53,160 - SearchCh - INFO - Successfully scraped listing: ARBERIA S?rl - D?pannage Sanitaire Chauffage (Phone: +41787753600)
+2026-07-19 17:30:55,175 - layer1 - INFO - Reached 150 directory leads, stopping search.ch early.
+2026-07-19 17:31:40,312 - layer5 - WARNING - Social search failed for Chauffagiste Fribourg - Réparation Chauffage - 077 912 66 83: Request timed out: ConnectTimeout('timed out')
+2026-07-19 17:32:25,392 - WebAnalyzer - ERROR - Fallback analysis failed for https://hugodubois.ch/chauffagiste/valais/martigny/: 
+2026-07-19 17:32:54,450 - layer5 - WARNING - Social search failed for Sanitaire - binerbitschnau: Request timed out: ConnectTimeout('timed out')
+2026-07-19 17:33:06,447 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:33:26,495 - layer5 - WARNING - Review search failed for SCDI – Chauffages à Martigny | local.ch: No results found.
+2026-07-19 17:33:30,486 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:33:36,657 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:34:00,652 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:34:35,622 - layer5 - WARNING - Social search failed for Plombier Lausanne | Plombier sanitaire à Lausanne: Request timed out: ConnectTimeout('timed out')
+2026-07-19 17:34:36,910 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:34:37,033 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:35:07,264 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:35:07,447 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:35:37,519 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:35:37,616 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:36:07,759 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:36:27,106 - layer5 - WARNING - Review search failed for Plombier Dépannage Urgent - Plombier Urgence Dépannage: Request timed out: ConnectTimeout('timed out')
+2026-07-19 17:36:41,098 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:36:43,000 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:37:13,884 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:37:35,793 - layer5 - WARNING - Social search failed for Plombier Sanitaire Lancy | 022 886 02 26 | Devis gratuits: No results found.
+2026-07-19 17:37:36,297 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:37:44,096 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:38:06,494 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:38:18,519 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:38:36,761 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:38:48,693 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:39:06,964 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:39:37,733 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:39:45,527 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:40:24,527 - layer5 - WARNING - Review search failed for Shop sanitaire Grand-Lancy, Sanitas Troesch - AllBiz: Request timed out: ConnectTimeout('timed out')
+2026-07-19 17:40:27,370 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:40:29,235 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:40:57,618 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:40:59,461 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:41:27,803 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:41:29,768 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:41:58,055 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:41:59,977 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:42:30,249 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:42:55,856 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:43:17,961 - layer5 - WARNING - Review search failed for Studer François SA, Traitement thermique à Courroux - search.chTMGrectifiage.ch | 079 330 58 31 | Courroux - AllBizChauffage Courroux - Installation, Entretien & SOS Dépannage ...: No results found.
+2026-07-19 17:43:26,172 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:43:28,045 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:43:59,122 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:44:00,588 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:44:33,854 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:44:34,954 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:45:09,864 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:45:11,210 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:45:40,073 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:46:15,271 - layer5 - WARNING - Social search failed for ELP Services Sàrl: Request timed out: ConnectTimeout('timed out')
+2026-07-19 17:46:15,838 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:46:45,842 - layer5 - WARNING - Social search failed for SANI-RENOV SARL: Request timed out: ConnectTimeout('timed out')
+2026-07-19 17:46:46,395 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:46:46,398 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:47:16,604 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:47:16,606 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:47:46,812 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:47:46,827 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:48:17,083 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:48:17,101 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:48:47,353 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:49:18,289 - layer5 - WARNING - Social search failed for Forster Plombier Sàrl: Request timed out: ConnectTimeout('timed out')
+2026-07-19 17:49:18,875 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:49:48,651 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:49:49,085 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:50:19,725 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:50:19,831 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:50:50,016 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:51:20,486 - layer5 - WARNING - Social search failed for DEP SA Dépannage Sanitaire: Request timed out: ConnectTimeout('timed out')
+2026-07-19 17:51:29,967 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:51:30,047 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:52:01,540 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:52:29,544 - layer5 - WARNING - Social search failed for ISOLTOUT SA: Request timed out: ConnectTimeout('timed out')
+2026-07-19 17:52:37,645 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:52:37,694 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:53:08,104 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:53:08,195 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:53:38,757 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:53:38,815 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:54:09,640 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:54:44,370 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:54:44,419 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:55:14,892 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:55:16,972 - WebAnalyzer - ERROR - Fallback analysis failed for https://avai.swiss/: [Errno 11001] getaddrinfo failed
+2026-07-19 17:55:35,337 - layer5 - WARNING - Social search failed for AVAI.CH Sàrl: Request timed out: ConnectTimeout('timed out')
+2026-07-19 17:55:38,073 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:55:45,718 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:56:08,451 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:56:16,097 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:56:38,787 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:56:46,472 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:57:09,063 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:57:36,334 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:57:39,258 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:58:06,497 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:58:28,378 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:58:36,831 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:58:58,579 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:59:07,026 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:59:28,743 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:59:37,240 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 17:59:59,022 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:00:36,242 - layer5 - WARNING - Social search failed for Léman Fluides SA: Request timed out: ConnectTimeout('timed out')
+2026-07-19 18:00:36,798 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:00:36,803 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:01:07,099 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:01:25,617 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:01:38,781 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:01:55,856 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:02:09,011 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:02:26,096 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:02:39,249 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:02:56,289 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:03:27,198 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:03:42,879 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:04:13,897 - layer5 - WARNING - Review search failed for Dalloyeau Sàrl: No results found.
+2026-07-19 18:04:25,831 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:04:27,765 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:04:56,009 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:04:57,936 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:05:27,173 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:05:29,764 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:05:57,428 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:06:00,010 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:06:30,208 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:06:33,551 - WebAnalyzer - ERROR - Fallback analysis failed for https://www.romande-energie.ch: [Errno 11002] getaddrinfo failed
+2026-07-19 18:06:49,858 - layer5 - WARNING - Social search failed for Romande Energie Services SA: Request timed out: ConnectTimeout('timed out')
+2026-07-19 18:06:50,518 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:07:27,706 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:07:41,470 - layer5 - WARNING - Social search failed for iSanit Sàrl: No results found.
+2026-07-19 18:07:42,150 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:07:58,001 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:08:12,386 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:08:28,256 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:08:42,627 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:08:58,491 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:09:12,833 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:09:50,008 - layer5 - WARNING - Social search failed for Léman Dépannage sàrl: No results found.
+2026-07-19 18:09:50,563 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:09:50,573 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:10:20,900 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:10:45,544 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:10:51,189 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:11:15,825 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:11:21,373 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:11:46,005 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:11:51,581 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:12:16,364 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:12:37,185 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:12:46,760 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:13:07,536 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:13:20,004 - WebAnalyzer - ERROR - Fallback analysis failed for http://www.schneider-sanitaires.ch: 
+2026-07-19 18:13:40,714 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:13:44,514 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:14:11,076 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:14:14,802 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:14:41,412 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:14:45,066 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:15:20,316 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:15:35,131 - layer5 - WARNING - Social search failed for KGS Sanitaires Sàrl: Request timed out: ConnectTimeout('timed out')
+2026-07-19 18:15:37,010 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:15:50,638 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:16:07,261 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:16:26,992 - SearchCh - INFO - Initializing local.ch directory crawler fallback (no search.ch API key provided)
+2026-07-19 18:16:27,004 - SearchCh - INFO - Querying local.ch directory: plombier in Geneve
+2026-07-19 18:16:35,381 - SearchCh - INFO - Scraped listing: Piralla Sanitaires SA (Phone: +41227367265)
+2026-07-19 18:16:38,255 - SearchCh - INFO - Scraped listing: Pool Sanit S?rl (Phone: +41782699380)
+2026-07-19 18:16:43,542 - SearchCh - INFO - Scraped listing: DEP SA D?pannage Sanitaire (Phone: +41223287188)
+2026-07-19 18:16:43,953 - layer5 - WARNING - Social search failed for Schmidt Daniel SA: No results found.
+2026-07-19 18:16:46,280 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:16:46,305 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:17:16,503 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:17:16,541 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:17:46,973 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:17:46,994 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:18:17,437 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:18:50,714 - layer5 - WARNING - Social search failed for sanitherm installation sàrl: Request timed out: ConnectTimeout('timed out')
+2026-07-19 18:18:52,361 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:18:52,378 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:19:22,615 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:19:54,361 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:19:54,434 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:20:24,612 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:20:24,704 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:20:54,971 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:20:54,987 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:21:25,400 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:21:49,376 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:21:55,835 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:22:19,613 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:22:45,089 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:22:49,838 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:23:15,402 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:23:20,083 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:23:50,379 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:24:08,639 - layer5 - WARNING - Social search failed for AQUA Tech 3000 Sàrl: Request timed out: ConnectTimeout('timed out')
+2026-07-19 18:24:10,791 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:24:41,135 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:24:43,050 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:25:12,982 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:25:13,943 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:25:43,355 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:25:44,218 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:26:13,680 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:26:14,573 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:26:44,874 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:27:00,079 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:27:32,480 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:27:35,124 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:28:03,059 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:28:05,764 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:28:33,900 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:28:36,242 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:29:04,652 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:29:06,642 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:29:37,179 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
+2026-07-19 18:30:02,053 - layer5 - WARNING - Social search failed for JMartinez Sanitaire: Request timed out: ConnectTimeout('timed out')
+2026-07-19 18:30:05,100 - GroqClient - WARNING - 429 Too Many Requests (likely Token limit). Waiting 30s...
