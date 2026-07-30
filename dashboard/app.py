@@ -341,15 +341,20 @@ def export_pdf_single(lead_id):
 
 import threading
 import asyncio
-from main import run_pipeline, reconcile_and_finalize_run
-from utils.database import get_current_run_info
 from utils.state_manager import update_state, get_state
+
+# Detect cloud/Render mode — pipeline disabled to stay in 512MB RAM
+_RENDER_MODE = os.environ.get("RENDER", "") == "1"
 
 pipeline_thread = None
 update_state({"status": "idle", "stop_requested": False, "last_log": "System initialized and ready."})
 
 def run_background_pipeline():
+    """Heavy imports done INSIDE the function so they only load on local PC,
+    not on Render where they would blow the 512MB RAM limit on startup."""
     import gc
+    from main import run_pipeline, reconcile_and_finalize_run
+    from utils.database import get_current_run_info
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     try:
@@ -357,10 +362,7 @@ def run_background_pipeline():
         loop.run_until_complete(run_pipeline())
         gc.collect()  # free memory after completion
     except MemoryError:
-        # OOM on Render free tier — pipeline was too heavy for this run.
-        # Flask process stays alive; dashboard shows error instead of crashing.
-        import traceback
-        msg = "Out of memory — pipeline stopped. Try again (it resumes from existing data) or reduce TARGET_LEAD_COUNT."
+        msg = "Out of memory — pipeline stopped. Use your local PC to run the pipeline, then sync."
         print(f"[OOM] {msg}")
         update_state({"status": "error", "last_log": msg})
         try:
@@ -373,10 +375,11 @@ def run_background_pipeline():
         import traceback
         print("Error running background pipeline:", traceback.format_exc())
         try:
+            from utils.database import get_current_run_info
+            from main import reconcile_and_finalize_run
             run_info = get_current_run_info()
             if run_info.get("run_id"):
-                result = reconcile_and_finalize_run(run_info["run_id"])
-                print("Reconciled interrupted run:", result)
+                reconcile_and_finalize_run(run_info["run_id"])
         except Exception as reconcile_error:
             print("Error reconciling interrupted run:", reconcile_error)
         update_state({"status": "error", "last_log": f"Pipeline error: {str(e)}"})
@@ -384,12 +387,55 @@ def run_background_pipeline():
         gc.collect()
         loop.close()
 
+@app.route('/api/mode')
+def api_mode():
+    """Tells the frontend whether this is Render cloud mode or local PC mode."""
+    return jsonify({
+        "mode": "cloud" if _RENDER_MODE else "local",
+        "pipeline_enabled": not _RENDER_MODE,
+        "message": "Cloud viewer mode — run pipeline on your local PC and sync results here." if _RENDER_MODE else "Local mode — full pipeline available."
+    })
+
+@app.route('/api/upload-db', methods=['POST'])
+def upload_db():
+    """Accepts a SQLite DB file upload from the local sync script.
+    Replaces the cloud DB with the freshly-run local results.
+    Secured by a token check."""
+    import shutil, hashlib
+    token = request.headers.get('X-Sync-Token', '')
+    expected = os.environ.get('SYNC_TOKEN', 'astraquote-sync-2024')
+    if not token or token != expected:
+        return jsonify({"error": "Unauthorized"}), 401
+    if 'db' not in request.files:
+        return jsonify({"error": "No db file in request"}), 400
+    db_file = request.files['db']
+    tmp_path = config.DB_PATH + '.tmp'
+    db_file.save(tmp_path)
+    # Validate it's actually a SQLite file
+    with open(tmp_path, 'rb') as f:
+        header = f.read(16)
+    if not header.startswith(b'SQLite format 3'):
+        os.remove(tmp_path)
+        return jsonify({"error": "Invalid SQLite file"}), 400
+    shutil.move(tmp_path, config.DB_PATH)
+    # Count what we just received
+    conn = get_db_connection()
+    total = conn.execute('SELECT COUNT(*) FROM leads').fetchone()[0]
+    qualified = conn.execute("SELECT COUNT(*) FROM leads WHERE status='enriched'").fetchone()[0]
+    conn.close()
+    print(f"[SYNC] DB uploaded: {total} leads, {qualified} qualified")
+    return jsonify({"status": "ok", "total": total, "qualified": qualified})
+
 @app.route('/api/pipeline/start', methods=['POST'])
 def start_pipeline_route():
     global pipeline_thread
+    if _RENDER_MODE:
+        return jsonify({
+            "status": "cloud_mode",
+            "message": "Pipeline disabled on Render (512MB RAM limit). Run on your local PC and sync results here using: python sync_to_render.py"
+        }), 200
     if pipeline_thread and pipeline_thread.is_alive():
         return jsonify({"status": "error", "message": "Pipeline is already running"}), 400
-        
     update_state({
         "status": "running",
         "current_layer": 1,
@@ -400,6 +446,7 @@ def start_pipeline_route():
     pipeline_thread = threading.Thread(target=run_background_pipeline, daemon=True)
     pipeline_thread.start()
     return jsonify({"status": "success", "message": "Pipeline started"})
+
 
 @app.route('/api/pipeline/stop', methods=['POST'])
 def stop_pipeline_route():
