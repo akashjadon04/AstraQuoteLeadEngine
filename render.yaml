@@ -2,15 +2,13 @@ services:
   - type: web
     name: astraquote-lead-engine
     runtime: docker
-    dockerfilePath: ./Dockerfile
+    dockerfilePath: ./Dockerfile.render   # Lightweight build — no pipeline, no weasyprint
     plan: free
-    region: singapore  # Closest to India
+    region: singapore
     envVars:
       - key: DASHBOARD_HOST
         value: 0.0.0.0
-      - key: DASHBOARD_PORT
-        value: "8800"
       - key: PYTHONUNBUFFERED
         value: "1"
     healthCheckPath: /
-    autoDeploy: true   # Auto-deploy on every git push
+    autoDeploy: true

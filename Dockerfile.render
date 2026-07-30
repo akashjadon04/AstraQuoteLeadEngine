@@ -1,0 +1,38 @@
+# ============================================================
+# Dockerfile.render — Lightweight build for Render free tier
+# Dashboard only, no pipeline, no heavy deps, fits 512MB RAM
+# ============================================================
+
+FROM python:3.11-slim
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    DASHBOARD_HOST=0.0.0.0
+
+WORKDIR /app
+
+# Minimal system deps — skip GTK/Pango (weasyprint) to save RAM
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    build-essential \
+    libffi-dev \
+    libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install only what the dashboard needs (skip crawl4ai, weasyprint, playwright)
+COPY requirements.txt .
+RUN grep -vE "crawl4ai|weasyprint|playwright" requirements.txt > requirements_render.txt && \
+    pip install --no-cache-dir -r requirements_render.txt
+
+# Copy application code
+COPY . .
+
+RUN mkdir -p data exports logs
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=20s --retries=3 \
+    CMD curl -f http://localhost:${PORT:-8800}/ || exit 1
+
+EXPOSE 8800
+
+# Lightweight start — dashboard only, no pipeline, fits 512MB
+CMD ["python", "render_start.py"]
