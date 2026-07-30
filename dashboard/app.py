@@ -412,7 +412,7 @@ def upload_db():
     if 'db' not in request.files:
         return jsonify({"error": "No db file in request"}), 400
     db_file = request.files['db']
-    tmp_path = config.DB_PATH + '.tmp'
+    tmp_path = DB_PATH + '.tmp'
     db_file.save(tmp_path)
     # Validate it's actually a SQLite file
     with open(tmp_path, 'rb') as f:
@@ -420,7 +420,7 @@ def upload_db():
     if not header.startswith(b'SQLite format 3'):
         os.remove(tmp_path)
         return jsonify({"error": "Invalid SQLite file"}), 400
-    shutil.move(tmp_path, config.DB_PATH)
+    shutil.move(tmp_path, DB_PATH)
     # Count what we just received
     conn = get_db_connection()
     total = conn.execute('SELECT COUNT(*) FROM leads').fetchone()[0]
