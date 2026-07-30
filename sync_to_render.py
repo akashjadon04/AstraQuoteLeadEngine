@@ -26,7 +26,7 @@ def main():
         sys.exit(1)
 
     size_kb = os.path.getsize(LOCAL_DB) / 1024
-    print(f"[SYNC] Uploading {LOCAL_DB} ({size_kb:.1f} KB) → {RENDER_URL}")
+    print(f"[SYNC] Uploading {LOCAL_DB} ({size_kb:.1f} KB) -> {RENDER_URL}")
 
     with open(LOCAL_DB, "rb") as f:
         try:

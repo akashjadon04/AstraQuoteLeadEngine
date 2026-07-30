@@ -343,8 +343,11 @@ import threading
 import asyncio
 from utils.state_manager import update_state, get_state
 
-# Detect cloud/Render mode — pipeline disabled to stay in 512MB RAM
-_RENDER_MODE = os.environ.get("RENDER", "") == "1"
+# Detect cloud/Render mode — pipeline disabled to stay in 512MB RAM.
+# Render platform auto-injects RENDER=true; our render.yaml also sets RENDER=1.
+# Check for any truthy value so both are caught.
+_RENDER_ENV = os.environ.get("RENDER", "").lower()
+_RENDER_MODE = _RENDER_ENV in ("1", "true", "yes")
 
 pipeline_thread = None
 update_state({"status": "idle", "stop_requested": False, "last_log": "System initialized and ready."})
