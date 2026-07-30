@@ -2,7 +2,7 @@ services:
   - type: web
     name: astraquote-lead-engine
     runtime: docker
-    dockerfilePath: ./Dockerfile.render   # Lightweight build — no pipeline, no weasyprint
+    dockerfilePath: ./Dockerfile.render
     plan: free
     region: singapore
     envVars:
@@ -10,5 +10,11 @@ services:
         value: 0.0.0.0
       - key: PYTHONUNBUFFERED
         value: "1"
+      - key: RENDER
+        value: "1"                  # Activates low-mem mode: concurrency 2/3, no SHAB, no review search
+      - key: RESEARCH_CONCURRENCY
+        value: "2"                  # 2 parallel crawls max (was 10) — fits in 512MB
+      - key: ENRICH_CONCURRENCY
+        value: "3"                  # 3 parallel enrichments max (was 20)
     healthCheckPath: /
     autoDeploy: true

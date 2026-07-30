@@ -349,17 +349,29 @@ pipeline_thread = None
 update_state({"status": "idle", "stop_requested": False, "last_log": "System initialized and ready."})
 
 def run_background_pipeline():
+    import gc
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     try:
+        gc.collect()  # clean slate before starting
         loop.run_until_complete(run_pipeline())
+        gc.collect()  # free memory after completion
+    except MemoryError:
+        # OOM on Render free tier — pipeline was too heavy for this run.
+        # Flask process stays alive; dashboard shows error instead of crashing.
+        import traceback
+        msg = "Out of memory — pipeline stopped. Try again (it resumes from existing data) or reduce TARGET_LEAD_COUNT."
+        print(f"[OOM] {msg}")
+        update_state({"status": "error", "last_log": msg})
+        try:
+            run_info = get_current_run_info()
+            if run_info.get("run_id"):
+                reconcile_and_finalize_run(run_info["run_id"])
+        except Exception:
+            pass
     except Exception as e:
-        print("Error running background pipeline:", e)
-        # A cancelled/crashed run skips run_pipeline()'s own end-of-loop
-        # reconciliation (keep the best N, demote the rest to 'rejected' with
-        # a reason) — without this, every lead that reached Layer 6 is left
-        # sitting as whatever status it last had, with the dashboard/export
-        # showing far more "delivered" leads than actually met the bar.
+        import traceback
+        print("Error running background pipeline:", traceback.format_exc())
         try:
             run_info = get_current_run_info()
             if run_info.get("run_id"):
@@ -367,8 +379,9 @@ def run_background_pipeline():
                 print("Reconciled interrupted run:", result)
         except Exception as reconcile_error:
             print("Error reconciling interrupted run:", reconcile_error)
-        update_state({"status": "error", "last_log": f"Pipeline crashed: {str(e)}"})
+        update_state({"status": "error", "last_log": f"Pipeline error: {str(e)}"})
     finally:
+        gc.collect()
         loop.close()
 
 @app.route('/api/pipeline/start', methods=['POST'])

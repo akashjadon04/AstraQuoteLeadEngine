@@ -2,21 +2,29 @@ import os
 
 SEARCH_CH_API_KEY = os.environ.get("SEARCH_CH_API_KEY", "")
 
+# ── Cloud/Low-memory mode ──────────────────────────────────────────────────
+# Set RENDER=1 or LOW_MEM=1 env var to automatically reduce concurrency and
+# memory usage to fit within 512MB (Render free tier). On local PC these
+# defaults are ignored and full concurrency is used.
+_LOW_MEM = os.environ.get("RENDER", "") == "1" or os.environ.get("LOW_MEM", "") == "1"
+
 # ── Research Engine (rule-based, no AI/LLM — logic over public info only) ──
-RESEARCH_CONCURRENCY = 10          # parallel site crawls in Layer 5
-ENRICH_CONCURRENCY = 20            # parallel contact lookups in Layer 6
-LEAD_RESEARCH_TIMEOUT = 30         # hard per-lead ceiling (seconds) so one slow site can't stall the batch
-LEAD_ENRICH_TIMEOUT = 45           # hard per-lead ceiling (seconds) for enrichment (covers the SHAB registry lookup's multiple paced requests)
-ENABLE_REVIEW_SEARCH = True        # opportunistic DDGS review lookup (auto-skipped if the circuit breaker trips)
-ENABLE_DM_SEARCH_FALLBACK = True   # opportunistic DDGS LinkedIn lookup when other decision-maker sources find nothing
-ENABLE_SHAB_LOOKUP = True          # official SHAB gazette lookup for legally-registered officer names (authoritative)
+# On Render free (512MB): 2 concurrent crawls max — each holds ~20-40MB in RAM.
+# On local PC: 10 concurrent crawls for speed.
+RESEARCH_CONCURRENCY = int(os.environ.get("RESEARCH_CONCURRENCY", "2" if _LOW_MEM else "10"))
+ENRICH_CONCURRENCY   = int(os.environ.get("ENRICH_CONCURRENCY",   "3" if _LOW_MEM else "20"))
+LEAD_RESEARCH_TIMEOUT = int(os.environ.get("LEAD_RESEARCH_TIMEOUT", "20" if _LOW_MEM else "30"))
+LEAD_ENRICH_TIMEOUT   = int(os.environ.get("LEAD_ENRICH_TIMEOUT",   "30" if _LOW_MEM else "45"))
+ENABLE_REVIEW_SEARCH    = not _LOW_MEM   # skip on Render — saves RAM + avoids DDGS hammering
+ENABLE_DM_SEARCH_FALLBACK = True
+ENABLE_SHAB_LOOKUP      = not _LOW_MEM   # skip on Render — SHAB is heavy
 
 # ── Network resilience (utils/net.py) ──
-NET_MAX_CONCURRENT_DDGS = 2        # DDGS scrapes the DOM and rate-limits aggressively; keep this low
-NET_DDGS_MIN_INTERVAL = 1.2        # seconds between DDGS calls, global across the whole run
-NET_DDGS_TIMEOUT = 12              # seconds before a single DDGS call is abandoned
-NET_CIRCUIT_BREAKER_THRESHOLD = 5  # consecutive DDGS failures before the breaker opens
-NET_CIRCUIT_BREAKER_COOLDOWN = 90  # seconds the breaker stays open before allowing another attempt
+NET_MAX_CONCURRENT_DDGS    = 1 if _LOW_MEM else 2
+NET_DDGS_MIN_INTERVAL      = 2.0 if _LOW_MEM else 1.2
+NET_DDGS_TIMEOUT           = 10
+NET_CIRCUIT_BREAKER_THRESHOLD = 5
+NET_CIRCUIT_BREAKER_COOLDOWN  = 90
 
 TARGET_CANTONS = ["Genève", "Vaud", "Valais", "Neuchâtel", "Jura"]
 
