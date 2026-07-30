@@ -1,0 +1,88 @@
+name: Run Lead Engine Pipeline
+
+on:
+  # Run automatically every 6 hours
+  schedule:
+    - cron: '0 */6 * * *'   # Every 6 hours: midnight, 6am, noon, 6pm UTC
+  # Also allow manual trigger from GitHub UI (Actions tab → Run workflow)
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for manual run'
+        required: false
+        default: 'Manual trigger'
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest          # 7GB RAM, 2 vCPUs — plenty for the pipeline
+    timeout-minutes: 90             # Kill if takes longer than 90 min
+
+    steps:
+      # 1. Check out the code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Set up Python
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      # 3. Install dependencies (skip crawl4ai — uses httpx fallback)
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          grep -vE "crawl4ai|weasyprint|playwright" requirements.txt > requirements_ci.txt
+          pip install -r requirements_ci.txt
+
+      # 4. Create required directories
+      - name: Prepare directories
+        run: mkdir -p data exports logs
+
+      # 5. Run the full pipeline
+      - name: Run Lead Engine Pipeline
+        env:
+          SEARCH_CH_API_KEY: ${{ secrets.SEARCH_CH_API_KEY }}
+          PYTHONUNBUFFERED: "1"
+        run: |
+          echo "Starting pipeline at $(date)"
+          python main.py
+          echo "Pipeline completed at $(date)"
+
+      # 6. Show results summary
+      - name: Pipeline Results Summary
+        run: |
+          python -c "
+          import sqlite3, json
+          try:
+              conn = sqlite3.connect('data/leads.db')
+              total    = conn.execute('SELECT COUNT(*) FROM leads').fetchone()[0]
+              qualified = conn.execute(\"SELECT COUNT(*) FROM leads WHERE status='enriched'\").fetchone()[0]
+              avg_score = conn.execute('SELECT ROUND(AVG(fit_score),1) FROM leads WHERE status=\\'enriched\\'').fetchone()[0] or 0
+              print(f'Total leads: {total}')
+              print(f'Qualified:   {qualified}')
+              print(f'Avg score:   {avg_score}/100')
+              conn.close()
+          except Exception as e:
+              print(f'Could not read DB: {e}')
+          "
+
+      # 7. Sync results to Render dashboard
+      - name: Sync results to Render
+        env:
+          RENDER_URL: ${{ secrets.RENDER_URL }}
+          SYNC_TOKEN: ${{ secrets.SYNC_TOKEN }}
+        run: |
+          echo "Syncing leads to Render dashboard..."
+          python sync_to_render.py
+          echo "Sync complete. Dashboard: $RENDER_URL"
+
+      # 8. Upload DB as artifact (downloadable from GitHub Actions UI)
+      - name: Upload leads DB artifact
+        uses: actions/upload-artifact@v4
+        if: always()    # Upload even if pipeline partially failed
+        with:
+          name: leads-db-${{ github.run_number }}
+          path: data/leads.db
+          retention-days: 30
