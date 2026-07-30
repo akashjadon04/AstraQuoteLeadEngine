@@ -26,6 +26,11 @@
             <option value="discovered">Discovered</option>
             <option value="rejected">Rejected</option>
         </select>
+        <select id="nogaFilter" class="input-control" style="max-width: 220px;">
+            <option value="">All NOGA Codes (NOGA 4322)</option>
+            <option value="432201">NOGA 432201 — Plomberie / Sanitaire</option>
+            <option value="432202">NOGA 432202 — Chauffage / Climatisation</option>
+        </select>
         <select id="sortBy" class="input-control" style="max-width: 190px;">
             <option value="fit">Sort: Best Fit (AstraQuote)</option>
             <option value="size">Sort: Company Size</option>
@@ -43,6 +48,7 @@
             <tr>
                 <th>Company</th>
                 <th>Canton</th>
+                <th>NOGA Code</th>
                 <th>Niche</th>
                 <th>Phone</th>
                 <th>Fit</th>
@@ -55,7 +61,7 @@
             </tr>
         </thead>
         <tbody id="leadsBody">
-            <tr><td colspan="11" style="text-align: center;">Loading leads...</td></tr>
+            <tr><td colspan="12" style="text-align: center;">Loading leads...</td></tr>
         </tbody>
     </table>
 </div>
@@ -125,12 +131,14 @@
     async function loadLeads() {
         const canton = document.getElementById('cantonFilter').value;
         const status = document.getElementById('statusFilter').value;
+        const noga = document.getElementById('nogaFilter').value;
         const search = document.getElementById('searchInput').value.toLowerCase();
         const sort = document.getElementById('sortBy').value;
 
         let url = '/api/leads?';
         if (canton) url += `canton=${canton}&`;
         if (status) url += `status=${status}&`;
+        if (noga) url += `noga=${noga}&`;
         if (sort) url += `sort=${sort}&`;
 
         try {
@@ -145,9 +153,12 @@
                 const tr = document.createElement('tr');
                 tr.style.cursor = 'pointer';
 
+                const nogaBadge = lead.noga_code ? `<span class="badge" style="background: rgba(139,92,246,0.2); border: 1px solid var(--primary); font-size:11px;">NOGA ${lead.noga_code}</span>` : '-';
+
                 tr.innerHTML = `
                     <td onclick="window.location.href='/leads/${lead.id}'" style="font-weight: 600; color: var(--primary);">${lead.company_name || '-'}</td>
                     <td onclick="window.location.href='/leads/${lead.id}'">${lead.canton || '-'}</td>
+                    <td>${nogaBadge}</td>
                     <td onclick="window.location.href='/leads/${lead.id}'">${lead.niche || '-'}</td>
                     <td>${lead.phone || '-'}</td>
                     <td>${getFitBadge(lead.fit_score)}</td>
@@ -166,11 +177,11 @@
             });
 
             if (leads.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="11" style="text-align: center;">No leads found.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="12" style="text-align: center;">No leads found.</td></tr>';
             }
         } catch (error) {
             console.error('Error loading leads:', error);
-            document.getElementById('leadsBody').innerHTML = '<tr><td colspan="11" style="text-align: center; color: var(--danger);">Error loading leads.</td></tr>';
+            document.getElementById('leadsBody').innerHTML = '<tr><td colspan="12" style="text-align: center; color: var(--danger);">Error loading leads.</td></tr>';
         }
     }
 

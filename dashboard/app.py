@@ -47,6 +47,14 @@ def dict_from_row(row):
     d['pitch_strategy'] = d.get('pitch_angle')
     d['custom_opening_line'] = d.get('custom_opening')
     d['contact_tier'] = classify_contact_tier(d)
+    # Map NOGA label
+    noga = d.get('noga_code')
+    if noga == '432201':
+        d['noga_label'] = 'NOGA 432201 — Installation sanitaire & Plomberie'
+    elif noga == '432202':
+        d['noga_label'] = 'NOGA 432202 — Installation de chauffage & Climatisation'
+    else:
+        d['noga_label'] = 'NOGA 4322 — Installation sanitaire & Chauffage'
     # Generate Google review summary if not stored
     rating = d.get('google_rating')
     reviews = d.get('google_reviews')
@@ -118,6 +126,11 @@ def api_leads():
         conditions.append('niche = ?')
         params.append(niche)
 
+    noga = request.args.get('noga')
+    if noga:
+        conditions.append('noga_code = ?')
+        params.append(noga)
+
     if conditions:
         query += ' WHERE ' + ' AND '.join(conditions)
 
@@ -156,6 +169,10 @@ def api_stats():
     # Niche distribution
     niche_rows = conn.execute('SELECT niche, COUNT(*) as count FROM leads GROUP BY niche').fetchall()
     niche_dist = {row['niche']: row['count'] for row in niche_rows if row['niche']}
+
+    # NOGA distribution
+    noga_rows = conn.execute('SELECT noga_code, COUNT(*) as count FROM leads GROUP BY noga_code').fetchall()
+    noga_dist = {row['noga_code'] or '432201': row['count'] for row in noga_rows}
 
     # Urgency distribution
     urgency_dist = {'High (8-10)': 0, 'Medium (5-7)': 0, 'Low (1-4)': 0}

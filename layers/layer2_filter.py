@@ -11,6 +11,7 @@ from rich.console import Console
 
 import config
 from utils.logger import get_logger
+from utils.noga import classify_noga
 
 logger = get_logger("layer2")
 console = Console()
@@ -49,33 +50,13 @@ def _looks_like_garbage_name(company_name: str) -> bool:
 
 
 def _is_relevant_niche(lead: dict) -> bool:
-    """Check if the lead is genuinely a plumbing, heating, or sanitaire business.
-    CRITICAL: We deliberately do NOT include lead.get('niche') in the text check.
-    The niche field is set by detect_niche() which in the past had a fallback to
-    'plomberie' for everything — including airports, restaurants, and escort ads.
-    That bug is fixed, but even so, checking our own tag is circular reasoning.
-    We only check actual content from the web: company_name and raw_snippet."""
-    name_lower = (lead.get("company_name") or "").lower()
-    snippet_lower = (lead.get("raw_snippet") or "").lower()
-
-    trade_stems = [
-        "plomb", "sanitaire", "chauffag", "hvac", "thermique",
-        "tuyau", "robinet", "salle de bain", "chaudière", "chaudiere",
-        "pompe à chaleur", "pompe a chaleur", "installation sanitaire",
-        "installations sanitaires", "dépannage plomberie", "depannage plomberie",
-        "génie sanitaire", "genie sanitaire", "technique du bâtiment",
-        "technique du batiment", "canalisation", "débouchage", "debouchage",
-        "haustechnik", "wärmetechnik", "installateur sanitaire",
-    ]
-
-    # Check name first (strongest signal — it's the actual company name from web)
-    if any(t in name_lower for t in trade_stems):
+    """Check if the lead is genuinely a plumbing, heating, or sanitaire business (NOGA 4322)."""
+    niche = lead.get("niche", "")
+    full_text = f"{lead.get('company_name', '')} {lead.get('raw_snippet', '')}"
+    info = classify_noga(niche, full_text)
+    if info:
+        lead["noga_code"] = info["code"]
         return True
-
-    # Check snippet (from the search result body — also real web content)
-    if any(t in snippet_lower for t in trade_stems):
-        return True
-
     return False
 
 
@@ -118,9 +99,9 @@ def batch_filter(leads: List[Dict[str, Any]]) -> Tuple[List[Dict[str, Any]], Lis
                 reasons.append(f"Excluded keyword: '{kw}'")
                 break
 
-        # 4. Niche relevance — must relate to plumbing/HVAC/sanitaire
+        # 4. Niche relevance — must be strictly NOGA 4322 (plumbing/HVAC/sanitaire)
         if not _is_relevant_niche(lead) and not reasons:
-            reasons.append("Not in a relevant trade niche")
+            reasons.append("Not NOGA 4322 (Plomberie/Chauffage/Sanitaire)")
 
         # 5. Flag for size check in Layer 5
         lead["needs_size_check"] = True

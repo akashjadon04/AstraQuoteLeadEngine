@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS leads (
     website         TEXT,
     address         TEXT,
     postal_code     TEXT,
+    noga_code       TEXT,
 
     -- Company Info
     legal_form      TEXT,
@@ -136,6 +137,7 @@ _MIGRATION_COLUMNS = {
     "officer_count": "INTEGER",
     "team_headcount_hint": "INTEGER",
     "run_id": "TEXT",
+    "noga_code": "TEXT",
 }
 
 # name_key = normalized company name (see layers/layer1_discovery.normalize_name),
