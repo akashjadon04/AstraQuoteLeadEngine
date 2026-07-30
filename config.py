@@ -11,8 +11,8 @@ _LOW_MEM = os.environ.get("RENDER", "") == "1" or os.environ.get("LOW_MEM", "") 
 # ── Research Engine (rule-based, no AI/LLM — logic over public info only) ──
 # On Render free (512MB): 2 concurrent crawls max — each holds ~20-40MB in RAM.
 # On local PC: 10 concurrent crawls for speed.
-RESEARCH_CONCURRENCY = int(os.environ.get("RESEARCH_CONCURRENCY", "2" if _LOW_MEM else "10"))
-ENRICH_CONCURRENCY   = int(os.environ.get("ENRICH_CONCURRENCY",   "3" if _LOW_MEM else "20"))
+RESEARCH_CONCURRENCY = int(os.environ.get("RESEARCH_CONCURRENCY", "1" if _LOW_MEM else "10"))
+ENRICH_CONCURRENCY   = int(os.environ.get("ENRICH_CONCURRENCY",   "1" if _LOW_MEM else "20"))
 LEAD_RESEARCH_TIMEOUT = int(os.environ.get("LEAD_RESEARCH_TIMEOUT", "20" if _LOW_MEM else "30"))
 LEAD_ENRICH_TIMEOUT   = int(os.environ.get("LEAD_ENRICH_TIMEOUT",   "30" if _LOW_MEM else "45"))
 ENABLE_REVIEW_SEARCH    = not _LOW_MEM   # skip on Render — saves RAM + avoids DDGS hammering

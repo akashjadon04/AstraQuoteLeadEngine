@@ -449,13 +449,37 @@ def upload_db():
 @app.route('/api/pipeline/start', methods=['POST'])
 def start_pipeline_route():
     global pipeline_thread
-    if _RENDER_MODE:
-        return jsonify({
-            "status": "cloud_mode",
-            "message": "Pipeline disabled on Render (512MB RAM limit). Run on your local PC and sync results here using: python sync_to_render.py"
-        }), 200
     if pipeline_thread and pipeline_thread.is_alive():
         return jsonify({"status": "error", "message": "Pipeline is already running"}), 400
+
+    # Try triggering GitHub Actions dispatch if token is available
+    gh_token = os.environ.get("GITHUB_PAT") or os.environ.get("GITHUB_TOKEN")
+    if gh_token:
+        try:
+            import urllib.request
+            req = urllib.request.Request(
+                "https://api.github.com/repos/akashjadon04/AstraQuoteLeadEngine/actions/workflows/pipeline.yml/dispatches",
+                data=json.dumps({"ref": "main"}).encode('utf-8'),
+                headers={
+                    "Authorization": f"Bearer {gh_token}",
+                    "Accept": "application/vnd.github+json",
+                    "User-Agent": "AstraQuoteDashboard"
+                },
+                method="POST"
+            )
+            with urllib.request.urlopen(req) as resp:
+                if resp.status in (200, 204):
+                    update_state({
+                        "status": "running",
+                        "current_layer": 1,
+                        "current_layer_name": "Discovery",
+                        "stop_requested": False,
+                        "last_log": "Pipeline dispatched on GitHub Cloud runner (7GB RAM)..."
+                    })
+                    return jsonify({"status": "success", "message": "Pipeline triggered on GitHub Actions cloud runner"})
+        except Exception as e:
+            print("GitHub dispatch fallback to local worker:", e)
+
     update_state({
         "status": "running",
         "current_layer": 1,
