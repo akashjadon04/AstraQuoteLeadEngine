@@ -42,7 +42,7 @@ def main():
 
     if resp.status_code == 200:
         data = resp.json()
-        print(f"[SYNC] ✅ Success!")
+        print("[SYNC] SUCCESS!")
         print(f"       Total leads on Render: {data.get('total', '?')}")
         print(f"       Qualified leads:       {data.get('qualified', '?')}")
         print(f"       Live at: {RENDER_URL}")
