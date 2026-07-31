@@ -49,12 +49,15 @@ def dict_from_row(row):
     d['contact_tier'] = classify_contact_tier(d)
     # Map NOGA label
     noga = d.get('noga_code')
-    if noga == '432201':
-        d['noga_label'] = 'NOGA 432201 — Installation sanitaire & Plomberie'
-    elif noga == '432202':
-        d['noga_label'] = 'NOGA 432202 — Installation de chauffage & Climatisation'
+    if noga in ('43.22A', '432201'):
+        d['noga_label'] = 'NOGA 43.22A — Installation sanitaire & Plomberie'
+        d['noga_code_display'] = 'NOGA 43.22A'
+    elif noga in ('43.22B', '432202'):
+        d['noga_label'] = 'NOGA 43.22B — Installation de chauffage & Climatisation'
+        d['noga_code_display'] = 'NOGA 43.22B'
     else:
-        d['noga_label'] = 'NOGA 4322 — Installation sanitaire & Chauffage'
+        d['noga_label'] = 'NOGA 43.22 — Installation sanitaire & Chauffage'
+        d['noga_code_display'] = 'NOGA 43.22'
     # Generate Google review summary if not stored
     rating = d.get('google_rating')
     reviews = d.get('google_reviews')
@@ -445,6 +448,40 @@ def upload_db():
     conn.close()
     print(f"[SYNC] DB uploaded: {total} leads, {qualified} qualified")
     return jsonify({"status": "ok", "total": total, "qualified": qualified})
+
+@app.route('/api/blacklist/import', methods=['POST'])
+def import_blacklist():
+    """Import a list of previously called leads (phones or company names)
+    into the permanent blacklist table so they are NEVER re-contacted or delivered."""
+    from utils.database import add_to_blacklist
+    from layers.layer1_discovery import normalize_name
+
+    entries = []
+    if request.is_json:
+        data = request.get_json() or {}
+        entries = data.get('entries', [])
+
+    if 'file' in request.files:
+        file = request.files['file']
+        content = file.read().decode('utf-8', errors='ignore')
+        lines = content.splitlines()
+        reader = csv.reader(lines)
+        for row in reader:
+            for item in row:
+                if item.strip():
+                    entries.append(item.strip())
+
+    added = 0
+    for entry in entries:
+        entry_str = str(entry).strip()
+        if not entry_str:
+            continue
+        phone = _validate_swiss_phone(entry_str) or entry_str
+        name_key = normalize_name(entry_str)
+        add_to_blacklist(phone, entry_str, name_key)
+        added += 1
+
+    return jsonify({"status": "ok", "added": added, "message": f"Successfully blacklisted {added} previously called leads."})
 
 @app.route('/api/pipeline/start', methods=['POST'])
 def start_pipeline_route():

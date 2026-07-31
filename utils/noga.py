@@ -1,13 +1,17 @@
 # ============================================================
 # noga.py — Swiss NOGA Activity Classification (Nomenclature Générale des Activités)
-# Official Swiss economic activity classification for B2B targeting.
-# AstraQuote Target Domain: NOGA 4322 (Plumbing, Heating, Sanitation, HVAC)
+# Official Swiss Federal Statistical Office (OFS / UST) Economic Activity Code.
+# Primary Target Domain: NOGA 43.22 (Installation d'eau, de gaz, de chauffage et de climatisation)
+# Sub-categories:
+#   NOGA 43.22A (432201) — Installation sanitaire & Plomberie
+#   NOGA 43.22B (432202) — Installation de chauffage & Climatisation
 # ============================================================
 
 from typing import Dict, Any, Optional
 
-NOGA_432201 = "NOGA 432201 — Installation sanitaire & Plomberie"
-NOGA_432202 = "NOGA 432202 — Installation de chauffage & Climatisation"
+NOGA_4322 = "NOGA 43.22"
+NOGA_4322A = "NOGA 43.22A (432201) — Installation sanitaire & Plomberie"
+NOGA_4322B = "NOGA 43.22B (432202) — Installation de chauffage & Climatisation"
 
 _PLUMBING_STEMS = [
     "plomb", "sanitaire", "tuyau", "robinet", "salle de bain",
@@ -34,8 +38,8 @@ _INVALID_NOGAS = [
 
 def classify_noga(niche: str, text: str = "") -> Optional[Dict[str, str]]:
     """
-    Classify a business into official Swiss NOGA 4322 codes.
-    Returns dict with 'code', 'label' if it matches NOGA 4322, or None if not relevant.
+    Classify a business into official Swiss NOGA 43.22 codes.
+    Returns dict with 'code', 'sub_code', 'label' if it matches NOGA 43.22, or None if not relevant.
     """
     full_text = f"{niche} {text}".lower()
 
@@ -48,18 +52,22 @@ def classify_noga(niche: str, text: str = "") -> Optional[Dict[str, str]]:
             if not (has_plumbing or has_heating):
                 return None
 
-    # Match NOGA 432201 (Sanitaire / Plomberie)
+    # Match NOGA 43.22A (432201 - Sanitaire / Plomberie)
     if any(stem in full_text for stem in _PLUMBING_STEMS) or niche in ("plomberie", "sanitaire", "ferblanterie"):
         return {
-            "code": "432201",
-            "label": NOGA_432201
+            "code": "43.22",
+            "sub_code": "43.22A",
+            "legacy_code": "432201",
+            "label": NOGA_4322A
         }
 
-    # Match NOGA 432202 (Chauffage / Climatisation)
+    # Match NOGA 43.22B (432202 - Chauffage / Climatisation)
     if any(stem in full_text for stem in _HEATING_STEMS) or niche in ("chauffage", "climatisation"):
         return {
-            "code": "432202",
-            "label": NOGA_432202
+            "code": "43.22",
+            "sub_code": "43.22B",
+            "legacy_code": "432202",
+            "label": NOGA_4322B
         }
 
     return None
