@@ -69,8 +69,8 @@ MIN_EMPLOYEES = 10  # legacy/no longer used as a hard filter — kept so old imp
 # THREE, or the search space is genuinely exhausted. Anything processed along
 # the way that doesn't make the cut is kept in the DB with status='rejected'
 # and a reason, not silently dropped.
-TARGET_LEAD_COUNT = 50
-DISCOVERY_TARGET = 210
+TARGET_LEAD_COUNT = 100
+DISCOVERY_TARGET = 450
 # The research+enrich+final-gate loop in main.py keeps expanding until
 # TARGET_LEAD_COUNT is actually met, not just for a fixed few tries — each
 # iteration is individually time-bounded (see layer4_recrawl.py) and never
