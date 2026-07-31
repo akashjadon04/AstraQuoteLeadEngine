@@ -370,14 +370,10 @@ async def run_pipeline() -> dict:
         deduped_final_ready.append(lead)
     final_ready = deduped_final_ready
 
-    # Keep only the best FINAL_TARGET by fit score; everything else actually
-    # processed is explicitly marked with why, instead of silently vanishing.
-    qualified = final_ready[:FINAL_TARGET]
+    # Keep ALL surviving qualified leads that cleared hard filters (no artificial cap)
+    qualified = final_ready
     final_phones = {l.get("phone") for l in qualified}
 
-    if len(final_ready) < FINAL_TARGET:
-        console.print(f"[yellow]⚠ Reached the end of available search territory with "
-                      f"{len(final_ready)}/{FINAL_TARGET} leads meeting every requirement.[/yellow]\n")
     if duplicate_reasons:
         console.print(f"[dim]  ({len(duplicate_reasons)} duplicate entries for a company already "
                       f"in the list were collapsed — see 'rejected' leads for details.)[/dim]\n")
@@ -403,8 +399,9 @@ async def run_pipeline() -> dict:
                       f"minimum) — excluded from the final list")
             excluded_too_small += 1
         else:
-            reason = f"Met every requirement but ranked below the top {FINAL_TARGET} by fit score"
+            reason = "Excluded by hard filter criteria"
         update_lead(phone, {"status": "rejected", "elimination_reasons": reason})
+
 
     stats["final_ready"] = len(final_ready)
     stats["qualified"] = len(qualified)
