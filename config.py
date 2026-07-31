@@ -54,7 +54,7 @@ SECONDARY_NICHES = [
 #   "small"        ~4-9 (est., covers target 7-8 employee plumbing firms)
 #   "established"  ~10+ (est.)
 #   "unknown"      no signals either way
-MIN_COMPANY_SIZE_BAND = "small"
+MIN_COMPANY_SIZE_BAND = "micro"
 UNKNOWN_PASSES = False
 _SIZE_BAND_RANK = {"sole_trader": 0, "micro": 1, "unknown": 2, "small": 3, "established": 4}
 MIN_EMPLOYEES = 10  # legacy/no longer used as a hard filter — kept so old imports don't break
@@ -78,10 +78,11 @@ DISCOVERY_TARGET = 450
 # hanging, it just gives the pipeline enough runway to guarantee the target
 # even on a day when DDGS/local.ch are both slow or few candidates have a
 # discoverable contact.
-MAX_RECRAWL_ITERATIONS = 20
+MAX_RECRAWL_ITERATIONS = 100
 
 DB_PATH = "data/leads.db"
 LOG_FILE = "data/engine.log"
+
 
 DASHBOARD_HOST = os.getenv("DASHBOARD_HOST", "0.0.0.0")
 DASHBOARD_PORT = 8800
