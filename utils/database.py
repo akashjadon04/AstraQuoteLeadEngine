@@ -474,24 +474,88 @@ def clear_db() -> None:
         conn.close()
 
 
-def start_new_run() -> str:
-    """Called once at the very start of a pipeline run. Backs up the current
-    database file, then wipes the `leads` table so every run starts from a
-    clean, current-batch-only view instead of accumulating leads across runs
-    forever — otherwise the dashboard fills up with stale leads from past runs
-    with no way to tell which batch is current.
+_master_db_path = "data/qualified_master.db"
 
-    Deliberately does NOT touch `blacklist`: that must persist across every
-    wipe, forever, so a company already assessed in ANY past run is never
-    rediscovered and re-delivered as if it were new — "old leads wipe out of
-    view, but never come back and repeat" only holds if the memory of what's
-    already been contacted survives the wipe.
 
-    Returns a fresh run_id; the caller stamps it onto every lead this run
-    touches so the current batch is traceable even if a future wipe is ever
-    skipped (e.g. a --dashboard-only session)."""
+def init_master_db(path: str = None) -> None:
+    """Initialize the master qualified database schema."""
+    master_path = path or _master_db_path
+    db_dir = os.path.dirname(master_path)
+    if db_dir and not os.path.exists(db_dir):
+        os.makedirs(db_dir, exist_ok=True)
+    conn = sqlite3.connect(master_path)
+    try:
+        conn.executescript(SCHEMA)
+        _migrate_schema(conn)
+        conn.commit()
+        logger.info(f"Master qualified database initialized at {master_path}")
+    except Exception as e:
+        logger.error(f"Error initializing master DB: {e}")
+    finally:
+        conn.close()
+
+
+def archive_qualified_leads_to_master() -> int:
+    """Move all qualified ('enriched') leads from data/leads.db into data/qualified_master.db
+    and add their phones & company names to the master blacklist. Returns count transferred."""
+    init_master_db()
+    main_conn = get_connection()
+    master_conn = sqlite3.connect(_master_db_path)
+    master_conn.row_factory = sqlite3.Row
+
+    transferred = 0
+    try:
+        qualified_rows = main_conn.execute("SELECT * FROM leads WHERE status = 'enriched'").fetchall()
+        if not qualified_rows:
+            return 0
+
+        columns = [description[0] for description in main_conn.execute("SELECT * FROM leads LIMIT 1").description]
+        placeholders = ", ".join(["?"] * len(columns))
+        col_names = ", ".join(columns)
+        insert_sql = f"INSERT OR REPLACE INTO leads ({col_names}) VALUES ({placeholders})"
+
+        for row in qualified_rows:
+            values = [row[col] for col in columns]
+            master_conn.execute(insert_sql, values)
+            phone = row["phone"]
+            company_name = row["company_name"]
+            if phone:
+                master_conn.execute(
+                    "INSERT OR IGNORE INTO blacklist (phone, company_name) VALUES (?, ?)",
+                    (phone, company_name)
+                )
+                main_conn.execute(
+                    "INSERT OR IGNORE INTO blacklist (phone, company_name) VALUES (?, ?)",
+                    (phone, company_name)
+                )
+            transferred += 1
+
+        master_conn.commit()
+        main_conn.commit()
+        logger.info(f"Archived {transferred} qualified leads to {_master_db_path} and master blacklist.")
+        return transferred
+    except Exception as e:
+        logger.error(f"Error archiving qualified leads to master DB: {e}")
+        return 0
+    finally:
+        main_conn.close()
+        master_conn.close()
+
+
+def prepare_db_for_new_run() -> str:
+    """Prepare database for a fresh run.
+    1. Archives existing qualified leads to data/qualified_master.db.
+    2. Syncs master blacklist into current database so past leads are NEVER re-scraped.
+    3. Clears data/leads.db for the upcoming fresh run.
+    """
     run_id = datetime.now().strftime("run_%Y%m%d_%H%M%S")
 
+    # 1. Archive qualified leads first
+    archived = archive_qualified_leads_to_master()
+    if archived > 0:
+        logger.info(f"Preserved {archived} qualified leads in master database data/qualified_master.db")
+
+    # 2. Backup current db
     try:
         if os.path.exists(_db_path):
             backup_dir = os.path.join(os.path.dirname(_db_path) or ".", "backups")
@@ -502,11 +566,12 @@ def start_new_run() -> str:
     except Exception as e:
         logger.error(f"Could not back up database before new run (continuing anyway): {e}")
 
+    # 3. Clear current run leads table
     conn = get_connection()
     try:
         conn.execute("DELETE FROM leads")
         conn.commit()
-        logger.info(f"Cleared leads table for new run '{run_id}' (blacklist preserved).")
+        logger.info(f"Cleared leads table for fresh run '{run_id}' (master blacklist preserved).")
     except Exception as e:
         logger.error(f"Error clearing leads table for new run: {e}")
     finally:
@@ -515,11 +580,15 @@ def start_new_run() -> str:
     return run_id
 
 
+def start_new_run() -> str:
+    """Start a new pipeline run."""
+    return prepare_db_for_new_run()
+
+
+
 def get_current_run_info() -> Dict[str, Any]:
     """The run_id and timestamp of whatever batch is currently in the `leads`
-    table, plus how many leads carry it — lets the dashboard show "this batch
-    was generated at X" instead of leaving the user to guess which rows are
-    current."""
+    table, plus how many leads carry it."""
     conn = get_connection()
     try:
         row = conn.execute(
@@ -531,3 +600,4 @@ def get_current_run_info() -> Dict[str, Any]:
         return {"run_id": row["run_id"], "count": row["count"], "last_updated": row["last_updated"]}
     finally:
         conn.close()
+

@@ -156,6 +156,17 @@ def api_leads():
 
     return jsonify([dict_from_row(row) for row in leads_rows])
 
+@app.route('/api/master_qualified')
+def api_master_qualified():
+    master_path = "data/qualified_master.db"
+    if not os.path.exists(master_path):
+        return jsonify([])
+    conn = sqlite3.connect(master_path)
+    conn.row_factory = sqlite3.Row
+    leads = conn.execute("SELECT * FROM leads WHERE status = 'enriched' ORDER BY fit_score DESC").fetchall()
+    conn.close()
+    return jsonify([dict_from_row(row) for row in leads])
+
 @app.route('/api/stats')
 def api_stats():
     conn = get_db_connection()
