@@ -36,15 +36,19 @@ CANTON_CITIES = {
     "Jura": ["Delémont", "Porrentruy", "Courroux", "Courrendlin", "Saignelégier", "Bassecourt", "Fontenais", "Vicques"]
 }
 
-PRIMARY_NICHES = [
-    "plombier", "plomberie", "sanitaire", "installateur sanitaire", 
-    "chauffagiste", "chauffage", "dépannage plomberie", "installation sanitaire"
-]
+from utils.niche_profiles import get_active_profile
 
-SECONDARY_NICHES = [
-    "installations sanitaires", "technique du bâtiment", "génie sanitaire",
-    "pompe à chaleur", "installation thermique"
-]
+def get_current_primary_niches():
+    return get_active_profile().primary_niches
+
+def get_current_secondary_niches():
+    return get_active_profile().secondary_niches
+
+def get_current_exclude_keywords():
+    return get_active_profile().exclude_keywords
+
+PRIMARY_NICHES = get_current_primary_niches()
+SECONDARY_NICHES = get_current_secondary_niches()
 
 # ── Company size (the "is this big enough to bother" gate) ──────────────
 # Switzerland does NOT publish employee headcount for SMEs in any free,
@@ -59,66 +63,19 @@ UNKNOWN_PASSES = False
 _SIZE_BAND_RANK = {"sole_trader": 0, "micro": 1, "unknown": 2, "small": 3, "established": 4}
 MIN_EMPLOYEES = 10  # legacy/no longer used as a hard filter — kept so old imports don't break
 
-# The FINAL, fully-qualified count the pipeline guarantees — not a pre-research
-# candidate cap. Every one of these has a valid phone (required since Layer 2),
-# a real named contact (not just "the company" — see
-# utils.scoring.classify_contact_tier), and research that actually completed
-# rather than hitting the timeout/crash fallback (see `research_complete` in
-# layer5_research.py). main.py's run_pipeline() adaptively re-crawls for more
-# raw material and keeps researching/enriching until this many leads meet ALL
-# THREE, or the search space is genuinely exhausted. Anything processed along
-# the way that doesn't make the cut is kept in the DB with status='rejected'
-# and a reason, not silently dropped.
 TARGET_LEAD_COUNT = 100
 DISCOVERY_TARGET = 450
-# The research+enrich+final-gate loop in main.py keeps expanding until
-# TARGET_LEAD_COUNT is actually met, not just for a fixed few tries — each
-# iteration is individually time-bounded (see layer4_recrawl.py) and never
-# repeats a query/combo already tried this run, so raising this doesn't risk
-# hanging, it just gives the pipeline enough runway to guarantee the target
-# even on a day when DDGS/local.ch are both slow or few candidates have a
-# discoverable contact.
 MAX_RECRAWL_ITERATIONS = 100
 
 DB_PATH = "data/leads.db"
 LOG_FILE = "data/engine.log"
 
-
 DASHBOARD_HOST = os.getenv("DASHBOARD_HOST", "0.0.0.0")
 DASHBOARD_PORT = 8800
 DASHBOARD_URL = f"http://{DASHBOARD_HOST}:{DASHBOARD_PORT}"
 
-EXCLUDE_KEYWORDS = [
-    # Marketing / IT / Digital
-    "agence digitale", "marketing", "consulting", "web design", "seo", "influencer",
-    "software", "informatique", "telecom", "télécom", "sigmacom", "computer",
-    # Transportation / Infrastructure / Airports / Auto / Garages
-    "airport", "aéroport", "aeroport", "sbb", "cff", "ffs", "bus", "transport", "car wash",
-    "garage", "carrosserie", "fiat", "auto", "automobile", "véhicule", "vehicule",
-    "parking", "stationnement", "voyage", "cabs", "taxi", "otter", "volkswagen",
-    # Food / Dining / Hospitality / Travel / Aggregators
-    "restaurant", "café", "cafe", "brasserie", "bar", "manoir", "hôtel", "hotel",
-    "banh mi", "pizzeria", "boulangerie", "snack", "catering", "tripadvisor",
-    "gastronomie", "boucherie", "épicerie", "epicerie", "renovero", "starofservice", "cybo",
-    # Medical / Health / Veterinary / Beauty
-    "pharmacie", "apotheke", "orthodontie", "dentiste", "médecin", "medecin",
-    "hôpital", "hopital", "clinique", "santé", "sante", "vet", "véterinaire",
-    "kleintierpraxis", "cabinet", "coiffure", "esthétique", "beauté", "ortho-team",
-    # Escort / Adult / Personal Services
-    "escort", "handjob", "erotic", "érotique", "massages", "visitable", "sexy",
-    "nightclub", "cabaret",
-    # Public / Municipal / Education / Religion / Legal / Funeral
-    "commune", "chancellerie", "gemeindeverwaltung", "unil", "université", "universite",
-    "école", "ecole", "centrale téléphonique", "police", "pompes funèbres",
-    "funèbres", "avocat", "notaire", "fiduciaire", "comptabilité", "imprimerie",
-    # Unrelated Physical Trades & Services
-    "peinture", "peintre", "maçonnerie", "maçon", "macon", "menuiserie", "menuisier",
-    "carrelage", "carreleur", "serrurerie", "serrurier", "toiture", "étanchéité",
-    "échafaudage", "nettoyage", "interim", "intérim", "sécurité", "securite",
-    "paysagiste", "jardinier", "jardin", "piscine", "store", "volet", "fenêtre",
-    "architecture", "architecte", "ingénieur civil", "ingenieur civil",
-    "géomètre", "immobilier", "immobilière", "régie", "assurances", "interim"
-]
+EXCLUDE_KEYWORDS = get_current_exclude_keywords()
+
 
 BOOKING_SIGNALS = [
     "devis", "demander un devis", "obtenir une offre", "contact", 

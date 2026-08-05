@@ -23,15 +23,24 @@
         <div class="header-card">
             <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
                 <div>
-                    <h2 class="fw-bold mb-1">🚰 AstraQuote Swiss Trade Leads</h2>
-                    <p class="text-secondary mb-0">Verified Plumbing, HVAC, & Sanitaire B2B Leads in Romandie</p>
+                    <h2 class="fw-bold mb-1" id="engineTitle">🚰 AstraQuote Lead Engine</h2>
+                    <p class="text-secondary mb-0" id="engineSubtitle">Dual-Scraper B2B Engine — Select Active Industry Niche</p>
                 </div>
-                <div>
-                    <button onclick="exportCSV()" class="btn btn-primary fw-bold me-2">📄 Export CSV</button>
-                    <button onclick="exportJSON()" class="btn btn-outline-light fw-bold">📥 Export JSON</button>
+                <div class="d-flex gap-2 align-items-center">
+                    <div class="btn-group me-2" role="group" id="profileToggleGroup" style="background:#0f172a; padding:4px; border-radius:10px; border:1px solid #475569;">
+                        <button type="button" class="btn btn-sm btn-primary fw-bold active" id="btnProfilePlumbing" onclick="switchProfile('plumbing_hvac')">
+                            🔧 Plomberie & Chauffage (NOGA 43.22)
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-warning fw-bold text-white" id="btnProfilePergolas" onclick="switchProfile('pergolas_awnings')">
+                            ☀️ Pergolas & Stores (Quote Engine)
+                        </button>
+                    </div>
+                    <button onclick="exportCSV()" class="btn btn-sm btn-primary fw-bold">📄 Export CSV</button>
+                    <button onclick="exportJSON()" class="btn btn-sm btn-outline-light fw-bold">📥 Export JSON</button>
                 </div>
             </div>
         </div>
+
 
         <div class="row g-3 mb-4">
             <div class="col-md-5">
@@ -142,7 +151,44 @@
             a.click();
         }
 
+        async function switchProfile(profileId) {
+            try {
+                const res = await fetch('/api/profile', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ profile_id: profileId })
+                });
+                const data = await res.json();
+                if (data.status === 'success') {
+                    const p = data.active_profile;
+                    document.getElementById('engineTitle').innerText = `${p.icon} AstraQuote — ${p.display_name}`;
+                    document.getElementById('engineSubtitle').innerText = p.pitch_angle_template;
+                    
+                    if (profileId === 'plumbing_hvac') {
+                        document.getElementById('btnProfilePlumbing').className = 'btn btn-sm btn-primary fw-bold active';
+                        document.getElementById('btnProfilePergolas').className = 'btn btn-sm btn-outline-warning fw-bold text-white';
+                    } else {
+                        document.getElementById('btnProfilePlumbing').className = 'btn btn-sm btn-outline-primary fw-bold text-white';
+                        document.getElementById('btnProfilePergolas').className = 'btn btn-sm btn-warning fw-bold active text-dark';
+                    }
+                    
+                    const leadsRes = await fetch('/api/leads');
+                    if (leadsRes.ok) {
+                        const newLeads = await leadsRes.json();
+                        if (newLeads && newLeads.length) {
+                            leadsData.length = 0;
+                            leadsData.push(...newLeads);
+                        }
+                        filterLeads();
+                    }
+                }
+            } catch(err) {
+                console.error("Error switching profile:", err);
+            }
+        }
+
         renderLeads(leadsData);
     </script>
+
 </body>
 </html>

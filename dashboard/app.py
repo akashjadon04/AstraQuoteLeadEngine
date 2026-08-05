@@ -98,8 +98,25 @@ def lead_detail(lead_id):
 def export_panel():
     return render_template('export.html')
 
+from utils.niche_profiles import get_active_profile, set_active_profile_id, list_profiles
+
 # APIs
+@app.route('/api/profiles')
+def api_profiles():
+    return jsonify(list_profiles())
+
+@app.route('/api/profile', methods=['GET', 'POST'])
+def api_profile():
+    if request.method == 'POST':
+        data = request.get_json(silent=True) or request.form
+        pid = data.get('profile_id')
+        if pid and set_active_profile_id(pid):
+            return jsonify({"status": "success", "active_profile": get_active_profile().to_dict()})
+        return jsonify({"status": "error", "message": "Invalid profile_id"}), 400
+    return jsonify(get_active_profile().to_dict())
+
 @app.route('/api/leads')
+
 def api_leads():
     conn = get_db_connection()
     query = 'SELECT * FROM leads'
