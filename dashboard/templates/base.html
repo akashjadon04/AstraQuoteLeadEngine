@@ -33,11 +33,26 @@
             </a>
         </nav>
         
+        <!-- Dual Scraper Profile Switcher in Sidebar -->
+        <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;">
+            <div style="font-size: 0.72rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: space-between;">
+                <span>Niche Profile</span>
+                <span id="sidebarProfileIcon" style="font-size: 0.9rem;">🔧</span>
+            </div>
+            <button id="btnSidebarPlumbing" onclick="switchNicheProfile('plumbing_hvac')" style="width: 100%; text-align: left; padding: 9px 12px; margin-bottom: 8px; border-radius: 8px; border: 1px solid #3b82f6; background: #3b82f6; color: #fff; font-weight: 600; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s;">
+                <span>🔧</span> Plomberie & Chauffage
+            </button>
+            <button id="btnSidebarPergolas" onclick="switchNicheProfile('pergolas_awnings')" style="width: 100%; text-align: left; padding: 9px 12px; border-radius: 8px; border: 1px solid #f59e0b; background: transparent; color: #fbbf24; font-weight: 600; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s;">
+                <span>☀️</span> Pergolas & Stores
+            </button>
+        </div>
+
         <div style="margin-top: auto; padding-top: 2rem; text-align: center; font-size: 0.8rem; color: var(--text-muted);">
             AstraQuote Lead Engine<br>
             v1.0.0
         </div>
     </div>
+
     
     <div class="main-content">
         <!-- Dual Scraper Niche Profile Switcher Bar -->
@@ -77,16 +92,27 @@
             if (badge) {
                 badge.innerText = `${profile.icon} ${profile.display_name}`;
             }
+            const sideIcon = document.getElementById('sidebarProfileIcon');
+            if (sideIcon) sideIcon.innerText = profile.icon;
+
             const btnPlumb = document.getElementById('btnProfilePlumbing');
             const btnPerg = document.getElementById('btnProfilePergolas');
+            const sidePlumb = document.getElementById('btnSidebarPlumbing');
+            const sidePerg = document.getElementById('btnSidebarPergolas');
+
             if (profile.profile_id === 'pergolas_awnings') {
                 if (btnPerg) { btnPerg.style.background = '#f59e0b'; btnPerg.style.color = '#000'; }
                 if (btnPlumb) { btnPlumb.style.background = 'transparent'; btnPlumb.style.color = '#94a3b8'; btnPlumb.style.border = '1px solid #334155'; }
+                if (sidePerg) { sidePerg.style.background = '#f59e0b'; sidePerg.style.color = '#000'; }
+                if (sidePlumb) { sidePlumb.style.background = 'transparent'; sidePlumb.style.color = '#94a3b8'; sidePlumb.style.border = '1px solid #334155'; }
             } else {
                 if (btnPlumb) { btnPlumb.style.background = '#3b82f6'; btnPlumb.style.color = '#fff'; btnPlumb.style.border = '1px solid #3b82f6'; }
                 if (btnPerg) { btnPerg.style.background = 'transparent'; btnPerg.style.color = '#fbbf24'; btnPerg.style.border = '1px solid #f59e0b'; }
+                if (sidePlumb) { sidePlumb.style.background = '#3b82f6'; sidePlumb.style.color = '#fff'; sidePlumb.style.border = '1px solid #3b82f6'; }
+                if (sidePerg) { sidePerg.style.background = 'transparent'; sidePerg.style.color = '#fbbf24'; sidePerg.style.border = '1px solid #f59e0b'; }
             }
         }
+
 
         async function switchNicheProfile(profileId) {
             try {

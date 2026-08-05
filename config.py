@@ -58,9 +58,10 @@ SECONDARY_NICHES = get_current_secondary_niches()
 #   "small"        ~4-9 (est., covers target 7-8 employee plumbing firms)
 #   "established"  ~10+ (est.)
 #   "unknown"      no signals either way
-MIN_COMPANY_SIZE_BAND = "micro"
-UNKNOWN_PASSES = False
+MIN_COMPANY_SIZE_BAND = "sole_trader"
+UNKNOWN_PASSES = True
 _SIZE_BAND_RANK = {"sole_trader": 0, "micro": 1, "unknown": 2, "small": 3, "established": 4}
+
 MIN_EMPLOYEES = 10  # legacy/no longer used as a hard filter — kept so old imports don't break
 
 TARGET_LEAD_COUNT = 100
