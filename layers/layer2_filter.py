@@ -99,9 +99,10 @@ def batch_filter(leads: List[Dict[str, Any]]) -> Tuple[List[Dict[str, Any]], Lis
                 reasons.append(f"Excluded keyword: '{kw}'")
                 break
 
-        # 4. Niche relevance — must be strictly NOGA 4322 (plumbing/HVAC/sanitaire)
+        # 4. Niche relevance — check against active profile
         if not _is_relevant_niche(lead) and not reasons:
-            reasons.append("Not NOGA 4322 (Plomberie/Chauffage/Sanitaire)")
+            reasons.append(f"Not relevant to active profile ({config.get_active_profile().display_name})")
+
 
         # 5. Flag for size check in Layer 5
         lead["needs_size_check"] = True

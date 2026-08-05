@@ -1,17 +1,10 @@
 # ============================================================
-# noga.py — Swiss NOGA Activity Classification (Nomenclature Générale des Activités)
-# Official Swiss Federal Statistical Office (OFS / UST) Economic Activity Code.
-# Primary Target Domain: NOGA 43.22 (Installation d'eau, de gaz, de chauffage et de climatisation)
-# Sub-categories:
-#   NOGA 43.22A (432201) — Installation sanitaire & Plomberie
-#   NOGA 43.22B (432202) — Installation de chauffage & Climatisation
+# noga.py — Dynamic Swiss NOGA Activity Classification
+# Supports both NOGA 43.22 (Plomberie/Sanitaire/Chauffage) and NOGA 43.32/43.21 (Pergolas/Stores/Protection Solaire)
 # ============================================================
 
 from typing import Dict, Any, Optional
-
-NOGA_4322 = "NOGA 43.22"
-NOGA_4322A = "NOGA 43.22A (432201) — Installation sanitaire & Plomberie"
-NOGA_4322B = "NOGA 43.22B (432202) — Installation de chauffage & Climatisation"
+from utils.niche_profiles import get_active_profile
 
 _PLUMBING_STEMS = [
     "plomb", "sanitaire", "tuyau", "robinet", "salle de bain",
@@ -27,47 +20,44 @@ _HEATING_STEMS = [
     "climatisation", "ventilation", "wärmetechnik", "warmetechnik", "haustechnik"
 ]
 
-_INVALID_NOGAS = [
-    "carrelage", "carreleur", "peinture", "peintre", "maçonnerie", "maçon", "macon",
-    "menuiserie", "menuisier", "serrurerie", "serrurier", "vitrerie", "vitrier",
-    "électricité", "électricien", "electricien", "nettoyage", "paysagiste",
-    "jardinier", "piscine", "toiture", "étanchéité", "étanchéiste", "échafaudage",
-    "architecture", "architecte", "ingénieur", "immobilier"
+_PERGOLA_STORE_STEMS = [
+    "pergola", "pergolas", "store", "stores", "store banne", "stores bannes",
+    "protection solaire", "volet", "volets", "volets roulants", "bioclimatique",
+    "toile de store", "store extérieur", "store exterieur", "store vénitien", "store venitien",
+    "pare-soleil", "ombrage", "baies vitrées", "fermetures", "véranda", "veranda", "parasol"
 ]
 
 
 def classify_noga(niche: str, text: str = "") -> Optional[Dict[str, str]]:
     """
-    Classify a business into official Swiss NOGA 43.22 codes.
-    Returns dict with 'code', 'sub_code', 'label' if it matches NOGA 43.22, or None if not relevant.
+    Classify a business into official Swiss NOGA codes matching active profile.
     """
+    profile = get_active_profile()
     full_text = f"{niche} {text}".lower()
 
-    # Reject if explicit non-plumbing trade with no plumbing keywords
-    for invalid in _INVALID_NOGAS:
-        if invalid in full_text:
-            # Only allow if it ALSO has explicit plumbing/sanitary/heating keywords
-            has_plumbing = any(stem in full_text for stem in _PLUMBING_STEMS)
-            has_heating = any(stem in full_text for stem in _HEATING_STEMS)
-            if not (has_plumbing or has_heating):
-                return None
-
-    # Match NOGA 43.22A (432201 - Sanitaire / Plomberie)
-    if any(stem in full_text for stem in _PLUMBING_STEMS) or niche in ("plomberie", "sanitaire", "ferblanterie"):
-        return {
-            "code": "43.22",
-            "sub_code": "43.22A",
-            "legacy_code": "432201",
-            "label": NOGA_4322A
-        }
-
-    # Match NOGA 43.22B (432202 - Chauffage / Climatisation)
-    if any(stem in full_text for stem in _HEATING_STEMS) or niche in ("chauffage", "climatisation"):
-        return {
-            "code": "43.22",
-            "sub_code": "43.22B",
-            "legacy_code": "432202",
-            "label": NOGA_4322B
-        }
-
-    return None
+    if profile.profile_id == "pergolas_awnings":
+        if any(stem in full_text for stem in _PERGOLA_STORE_STEMS) or any(k in full_text for k in profile.primary_niches):
+            return {
+                "code": "43.32",
+                "sub_code": "43.32A",
+                "legacy_code": "433200",
+                "label": "NOGA 43.32 — Menuiserie, Stores & Protection Solaire"
+            }
+        return None
+    else:
+        # Default: plumbing_hvac
+        if any(stem in full_text for stem in _PLUMBING_STEMS) or niche in ("plomberie", "sanitaire", "ferblanterie"):
+            return {
+                "code": "43.22",
+                "sub_code": "43.22A",
+                "legacy_code": "432201",
+                "label": "NOGA 43.22A — Installation sanitaire & Plomberie"
+            }
+        if any(stem in full_text for stem in _HEATING_STEMS) or niche in ("chauffage", "climatisation"):
+            return {
+                "code": "43.22",
+                "sub_code": "43.22B",
+                "legacy_code": "432202",
+                "label": "NOGA 43.22B — Installation de chauffage & Climatisation"
+            }
+        return None
