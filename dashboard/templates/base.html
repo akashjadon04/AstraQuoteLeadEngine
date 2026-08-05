@@ -40,9 +40,72 @@
     </div>
     
     <div class="main-content">
+        <!-- Dual Scraper Niche Profile Switcher Bar -->
+        <div class="top-profile-bar" style="background: rgba(30, 41, 59, 0.8); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px 20px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 1rem; font-weight: 700; color: #fff;">Active Scraper Profile:</span>
+                <span id="activeProfileBadge" style="background: rgba(59,130,246,0.2); color: #60a5fa; padding: 4px 14px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; border: 1px solid rgba(59,130,246,0.3);">
+                    Loading profile…
+                </span>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button id="btnProfilePlumbing" onclick="switchNicheProfile('plumbing_hvac')" style="background: #3b82f6; border: 1px solid #3b82f6; color: #fff; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+                    🔧 Plomberie & Chauffage (NOGA 43.22)
+                </button>
+                <button id="btnProfilePergolas" onclick="switchNicheProfile('pergolas_awnings')" style="background: transparent; border: 1px solid #f59e0b; color: #fbbf24; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+                    ☀️ Pergolas & Stores (Quote Engine)
+                </button>
+            </div>
+        </div>
+
         {% block content %}{% endblock %}
     </div>
 
+    <script>
+        async function fetchCurrentProfile() {
+            try {
+                const res = await fetch('/api/profile');
+                if (res.ok) {
+                    const profile = await res.json();
+                    updateProfileUI(profile);
+                }
+            } catch(e) { console.error(e); }
+        }
+
+        function updateProfileUI(profile) {
+            const badge = document.getElementById('activeProfileBadge');
+            if (badge) {
+                badge.innerText = `${profile.icon} ${profile.display_name}`;
+            }
+            const btnPlumb = document.getElementById('btnProfilePlumbing');
+            const btnPerg = document.getElementById('btnProfilePergolas');
+            if (profile.profile_id === 'pergolas_awnings') {
+                if (btnPerg) { btnPerg.style.background = '#f59e0b'; btnPerg.style.color = '#000'; }
+                if (btnPlumb) { btnPlumb.style.background = 'transparent'; btnPlumb.style.color = '#94a3b8'; btnPlumb.style.border = '1px solid #334155'; }
+            } else {
+                if (btnPlumb) { btnPlumb.style.background = '#3b82f6'; btnPlumb.style.color = '#fff'; btnPlumb.style.border = '1px solid #3b82f6'; }
+                if (btnPerg) { btnPerg.style.background = 'transparent'; btnPerg.style.color = '#fbbf24'; btnPerg.style.border = '1px solid #f59e0b'; }
+            }
+        }
+
+        async function switchNicheProfile(profileId) {
+            try {
+                const res = await fetch('/api/profile', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ profile_id: profileId })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    updateProfileUI(data.active_profile);
+                    window.location.reload();
+                }
+            } catch(e) { console.error(e); }
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchCurrentProfile);
+    </script>
     {% block scripts %}{% endblock %}
 </body>
 </html>
+
