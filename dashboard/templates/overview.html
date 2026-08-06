@@ -329,43 +329,40 @@
                 
                 // Update progress bar
                 let progressPercent = 0;
+                const target = data.target_lead_count || 100;
+                const doneCount = data.leads_enriched || data.leads_qualified || 0;
+
                 if (data.status === 'running') {
                     if (data.current_layer === 1) {
                         progressPercent = Math.min((data.leads_discovered || 0) / 210, 1) * (100/7);
                     } else if (data.current_layer === 2) {
                         progressPercent = (100/7) + Math.min((data.leads_filtered || 0) / (data.leads_discovered || 1), 1) * (100/7);
                     } else {
-                        // Layers 3-6 are a merged research/enrich/final-gate loop that
-                        // can revisit earlier layer numbers on a re-crawl iteration
-                        // (e.g. drop back to Layer 4 after Layer 6), so a naive
-                        // "layer number" progress bar would visibly go backwards.
-                        // Drive this segment off the one number that only ever goes
-                        // up: how many final leads (phone + name + completed
-                        // research) have been found so far, out of the target.
-                        const target = data.target_lead_count || 50;
-                        const loopProgress = Math.min((data.leads_qualified || 0) / target, 1) * (100/7) * 4;
+                        const loopProgress = Math.min(doneCount / target, 1) * (100/7) * 4;
                         progressPercent = (100/7) * 2 + loopProgress;
                     }
                     progressPercent = Math.min(Math.round(progressPercent), 99);
-                } else if (data.status === 'completed') {
+                } else if (data.status === 'completed' || doneCount >= target) {
                     progressPercent = 100;
+                } else if (doneCount > 0) {
+                    progressPercent = Math.min(Math.round((doneCount / target) * 100), 99);
                 }
                 document.getElementById('pipelineProgressPercent').innerText = progressPercent + '%';
                 document.getElementById('pipelineProgressBar').style.width = progressPercent + '%';
                 
                 // Update layers visual tree
-                const current_layer = Number(data.current_layer);
+                const current_layer = Number(data.current_layer || 1);
                 for (let i = 1; i <= 7; i++) {
                     const el = document.getElementById('layer' + i);
                     const lbl = document.getElementById('lblL' + i);
+                    if (!el || !lbl) continue;
                     
-                    // Reset class list
                     el.className = 'layer-item';
                     
-                    if (data.status === 'idle') {
-                        el.classList.add('layer-pending');
-                        lbl.innerText = '-';
-                        lbl.style.color = 'var(--text-muted)';
+                    if (data.status === 'completed' || progressPercent === 100) {
+                        el.classList.add('layer-completed');
+                        lbl.innerText = '✓ DONE';
+                        lbl.style.color = '#10b981';
                     } else if (i < current_layer) {
                         el.classList.add('layer-completed');
                         lbl.innerText = '✓ DONE';
@@ -381,10 +378,9 @@
                     }
                 }
                 
-                // If it completed, refresh stats
-                if (data.status === 'completed' && statusText.innerText !== 'completed') {
-                    loadStats();
-                }
+                loadStats();
+                updateLogs();
+
             })
             .catch(err => console.error('Error fetching pipeline status:', err));
     }

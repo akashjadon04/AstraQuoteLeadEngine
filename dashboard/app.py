@@ -141,6 +141,10 @@ def api_leads():
         # transparency but shouldn't clutter the main list unless asked for.
         conditions.append("status != 'rejected'")
 
+    if request.args.get('qualified_only') == '1':
+        conditions.append("decision_maker IS NOT NULL AND decision_maker != '' AND phone IS NOT NULL AND phone != ''")
+
+
     niche = request.args.get('niche')
     if niche:
         conditions.append('niche = ?')
@@ -188,7 +192,14 @@ def api_master_qualified():
 def api_stats():
     conn = get_db_connection()
     total_leads = conn.execute('SELECT COUNT(*) FROM leads').fetchone()[0]
-    qualified_leads = conn.execute("SELECT COUNT(*) FROM leads WHERE status IN ('qualified', 'researched', 'enriched')").fetchone()[0]
+    qualified_leads = conn.execute(
+        "SELECT COUNT(*) FROM leads WHERE decision_maker IS NOT NULL AND decision_maker != '' "
+        "AND phone IS NOT NULL AND phone != ''"
+    ).fetchone()[0]
+    no_contact = conn.execute(
+        "SELECT COUNT(*) FROM leads WHERE decision_maker IS NULL OR decision_maker = ''"
+    ).fetchone()[0]
+
     avg_urgency = conn.execute('SELECT AVG(urgency_score) FROM leads').fetchone()[0] or 0
     avg_digital = conn.execute('SELECT AVG(digital_maturity) FROM leads').fetchone()[0] or 0
     avg_fit = conn.execute('SELECT AVG(fit_score) FROM leads').fetchone()[0] or 0
@@ -214,8 +225,7 @@ def api_stats():
         elif score >= 5: urgency_dist['Medium (5-7)'] += 1
         else: urgency_dist['Low (1-4)'] += 1
 
-    # Fit score distribution — the "potential" axis, kept separate from urgency/
-    # digital maturity above, which are about pitch angle, not lead quality.
+    # Fit score distribution
     fit_dist = {'Qualified (75+)': 0, 'Good (50-74)': 0, 'Fair (25-49)': 0, 'Poor (<25)': 0}
     fit_rows = conn.execute('SELECT fit_score FROM leads WHERE fit_score IS NOT NULL').fetchall()
     for row in fit_rows:
@@ -225,16 +235,12 @@ def api_stats():
         elif score >= 25: fit_dist['Fair (25-49)'] += 1
         else: fit_dist['Poor (<25)'] += 1
 
-    # Strict ICP-qualified count: good fit score AND a named contact. A lead
-    # can't be outreach-ready without both — see utils.scoring.compute_fit_score.
+    # Strict ICP-qualified count: good fit score AND a named contact.
     icp_qualified = conn.execute(
         "SELECT COUNT(*) FROM leads WHERE fit_score >= 75 "
         "AND decision_maker IS NOT NULL AND decision_maker != ''"
     ).fetchone()[0]
-    no_contact = conn.execute(
-        "SELECT COUNT(*) FROM leads WHERE (decision_maker IS NULL OR decision_maker = '') "
-        "AND status IN ('qualified', 'researched', 'enriched')"
-    ).fetchone()[0]
+
 
     # Company-size estimate distribution (the "is it big enough" axis) and how
     # many otherwise-complete leads were set aside purely for being too small.

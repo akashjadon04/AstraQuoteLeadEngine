@@ -27,10 +27,15 @@
             <option value="rejected">Rejected</option>
         </select>
         <select id="nogaFilter" class="input-control" style="max-width: 220px;">
-            <option value="">All NOGA Codes (NOGA 4322)</option>
-            <option value="432201">NOGA 432201 — Plomberie / Sanitaire</option>
-            <option value="432202">NOGA 432202 — Chauffage / Climatisation</option>
+            <option value="">All NOGA Codes</option>
+            <option value="43.32">NOGA 43.32 — Stores & Pergolas</option>
+            <option value="43.22">NOGA 43.22 — Plomberie & Chauffage</option>
         </select>
+        <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 600; color: #34d399; cursor: pointer; white-space: nowrap;">
+            <input type="checkbox" id="qualifiedOnlyCheck" style="accent-color: #10b981; width: 16px; height: 16px;">
+            <span>Verified Contact Only</span>
+        </label>
+
         <select id="sortBy" class="input-control" style="max-width: 190px;">
             <option value="fit">Sort: Best Fit (AstraQuote)</option>
             <option value="size">Sort: Company Size</option>
@@ -134,12 +139,14 @@
         const noga = document.getElementById('nogaFilter').value;
         const search = document.getElementById('searchInput').value.toLowerCase();
         const sort = document.getElementById('sortBy').value;
+        const qualOnly = document.getElementById('qualifiedOnlyCheck') ? document.getElementById('qualifiedOnlyCheck').checked : false;
 
         let url = '/api/leads?';
         if (canton) url += `canton=${canton}&`;
         if (status) url += `status=${status}&`;
         if (noga) url += `noga=${noga}&`;
         if (sort) url += `sort=${sort}&`;
+        if (qualOnly) url += `qualified_only=1&`;
 
         try {
             const response = await fetch(url);
@@ -189,6 +196,14 @@
     document.getElementById('searchInput').addEventListener('keyup', (e) => {
         if(e.key === 'Enter') loadLeads();
     });
+    document.getElementById('cantonFilter').addEventListener('change', loadLeads);
+    document.getElementById('statusFilter').addEventListener('change', loadLeads);
+    document.getElementById('nogaFilter').addEventListener('change', loadLeads);
+    document.getElementById('sortBy').addEventListener('change', loadLeads);
+    if (document.getElementById('qualifiedOnlyCheck')) {
+        document.getElementById('qualifiedOnlyCheck').addEventListener('change', loadLeads);
+    }
+
     document.getElementById('sortBy').addEventListener('change', loadLeads);
 </script>
 {% endblock %}
