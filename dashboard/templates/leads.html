@@ -36,7 +36,12 @@
             <span>Verified Contact Only</span>
         </label>
 
+        <select id="dbSourceSelect" class="input-control" style="max-width: 240px; border-color: #f59e0b; color: #fbbf24; font-weight: 700; background: rgba(245, 158, 11, 0.1);">
+            <option value="current">Current Active Run Batch</option>
+            <option value="master" selected>🏆 Master Vault (223 All-Time Leads)</option>
+        </select>
         <select id="sortBy" class="input-control" style="max-width: 190px;">
+
             <option value="fit">Sort: Best Fit (AstraQuote)</option>
             <option value="size">Sort: Company Size</option>
             <option value="urgency">Sort: Urgency</option>
@@ -140,13 +145,15 @@
         const search = document.getElementById('searchInput').value.toLowerCase();
         const sort = document.getElementById('sortBy').value;
         const qualOnly = document.getElementById('qualifiedOnlyCheck') ? document.getElementById('qualifiedOnlyCheck').checked : false;
+        const source = document.getElementById('dbSourceSelect') ? document.getElementById('dbSourceSelect').value : 'current';
 
-        let url = '/api/leads?';
+        let url = `/api/leads?source=${source}&`;
         if (canton) url += `canton=${canton}&`;
         if (status) url += `status=${status}&`;
         if (noga) url += `noga=${noga}&`;
         if (sort) url += `sort=${sort}&`;
         if (qualOnly) url += `qualified_only=1&`;
+
 
         try {
             const response = await fetch(url);
@@ -203,7 +210,9 @@
     if (document.getElementById('qualifiedOnlyCheck')) {
         document.getElementById('qualifiedOnlyCheck').addEventListener('change', loadLeads);
     }
+    if (document.getElementById('dbSourceSelect')) {
+        document.getElementById('dbSourceSelect').addEventListener('change', loadLeads);
+    }
 
-    document.getElementById('sortBy').addEventListener('change', loadLeads);
 </script>
 {% endblock %}

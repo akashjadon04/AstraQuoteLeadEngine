@@ -116,10 +116,18 @@ def api_profile():
     return jsonify(get_active_profile().to_dict())
 
 @app.route('/api/leads')
-
 def api_leads():
-    conn = get_db_connection()
+    if request.args.get('source') == 'master':
+        master_path = "data/qualified_master.db"
+        if not os.path.exists(master_path):
+            return jsonify([])
+        conn = sqlite3.connect(master_path)
+        conn.row_factory = sqlite3.Row
+    else:
+        conn = get_db_connection()
+
     query = 'SELECT * FROM leads'
+
     
     # Simple filtering
     conditions = []
