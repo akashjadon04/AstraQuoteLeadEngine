@@ -293,16 +293,11 @@ def api_pipeline_status():
     return jsonify(get_state())
 
 def _export_rows(conn):
-    """Rows for an export. Defaults to the CURRENT delivered batch only
-    (status='enriched') — the same 50 the dashboard shows by default — not
-    every candidate this run tried (status='rejected': too small, no contact,
-    duplicate, etc.) and never a past run's leftovers, since those no longer
-    exist in the table at all once a new run has wiped and replaced them (see
-    utils.database.start_new_run). Pass ?all=1 to export literally everything
-    still in the table, rejected rows included, for debugging/audit."""
+    """Rows for an export. Returns all qualified leads sorted by fit score."""
     if request.args.get('all') == '1':
-        return conn.execute('SELECT * FROM leads').fetchall()
-    return conn.execute("SELECT * FROM leads WHERE status = 'enriched'").fetchall()
+        return conn.execute('SELECT * FROM leads ORDER BY fit_score DESC').fetchall()
+    return conn.execute("SELECT * FROM leads WHERE status != 'rejected' ORDER BY fit_score DESC").fetchall()
+
 
 
 @app.route('/api/export/csv')
@@ -394,12 +389,18 @@ def export_pdf_single(lead_id):
             mimetype="text/html"
         )
         
-    return send_file(
-        temp_pdf,
-        download_name=f"astraquote_lead_{lead_id}.pdf",
-        as_attachment=True,
-        mimetype="application/pdf"
+@app.route('/api/export/json')
+def export_json():
+    conn = get_db_connection()
+    leads_rows = _export_rows(conn)
+    conn.close()
+    data = [dict_from_row(row) for row in leads_rows]
+    return Response(
+        json.dumps(data, indent=2, ensure_ascii=False),
+        mimetype="application/json",
+        headers={"Content-disposition": "attachment; filename=astraquote_leads.json"}
     )
+
 
 import threading
 import asyncio
