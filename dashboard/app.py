@@ -30,10 +30,15 @@ init_db(DB_PATH)
 
 
 def get_db_connection():
-    os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
-    conn = sqlite3.connect(DB_PATH)
+    if get_engine_mode() == "global":
+        db_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'global_leads.db')
+    else:
+        db_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'leads.db')
+    init_db(db_file)
+    conn = sqlite3.connect(db_file)
     conn.row_factory = sqlite3.Row
     return conn
+
 
 def dict_from_row(row):
     if not row:
@@ -120,15 +125,42 @@ def api_profile():
 def api_countries():
     return jsonify(list_countries())
 
-@app.route('/api/country', methods=['GET', 'POST'])
-def api_country():
+ENGINE_MODE_FILE = "data/engine_mode.json"
+
+def get_engine_mode() -> str:
+    if os.path.exists(ENGINE_MODE_FILE):
+        try:
+            with open(ENGINE_MODE_FILE, "r") as f:
+                return json.load(f).get("mode", "swiss")
+        except Exception:
+            pass
+    return "swiss"
+
+def set_engine_mode(mode: str) -> str:
+    m = "global" if mode == "global" else "swiss"
+    os.makedirs("data", exist_ok=True)
+    with open(ENGINE_MODE_FILE, "w") as f:
+        json.dump({"mode": m}, f)
+    return m
+
+@app.route('/api/engine/mode', methods=['GET', 'POST'])
+def api_engine_mode():
     if request.method == 'POST':
         data = request.get_json(silent=True) or request.form
-        code = data.get('country_code')
-        if code and set_active_country_code(code):
-            return jsonify({"status": "success", "active_country": get_active_country().to_dict()})
-        return jsonify({"status": "error", "message": "Invalid country_code"}), 400
-    return jsonify(get_active_country().to_dict())
+        m = data.get('mode')
+        new_mode = set_engine_mode(m)
+        return jsonify({"status": "success", "mode": new_mode})
+    return jsonify({"mode": get_engine_mode()})
+
+
+@app.route('/api/global/pipeline/start', methods=['POST'])
+def api_global_pipeline_start():
+    import subprocess
+    cmd = [sys.executable, "global_main.py"]
+    subprocess.Popen(cmd, cwd=os.path.dirname(os.path.dirname(__file__)))
+    return jsonify({"status": "success", "message": "Global Lead Engine pipeline started in background."})
+
+
 
 
 @app.route('/api/leads')

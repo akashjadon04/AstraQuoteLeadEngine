@@ -70,6 +70,22 @@
 
     
     <div class="main-content">
+        <!-- Engine Mode Switcher Bar (Swiss Engine vs Global Engine) -->
+        <div class="engine-mode-bar" style="background: rgba(15, 23, 42, 0.95); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 10px 20px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <span style="font-size: 0.85rem; font-weight: 700; color: #94a3b8; text-transform: uppercase;">Software Engine Mode:</span>
+                <button id="btnEngineSwiss" onclick="switchEngineMode('swiss')" style="padding: 6px 14px; border-radius: 8px; border: 1px solid #10b981; background: #10b981; color: #000; font-weight: 700; font-size: 0.82rem; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                    🇨🇭 Switzerland Quote Engine
+                </button>
+                <button id="btnEngineGlobal" onclick="switchEngineMode('global')" style="padding: 6px 14px; border-radius: 8px; border: 1px solid #3b82f6; background: transparent; color: #60a5fa; font-weight: 700; font-size: 0.82rem; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                    🌐 Global Engine (USA, UK, CA, AU)
+                </button>
+            </div>
+            <div id="engineModeBadge" style="font-size: 0.78rem; font-weight: 600; color: #34d399; background: rgba(52, 211, 153, 0.1); padding: 4px 12px; border-radius: 12px;">
+                Isolated Engine Active
+            </div>
+        </div>
+
         <!-- Dual Scraper Niche & Country Switcher Bar -->
         <div class="top-profile-bar" style="background: rgba(30, 41, 59, 0.8); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px 20px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
             <div style="display: flex; align-items: center; gap: 10px;">
@@ -106,6 +122,36 @@
                 if (cres.ok) {
                     const country = await cres.json();
                     updateCountryUI(country);
+                }
+                const mres = await fetch('/api/engine/mode');
+                if (mres.ok) {
+                    const emode = await mres.json();
+                    updateEngineModeUI(emode.mode);
+                }
+            } catch(e) { console.error(e); }
+        }
+
+        function updateEngineModeUI(mode) {
+            const btnS = document.getElementById('btnEngineSwiss');
+            const btnG = document.getElementById('btnEngineGlobal');
+            if (mode === 'global') {
+                if (btnG) { btnG.style.background = '#3b82f6'; btnG.style.color = '#fff'; }
+                if (btnS) { btnS.style.background = 'transparent'; btnS.style.color = '#34d399'; }
+            } else {
+                if (btnS) { btnS.style.background = '#10b981'; btnS.style.color = '#000'; }
+                if (btnG) { btnG.style.background = 'transparent'; btnG.style.color = '#60a5fa'; }
+            }
+        }
+
+        async function switchEngineMode(mode) {
+            try {
+                const res = await fetch('/api/engine/mode', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ mode: mode })
+                });
+                if (res.ok) {
+                    window.location.reload();
                 }
             } catch(e) { console.error(e); }
         }
@@ -177,6 +223,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', fetchCurrentProfile);
+
 
     </script>
     {% block scripts %}{% endblock %}
