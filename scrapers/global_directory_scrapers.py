@@ -15,7 +15,51 @@ HEADERS = {
     "Accept-Language": "en-US,en;q=0.9"
 }
 
+PHONE_EXTRACT_RE = re.compile(r"(\+?\d{1,4}[-.\s]?\(?\d{2,4}\)?[-.\s]?\d{3,4}[-.\s]?\d{3,4})")
+
+def scrape_ddgs_country(keyword: str, location: str, country_code: str) -> List[Dict[str, Any]]:
+    """Use DuckDuckGo search to extract trade contractor candidates for US, UK, CA, AU"""
+    results = []
+    try:
+        try:
+            from ddgs import DDGS
+        except ImportError:
+            from duckduckgo_search import DDGS
+
+        region_map = {"US": "us-en", "GB": "uk-en", "CA": "ca-en", "AU": "au-en"}
+        reg = region_map.get(country_code, "us-en")
+
+        query = f"{keyword} {location} phone"
+        with DDGS() as ddgs:
+            raw_res = list(ddgs.text(query, region=reg, max_results=8))
+
+            for r in raw_res:
+                title = r.get("title", "")
+                href = r.get("href", "")
+                body = r.get("body", "")
+
+                comp_name = title.split("-")[0].split("|")[0].split(":")[0].strip()
+                phones = PHONE_EXTRACT_RE.findall(f"{title} {body}")
+                phone = phones[0] if phones else ""
+
+                if comp_name and len(comp_name) > 3:
+                    results.append({
+                        "company_name": comp_name,
+                        "phone": phone,
+                        "website": href,
+                        "niche": keyword,
+                        "canton": location,
+                        "city": location,
+                        "raw_snippet": body[:300],
+                        "source": f"ddgs_{country_code.lower()}"
+                    })
+    except Exception as e:
+        print(f"DDGS country scraper error for {country_code}: {e}")
+
+    return results
+
 # ── 1. USA Scraper (YellowPages US) ─────────────────────────
+
 def scrape_yellowpages_us(keyword: str, location: str) -> List[Dict[str, Any]]:
     """Scrape free US business listings from YellowPages.com"""
     results = []

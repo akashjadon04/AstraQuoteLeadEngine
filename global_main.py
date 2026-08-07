@@ -5,8 +5,10 @@
 
 import os
 import sys
+import json
 import sqlite3
 from typing import List, Dict, Any
+
 
 from utils.country_profiles import get_active_country
 from utils.niche_profiles import get_active_profile
@@ -18,7 +20,8 @@ from scrapers.global_directory_scrapers import (
     scrape_yell_uk,
     scrape_yellowpages_ca,
     scrape_yellowpages_au,
-    scrape_overpass_osm
+    scrape_overpass_osm,
+    scrape_ddgs_country
 )
 from scrapers.uk_companies_house import search_uk_company_officers
 from layers.layer2_filter import _validate_phone, _looks_like_garbage_name
@@ -38,7 +41,6 @@ def run_global_pipeline():
     print(f"   Target Country Dial Code: {country.country_dial_code}")
     print("========================================================\n")
 
-
     reset_global_state(target_count=100)
     init_db(GLOBAL_DB_PATH)
     init_db(GLOBAL_MASTER_PATH)
@@ -52,7 +54,10 @@ def run_global_pipeline():
 
     for city in cities:
         for kw in keywords[:4]:
-            print(f"[SEARCH] Crawling {country.country_code} directories for '{kw}' in {city}...")
+            print(f"[SEARCH] Crawling {country.country_code} for '{kw}' in {city}...", flush=True)
+            ddg_res = scrape_ddgs_country(kw, city, country.country_code)
+            raw_candidates.extend(ddg_res)
+
             if country.country_code == "US":
                 res = scrape_yellowpages_us(kw, city)
             elif country.country_code == "GB":
@@ -67,11 +72,12 @@ def run_global_pipeline():
             raw_candidates.extend(res)
 
     # OSM Fallback
-    print(f"[OSM] Querying OpenStreetMap Overpass nodes for {country.country_code}...")
+    print(f"[OSM] Querying OpenStreetMap Overpass nodes for {country.country_code}...", flush=True)
     osm_res = scrape_overpass_osm(country.country_code, keywords[0])
     raw_candidates.extend(osm_res)
 
-    print(f"[DISCOVERY] Discovered {len(raw_candidates)} raw international candidates.")
+    print(f"[DISCOVERY] Discovered {len(raw_candidates)} raw international candidates.", flush=True)
+
 
     update_global_state(leads_discovered=len(raw_candidates), current_layer=2, current_layer_name="International Filtering")
 
@@ -109,7 +115,9 @@ def run_global_pipeline():
     enriched_leads = []
 
     for i, lead in enumerate(filtered):
-        print(f"  [{i+1}/{len(filtered)}] Deep Crawling & Enriching: {lead['company_name']}")
+        safe_name = str(lead.get('company_name', '')).encode('ascii', 'ignore').decode('ascii')
+        print(f"  [{i+1}/{len(filtered)}] Deep Crawling & Enriching: {safe_name}", flush=True)
+
 
         # Deep crawl company website if available
         if lead.get("website"):
@@ -134,16 +142,39 @@ def run_global_pipeline():
             lead["decision_maker"] = f"Managing Director ({lead['company_name']})"
             lead["decision_title"] = "Managing Director"
 
-        # Fit Scoring
+        dm = lead.get("decision_maker")
+        comp = lead.get("company_name")
+        city = lead.get("city") or lead.get("canton") or "your area"
+
+        # ICP & Outreach Personalization Engine
         lead["status"] = "enriched"
-        lead["fit_score"] = 90 if lead.get("email") else 80
+        lead["fit_score"] = 92 if lead.get("email") else 82
         lead["urgency_score"] = 8
         lead["digital_maturity"] = 4
-        lead["pitch_angle"] = f"Pitch AstraQuote to {lead['decision_maker']} at {lead['company_name']} for 4x faster quote turnarounds."
+
+        # Custom ICP Profile & Pain Points
+        lead["pain_points"] = json.dumps([
+            "Manual calculation of complex louvered roof and bioclimatic pergola dimensions on-site",
+            "Slow quote turnarounds causing prospective homeowners to go with competing contractors",
+            "Managing multi-vendor catalogues and aluminum component price adjustments manually"
+        ])
+
+        lead["pitch_angle"] = (
+            f"Demonstrate how AstraQuote allows {dm} and the team at {comp} in {city} "
+            f"to generate instant, millimeter-accurate quotes for pergolas, awnings, and patio covers "
+            f"directly during client site visits, boosting proposal conversion rates by 3.5x."
+        )
+
+        lead["custom_opening"] = (
+            f"Hi {dm}, I noticed {comp}'s outstanding outdoor living work in {city}. "
+            f"We help leading pergola & awning contractors automate their project quoting so you can "
+            f"deliver instant 3D proposals to homeowners before leaving the site. Would you be open to a quick 5-min look?"
+        )
 
         enriched_leads.append(lead)
 
-    print(f"\n[SUMMARY] Deeply Enriched {len(enriched_leads)} International Qualified Leads!")
+    print(f"\n[SUMMARY] Deeply Enriched {len(enriched_leads)} International Qualified Leads with Personalized ICP Outreach!")
+
 
 
     # Persist to global databases
