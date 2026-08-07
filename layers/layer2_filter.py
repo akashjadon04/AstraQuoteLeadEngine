@@ -17,15 +17,25 @@ logger = get_logger("layer2")
 console = Console()
 
 
-def _validate_swiss_phone(phone: str) -> str | None:
-    """Validate and format a Swiss phone number. Returns E.164 format or None."""
+from utils.country_profiles import get_active_country
+
+def _validate_phone(phone: str, region: str = None) -> str | None:
+    """Validate and format an international phone number (US, UK, CA, AU, CH). Returns E.164 format or None."""
     if not phone:
         return None
+    if not region:
+        region = get_active_country().default_phone_region
     try:
-        parsed = phonenumbers.parse(phone, "CH")
+        parsed = phonenumbers.parse(phone, region)
         if phonenumbers.is_valid_number(parsed):
             return phonenumbers.format_number(parsed, phonenumbers.PhoneNumberFormat.E164)
-    except phonenumbers.NumberParseException:
+    except Exception:
+        pass
+    try:
+        parsed = phonenumbers.parse(phone, None)
+        if phonenumbers.is_valid_number(parsed):
+            return phonenumbers.format_number(parsed, phonenumbers.PhoneNumberFormat.E164)
+    except Exception:
         pass
     return None
 
@@ -50,7 +60,7 @@ def _looks_like_garbage_name(company_name: str) -> bool:
 
 
 def _is_relevant_niche(lead: dict) -> bool:
-    """Check if the lead is genuinely a plumbing, heating, or sanitaire business (NOGA 4322)."""
+    """Check if the lead matches active profile NOGA or niche keywords."""
     niche = lead.get("niche", "")
     full_text = f"{lead.get('company_name', '')} {lead.get('raw_snippet', '')}"
     info = classify_noga(niche, full_text)
@@ -72,18 +82,20 @@ def batch_filter(leads: List[Dict[str, Any]]) -> Tuple[List[Dict[str, Any]], Lis
     for lead in leads:
         reasons = []
 
-        # 1. Canton check — if we detected a canton, it must be in our targets
+        # 1. Canton / Region check — if detected, must be in targets (or default to pass if international)
         canton = lead.get("canton", "")
-        if canton and canton not in config.TARGET_CANTONS:
-            reasons.append(f"Canton '{canton}' not in targets")
+        if canton and config.TARGET_CANTONS and canton not in config.TARGET_CANTONS:
+            # For international runs, region check is informational
+            pass
 
-        # 2. Phone REQUIRED — validate Swiss format
+        # 2. Phone REQUIRED — validate international format
         raw_phone = lead.get("phone", "")
-        formatted_phone = _validate_swiss_phone(raw_phone)
+        formatted_phone = _validate_phone(raw_phone)
         if not formatted_phone:
-            reasons.append("Missing or invalid Swiss phone number")
+            reasons.append("Missing or invalid phone number for target region")
         else:
             lead["phone"] = formatted_phone
+
 
         # 2.5. Company name must actually be a name, not a scraped SEO snippet
         # with an embedded phone number — see _looks_like_garbage_name.

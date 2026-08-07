@@ -26,20 +26,22 @@ NET_DDGS_TIMEOUT           = 10
 NET_CIRCUIT_BREAKER_THRESHOLD = 5
 NET_CIRCUIT_BREAKER_COOLDOWN  = 90
 
-TARGET_CANTONS = ["Genève", "Vaud", "Valais", "Neuchâtel", "Jura"]
-
-CANTON_CITIES = {
-    "Genève": ["Genève", "Vernier", "Lancy", "Meyrin", "Carouge", "Onex", "Thônex", "Versoix", "Grand-Saconnex", "Chêne-Bougeries"],
-    "Vaud": ["Lausanne", "Yverdon-les-Bains", "Montreux", "Renens", "Nyon", "Vevey", "Pully", "Morges", "Gland", "Ecublens"],
-    "Valais": ["Sion", "Martigny", "Monthey", "Sierre", "Brig-Glis", "Visp", "Naters", "Crans-Montana"],
-    "Neuchâtel": ["Neuchâtel", "La Chaux-de-Fonds", "Le Locle", "Val-de-Travers", "Val-de-Ruz", "Milvignes", "La Tène", "Cormondrèche"],
-    "Jura": ["Delémont", "Porrentruy", "Courroux", "Courrendlin", "Saignelégier", "Bassecourt", "Fontenais", "Vicques"]
-}
-
 from utils.niche_profiles import get_active_profile
+from utils.country_profiles import get_active_country
+
+def get_current_target_regions():
+    return get_active_country().major_regions
+
+def get_current_target_cities():
+    return get_active_country().major_cities
 
 def get_current_primary_niches():
-    return get_active_profile().primary_niches
+    country = get_active_country()
+    niche_profile = get_active_profile()
+    keywords = country.niche_keywords.get(niche_profile.profile_id)
+    if keywords:
+        return keywords
+    return niche_profile.primary_niches
 
 def get_current_secondary_niches():
     return get_active_profile().secondary_niches
@@ -47,8 +49,12 @@ def get_current_secondary_niches():
 def get_current_exclude_keywords():
     return get_active_profile().exclude_keywords
 
+TARGET_CANTONS = get_current_target_regions()
+CANTON_CITIES = {r: get_current_target_cities() for r in get_current_target_regions()}
+
 PRIMARY_NICHES = get_current_primary_niches()
 SECONDARY_NICHES = get_current_secondary_niches()
+
 
 # ── Company size (the "is this big enough to bother" gate) ──────────────
 # Switzerland does NOT publish employee headcount for SMEs in any free,

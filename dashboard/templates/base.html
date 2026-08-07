@@ -34,7 +34,7 @@
         </nav>
         
         <!-- Dual Scraper Profile Switcher in Sidebar -->
-        <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;">
+        <div style="margin-top: 1rem; padding: 1rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;">
             <div style="font-size: 0.72rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: space-between;">
                 <span>Niche Profile</span>
                 <span id="sidebarProfileIcon" style="font-size: 0.9rem;">🔧</span>
@@ -47,6 +47,21 @@
             </button>
         </div>
 
+        <!-- International Country Selector in Sidebar -->
+        <div style="margin-top: 1rem; padding: 1rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;">
+            <div style="font-size: 0.72rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: space-between;">
+                <span>Target Country</span>
+                <span id="sidebarCountryFlag">🇺🇸</span>
+            </div>
+            <select id="countrySelectSidebar" onchange="switchCountryProfile(this.value)" style="width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); background: rgba(15, 23, 42, 0.9); color: #fff; font-weight: 600; font-size: 0.82rem; cursor: pointer;">
+                <option value="US">🇺🇸 United States</option>
+                <option value="GB">🇬🇧 United Kingdom</option>
+                <option value="CA">🇨🇦 Canada</option>
+                <option value="AU">🇦🇺 Australia</option>
+                <option value="CH">🇨🇭 Switzerland</option>
+            </select>
+        </div>
+
         <div style="margin-top: auto; padding-top: 2rem; text-align: center; font-size: 0.8rem; color: var(--text-muted);">
             AstraQuote Lead Engine<br>
             v1.0.0
@@ -55,10 +70,13 @@
 
     
     <div class="main-content">
-        <!-- Dual Scraper Niche Profile Switcher Bar -->
+        <!-- Dual Scraper Niche & Country Switcher Bar -->
         <div class="top-profile-bar" style="background: rgba(30, 41, 59, 0.8); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px 20px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
             <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 1rem; font-weight: 700; color: #fff;">Active Scraper Profile:</span>
+                <span style="font-size: 1rem; font-weight: 700; color: #fff;">Active Target Market:</span>
+                <span id="activeCountryBadge" style="background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 4px 14px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; border: 1px solid rgba(16, 185, 129, 0.3);">
+                    🇺🇸 USA
+                </span>
                 <span id="activeProfileBadge" style="background: rgba(59,130,246,0.2); color: #60a5fa; padding: 4px 14px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; border: 1px solid rgba(59,130,246,0.3);">
                     Loading profile…
                 </span>
@@ -84,7 +102,21 @@
                     const profile = await res.json();
                     updateProfileUI(profile);
                 }
+                const cres = await fetch('/api/country');
+                if (cres.ok) {
+                    const country = await cres.json();
+                    updateCountryUI(country);
+                }
             } catch(e) { console.error(e); }
+        }
+
+        function updateCountryUI(country) {
+            const badge = document.getElementById('activeCountryBadge');
+            if (badge) badge.innerText = `${country.flag_emoji} ${country.display_name}`;
+            const flag = document.getElementById('sidebarCountryFlag');
+            if (flag) flag.innerText = country.flag_emoji;
+            const select = document.getElementById('countrySelectSidebar');
+            if (select) select.value = country.country_code;
         }
 
         function updateProfileUI(profile) {
@@ -129,7 +161,23 @@
             } catch(e) { console.error(e); }
         }
 
+        async function switchCountryProfile(countryCode) {
+            try {
+                const res = await fetch('/api/country', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ country_code: countryCode })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    updateCountryUI(data.active_country);
+                    window.location.reload();
+                }
+            } catch(e) { console.error(e); }
+        }
+
         document.addEventListener('DOMContentLoaded', fetchCurrentProfile);
+
     </script>
     {% block scripts %}{% endblock %}
 </body>

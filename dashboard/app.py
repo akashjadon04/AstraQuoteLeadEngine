@@ -99,6 +99,7 @@ def export_panel():
     return render_template('export.html')
 
 from utils.niche_profiles import get_active_profile, set_active_profile_id, list_profiles
+from utils.country_profiles import get_active_country, set_active_country_code, list_countries
 
 # APIs
 @app.route('/api/profiles')
@@ -114,6 +115,21 @@ def api_profile():
             return jsonify({"status": "success", "active_profile": get_active_profile().to_dict()})
         return jsonify({"status": "error", "message": "Invalid profile_id"}), 400
     return jsonify(get_active_profile().to_dict())
+
+@app.route('/api/countries')
+def api_countries():
+    return jsonify(list_countries())
+
+@app.route('/api/country', methods=['GET', 'POST'])
+def api_country():
+    if request.method == 'POST':
+        data = request.get_json(silent=True) or request.form
+        code = data.get('country_code')
+        if code and set_active_country_code(code):
+            return jsonify({"status": "success", "active_country": get_active_country().to_dict()})
+        return jsonify({"status": "error", "message": "Invalid country_code"}), 400
+    return jsonify(get_active_country().to_dict())
+
 
 @app.route('/api/leads')
 def api_leads():
