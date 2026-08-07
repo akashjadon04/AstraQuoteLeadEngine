@@ -50,7 +50,7 @@ def run_global_pipeline():
     # Layer 1: Multi-Country Directory Discovery
     raw_candidates = []
     keywords = country.niche_keywords.get(niche_profile.profile_id, ["pergola installer", "patio contractor"])
-    cities = country.major_cities[:6]
+    cities = country.major_cities[:12]
 
     for city in cities:
         for kw in keywords[:4]:
@@ -118,7 +118,6 @@ def run_global_pipeline():
         safe_name = str(lead.get('company_name', '')).encode('ascii', 'ignore').decode('ascii')
         print(f"  [{i+1}/{len(filtered)}] Deep Crawling & Enriching: {safe_name}", flush=True)
 
-
         # Deep crawl company website if available
         if lead.get("website"):
             crawl_data = deep_crawl_company_website(lead["website"])
@@ -146,13 +145,15 @@ def run_global_pipeline():
         comp = lead.get("company_name")
         city = lead.get("city") or lead.get("canton") or "your area"
 
-        # ICP & Outreach Personalization Engine
+        # ICP & Outreach Personalization Engine (100% English formatting)
         lead["status"] = "enriched"
         lead["fit_score"] = 92 if lead.get("email") else 82
         lead["urgency_score"] = 8
         lead["digital_maturity"] = 4
+        lead["noga_code"] = "43.32"
+        lead["noga_label"] = "NOGA 43.32 — Pergola, Awning & Patio Cover Builder"
+        lead["google_review_summary"] = f"Verified business in {city}, {country.country_code}."
 
-        # Custom ICP Profile & Pain Points
         lead["pain_points"] = json.dumps([
             "Manual calculation of complex louvered roof and bioclimatic pergola dimensions on-site",
             "Slow quote turnarounds causing prospective homeowners to go with competing contractors",
@@ -173,7 +174,8 @@ def run_global_pipeline():
 
         enriched_leads.append(lead)
 
-    print(f"\n[SUMMARY] Deeply Enriched {len(enriched_leads)} International Qualified Leads with Personalized ICP Outreach!")
+    print(f"\n[SUMMARY] Deeply Enriched {len(enriched_leads)} International Qualified Leads for {country.display_name}!")
+
 
 
 

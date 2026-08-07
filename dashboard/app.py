@@ -125,6 +125,21 @@ def api_profile():
 def api_countries():
     return jsonify(list_countries())
 
+@app.route('/api/country', methods=['GET', 'POST'])
+def api_country():
+    if request.method == 'POST':
+        data = request.get_json(silent=True) or request.form
+        code = data.get('country_code')
+        if code and set_active_country_code(code):
+            set_engine_mode('global')
+            import subprocess, sys
+            cmd = [sys.executable, "global_main.py"]
+            subprocess.Popen(cmd, cwd=os.path.dirname(os.path.dirname(__file__)))
+            return jsonify({"status": "success", "active_country": get_active_country().to_dict(), "message": f"Global Lead Engine launched for {code}."})
+        return jsonify({"status": "error", "message": "Invalid country_code"}), 400
+    return jsonify(get_active_country().to_dict())
+
+
 ENGINE_MODE_FILE = "data/engine_mode.json"
 
 def get_engine_mode() -> str:
@@ -340,6 +355,23 @@ def api_pipeline_status():
     from utils.state_manager import get_state
     return jsonify(get_state())
 
+def _get_export_connection():
+    target_engine = request.args.get('engine')
+    if not target_engine:
+        target_engine = get_engine_mode()
+    
+    if target_engine == 'global':
+        db_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'global_leads.db')
+    else:
+        db_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'leads.db')
+        if not os.path.exists(db_file) or os.path.getsize(db_file) == 0:
+            db_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'qualified_master.db')
+            
+    init_db(db_file)
+    conn = sqlite3.connect(db_file)
+    conn.row_factory = sqlite3.Row
+    return conn
+
 def _export_rows(conn):
     """Rows for an export. Returns all qualified leads sorted by fit score."""
     if request.args.get('all') == '1':
@@ -347,10 +379,9 @@ def _export_rows(conn):
     return conn.execute("SELECT * FROM leads WHERE status != 'rejected' ORDER BY fit_score DESC").fetchall()
 
 
-
 @app.route('/api/export/csv')
 def export_csv():
-    conn = get_db_connection()
+    conn = _get_export_connection()
     leads_rows = _export_rows(conn)
     conn.close()
 
@@ -358,6 +389,7 @@ def export_csv():
     df = pd.DataFrame(data)
 
     output = StringIO()
+
     df.to_csv(output, index=False)
 
     return Response(
@@ -368,7 +400,7 @@ def export_csv():
 
 @app.route('/api/export/excel')
 def export_excel():
-    conn = get_db_connection()
+    conn = _get_export_connection()
     leads_rows = _export_rows(conn)
     conn.close()
 
@@ -390,7 +422,7 @@ def export_excel():
 
 @app.route('/api/export/pdf')
 def export_pdf():
-    conn = get_db_connection()
+    conn = _get_export_connection()
     leads_rows = _export_rows(conn)
     conn.close()
 

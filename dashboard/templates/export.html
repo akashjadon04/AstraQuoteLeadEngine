@@ -8,6 +8,14 @@
         <h3 class="mb-4" style="color: var(--accent);">Export Settings</h3>
 
         <div class="mb-4">
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: 700; color: #fbbf24;">Target Engine Data Source</label>
+            <select id="exportEngineSelect" class="input-control" style="width: 100%; border-color: #f59e0b; font-weight: 700; color: #fbbf24; background: rgba(245, 158, 11, 0.1);">
+                <option value="global" selected>🌐 Global Engine Vault (USA, UK, CA, AU Leads)</option>
+                <option value="swiss">🇨🇭 Switzerland Engine Vault (199 Swiss Leads)</option>
+            </select>
+        </div>
+
+        <div class="mb-4">
             <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">Format</label>
             <div class="flex gap-4">
                 <label style="display: flex; align-items: center; gap: 0.5rem;">
@@ -32,42 +40,31 @@
     <div class="glass-card">
         <h3 class="mb-4" style="color: var(--accent);">Quick Exports</h3>
         <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">
-            Every run wipes the previous batch, so these always reflect only the current run —
-            never a stale earlier batch.
+            Select format below to export your selected target engine dataset.
         </p>
 
         <div class="flex flex-col gap-4" style="display: flex; flex-direction: column;">
-            <a href="/api/export/csv" class="btn btn-outline" style="justify-content: flex-start;">
+            <a href="javascript:void(0)" onclick="quickExport('csv')" class="btn btn-outline" style="justify-content: flex-start;">
                 <span style="margin-right: 1rem; font-size: 1.5rem;">📊</span>
                 <div>
-                    <strong>Current Batch (CSV)</strong>
-                    <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: normal;">Delivered leads only — CRM-ready</div>
+                    <strong>Export CSV Dataset</strong>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: normal;">CRM-ready CSV payload</div>
                 </div>
             </a>
 
-            <a href="/api/export/excel" class="btn btn-outline" style="justify-content: flex-start;">
+            <a href="javascript:void(0)" onclick="quickExport('excel')" class="btn btn-outline" style="justify-content: flex-start;">
                 <span style="margin-right: 1rem; font-size: 1.5rem;">📈</span>
                 <div>
-                    <strong>Current Batch (Excel)</strong>
-                    <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: normal;">Delivered leads only — formatted spreadsheet</div>
+                    <strong>Export Excel Spreadsheet</strong>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: normal;">Formatted Excel spreadsheet</div>
                 </div>
             </a>
 
-            <a href="/api/export/pdf" class="btn btn-outline" style="justify-content: flex-start; border-color: rgba(139, 92, 246, 0.5);">
+            <a href="javascript:void(0)" onclick="quickExport('pdf')" class="btn btn-outline" style="justify-content: flex-start; border-color: rgba(139, 92, 246, 0.5);">
                 <span style="margin-right: 1rem; font-size: 1.5rem;">📄</span>
                 <div>
                     <strong style="color: var(--primary);">Executive PDF Report</strong>
-                    <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: normal;">Delivered leads only — printable presentation</div>
-                </div>
-            </a>
-
-            <hr style="border-color: var(--border-color); margin: 0.5rem 0;">
-
-            <a href="/api/export/csv?all=1" class="btn btn-outline" style="justify-content: flex-start; opacity: 0.75;">
-                <span style="margin-right: 1rem; font-size: 1.5rem;">🗃️</span>
-                <div>
-                    <strong>Everything, incl. excluded (CSV)</strong>
-                    <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: normal;">Also includes this run's rejected leads (too small, no contact, duplicates) — for audit only</div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: normal;">Printable presentation PDF</div>
                 </div>
             </a>
         </div>
@@ -79,7 +76,14 @@
 <script>
     function executeExport() {
         const format = document.querySelector('input[name="format"]:checked').value;
-        window.location.href = `/api/export/${format}`;
+        const engine = document.getElementById('exportEngineSelect').value;
+        window.location.href = `/api/export/${format}?engine=${engine}`;
+    }
+
+    function quickExport(format) {
+        const engine = document.getElementById('exportEngineSelect').value;
+        window.location.href = `/api/export/${format}?engine=${engine}`;
     }
 </script>
 {% endblock %}
+
