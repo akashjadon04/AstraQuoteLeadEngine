@@ -101,37 +101,50 @@ def run_global_pipeline():
         filtered.append(cand)
 
     print(f"[FILTER] Passed Layer 2 International Filter: {len(filtered)} leads with valid E.164 phone numbers.")
-    update_global_state(leads_filtered=len(filtered), current_layer=6, current_layer_name="Executive Contact Enrichment")
+    update_global_state(leads_filtered=len(filtered), current_layer=3, current_layer_name="Deep Website Crawling")
 
-    # Layer 6: Executive Contact & Director Enrichment
+    # Layer 3 & 6: Deep Website Crawling & Executive Contact Enrichment
+    from scrapers.global_deep_crawler import deep_crawl_company_website
+
     enriched_leads = []
 
     for i, lead in enumerate(filtered):
-        print(f"  [{i+1}/{len(filtered)}] Enriching Executive Contact for: {lead['company_name']}")
+        print(f"  [{i+1}/{len(filtered)}] Deep Crawling & Enriching: {lead['company_name']}")
 
-        dm_name = None
-        dm_title = "Managing Director"
+        # Deep crawl company website if available
+        if lead.get("website"):
+            crawl_data = deep_crawl_company_website(lead["website"])
+            if crawl_data.get("email"):
+                lead["email"] = crawl_data["email"]
+            if crawl_data.get("decision_maker"):
+                lead["decision_maker"] = crawl_data["decision_maker"]
+                lead["decision_title"] = crawl_data.get("decision_title", "Owner")
+            if crawl_data.get("linkedin_url"):
+                lead["decision_maker_linkedin"] = crawl_data["linkedin_url"]
 
         # UK Companies House Official Officers Search
-        if country.country_code == "GB":
+        if not lead.get("decision_maker") and country.country_code == "GB":
             uk_officer = search_uk_company_officers(lead["company_name"])
             if uk_officer:
-                dm_name = uk_officer.get("decision_maker")
-                dm_title = uk_officer.get("decision_title", "Director")
+                lead["decision_maker"] = uk_officer.get("decision_maker")
+                lead["decision_title"] = uk_officer.get("decision_title", "Director")
 
-        # Fallback / General Search Strategy
-        if not dm_name:
-            dm_name = f"Owner / Managing Director ({lead['company_name']})"
+        # Fallback owner string
+        if not lead.get("decision_maker"):
+            lead["decision_maker"] = f"Managing Director ({lead['company_name']})"
+            lead["decision_title"] = "Managing Director"
 
-        lead["decision_maker"] = dm_name
-        lead["decision_title"] = dm_title
+        # Fit Scoring
         lead["status"] = "enriched"
-        lead["fit_score"] = 85
+        lead["fit_score"] = 90 if lead.get("email") else 80
         lead["urgency_score"] = 8
         lead["digital_maturity"] = 4
+        lead["pitch_angle"] = f"Pitch AstraQuote to {lead['decision_maker']} at {lead['company_name']} for 4x faster quote turnarounds."
+
         enriched_leads.append(lead)
 
-    print(f"\n[SUMMARY] Enriched {len(enriched_leads)} International Qualified Leads!")
+    print(f"\n[SUMMARY] Deeply Enriched {len(enriched_leads)} International Qualified Leads!")
+
 
     # Persist to global databases
     for db_target in [GLOBAL_DB_PATH, GLOBAL_MASTER_PATH]:

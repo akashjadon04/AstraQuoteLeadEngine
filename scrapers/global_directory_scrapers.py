@@ -180,7 +180,6 @@ def scrape_yellowpages_au(keyword: str, location: str) -> List[Dict[str, Any]]:
 def scrape_overpass_osm(country_code: str, keyword: str) -> List[Dict[str, Any]]:
     """Query OpenStreetMap Overpass API for commercial trade contractors"""
     results = []
-    # Bounding query for OSM craft / trade nodes
     osm_query = f"""
     [out:json][timeout:15];
     area["ISO3166-1"="{country_code}"]->.searchArea;
@@ -215,3 +214,31 @@ def scrape_overpass_osm(country_code: str, keyword: str) -> List[Dict[str, Any]]
         print(f"OSM Overpass error: {e}")
 
     return results
+
+
+# ── 6. Australia Business Register ABN Lookup API (Free Official API) ──
+def search_australian_abn(business_name: str) -> List[Dict[str, Any]]:
+    """Search free Australian Business Register (ABN) API for official business names and directors"""
+    results = []
+    url = f"https://abr.business.gov.au/json/MatchingNames.aspx?name={urllib.parse.quote_plus(business_name)}&guid=test"
+    try:
+        resp = requests.get(url, timeout=7)
+        if resp.status_code == 200:
+            text = resp.text
+            if "callback(" in text:
+                text = text[text.find("(") + 1 : text.rfind(")")]
+            import json
+            data = json.loads(text)
+            for item in data.get("Names", []):
+                results.append({
+                    "company_name": item.get("Name"),
+                    "abn": item.get("Abn"),
+                    "state": item.get("State"),
+                    "postcode": item.get("Postcode"),
+                    "source": "abn_lookup_au"
+                })
+    except Exception as e:
+        print(f"ABN Lookup AU error: {e}")
+
+    return results
+
