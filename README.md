@@ -10,6 +10,9 @@ pinned: false
 # AstraQuote Lead Engine
 
 **Enterprise-Grade B2B Lead Generation for Swiss Trade Businesses**
+
+> 🚀 **Live Interactive Demo**: [https://evolnex.digital/astraquote/](https://evolnex.digital/astraquote/)  
+> Inspect 500+ verified Swiss plumbing & trade leads, canton filters, and instant CSV/JSON exports with zero server dependencies.
 Discovers plumbing, HVAC, and sanitaire companies across French-speaking Switzerland,
 deeply researches them with a rule-based public-info research engine (no AI/LLM —
 pure logic over what's actually published), and presents 50 fully-qualified leads —
